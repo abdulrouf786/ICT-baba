@@ -108,3 +108,38 @@ st.info(
     "Learning only: Yeh panel educational hai. "
     "BUY/SELL signal ya guaranteed profit ki prediction nahi karta."
 )
+
+st.divider()
+st.header("📊 ICT Market Structure Analyzer")
+
+st.write("Demo data par swing highs aur lows samajhne ke liye.")
+
+import pandas as pd
+import numpy as np
+
+demo = pd.DataFrame({
+    "Candle": list(range(1, 11)),
+    "High": [2305, 2308, 2306, 2312, 2309, 2315, 2311, 2318, 2314, 2320],
+    "Low":  [2300, 2302, 2301, 2305, 2303, 2308, 2306, 2310, 2309, 2313],
+})
+
+demo["Swing High"] = False
+demo["Swing Low"] = False
+
+for i in range(1, len(demo) - 1):
+    demo.loc[i, "Swing High"] = (
+        demo.loc[i, "High"] > demo.loc[i-1, "High"]
+        and demo.loc[i, "High"] > demo.loc[i+1, "High"]
+    )
+    demo.loc[i, "Swing Low"] = (
+        demo.loc[i, "Low"] < demo.loc[i-1, "Low"]
+        and demo.loc[i, "Low"] < demo.loc[i+1, "Low"]
+    )
+
+st.line_chart(demo.set_index("Candle")[["High", "Low"]])
+st.dataframe(demo, use_container_width=True)
+
+st.caption(
+    "Yeh sirf sample data hai, live XAUUSD prices nahi. "
+    "Swing points akelay confirmed BUY/SELL signals nahi hain."
+)
