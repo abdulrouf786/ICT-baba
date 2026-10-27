@@ -194,10 +194,8 @@ try:
     )
 
 except Exception as e:
-    st.error(
-        "Market data load nahi hua. Internet connection check "
-        "karein aur kuch der baad dobara try karein."
-    )
+    st.error("Chart load nahi hua.")
+    st.write("Error details:", str(e))
     st.caption(f"Technical detail: {e}")
 
 st.divider()
