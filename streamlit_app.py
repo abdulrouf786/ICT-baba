@@ -76,3 +76,35 @@ st.warning(
     "Yeh chart khud verified BUY/SELL signal calculate nahi karta. "
     "TradingView chart embed hona Python ko candle data nahi deta."
 )
+
+st.divider()
+st.header("📘 ICT Market Structure Learning Panel")
+
+st.subheader("1. Market Structure")
+st.write("""
+- **Bullish Structure:** Higher High (HH) aur Higher Low (HL).
+- **Bearish Structure:** Lower Low (LL) aur Lower High (LH).
+""")
+
+st.subheader("2. Liquidity")
+st.write("""
+- **Buy-Side Liquidity (BSL):** Aksar previous highs ke upar.
+- **Sell-Side Liquidity (SSL):** Aksar previous lows ke neeche.
+""")
+
+st.subheader("3. Market Structure Shift (MSS)")
+st.write("""
+Price jab previous swing ko opposite direction mein break kare,
+to mumkin MSS ho sakta hai. Confirmation zaroori hai.
+""")
+
+st.subheader("4. Fair Value Gap (FVG)")
+st.write("""
+3-candle pattern mein jab candles ke darmiyan price gap ho,
+to use FVG kehte hain. Har FVG fill ya reverse nahi hota.
+""")
+
+st.info(
+    "Learning only: Yeh panel educational hai. "
+    "BUY/SELL signal ya guaranteed profit ki prediction nahi karta."
+)
