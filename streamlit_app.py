@@ -155,13 +155,36 @@ for i in range(2, len(df)):
             line_width=0
         )
 
+
 fig.update_layout(
     title="XAUUSD Candlestick Chart",
     template="plotly_dark",
-    height=600,
+    height=700,
+    autosize=True,
+    margin=dict(l=10, r=10, t=50, b=30),
     xaxis_rangeslider_visible=False,
     xaxis_title="Time (UTC)",
-    yaxis_title="Price (USD)"
+    yaxis_title="Price (USD)",
+    dragmode="pan",
+    xaxis=dict(
+        type="date",
+        showgrid=True,
+        rangeslider=dict(visible=False)
+    ),
+    yaxis=dict(
+        side="right",
+        fixedrange=False,
+        showgrid=True
+    ),
+    showlegend=True
+)
+
+fig.update_traces(
+    increasing_line_color="#00c853",
+    decreasing_line_color="#ff1744",
+    increasing_fillcolor="#00c853",
+    decreasing_fillcolor="#ff1744"
+)
 )
 
 st.plotly_chart(fig, use_container_width=True)
