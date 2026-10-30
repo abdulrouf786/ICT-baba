@@ -1,134 +1,168 @@
-# ICT BABA GOLD — single-file Streamlit app
-# Paste this entire file into GitHub as app.py. No separate requirements.txt needed.
-import sys, subprocess, importlib.util
-
-def ensure_package(import_name, package_name=None):
-    if importlib.util.find_spec(import_name) is None:
-        subprocess.check_call([sys.executable, "-m", "pip", "install", package_name or import_name])
-
-ensure_package("yfinance")
-ensure_package("plotly")
 
 import streamlit as st
 import pandas as pd
-import yfinance as yf
+import requests
 import plotly.graph_objects as go
-from datetime import datetime, timezone
 
-st.set_page_config(page_title="ICT Baba Gold", page_icon="🥇", layout="wide")
-st.title("🥇 ICT BABA — XAUUSD GOLD")
-st.caption("Gold spot OHLC chart • Yahoo Finance data • ICT-style reference markers")
+st.set_page_config(
+    page_title="ICT Baba",
+    page_icon="🥇",
+    layout="wide"
+)
 
-TIMEFRAMES = {
-    "1m": ("1m", "1d"), "5m": ("5m", "5d"), "15m": ("15m", "1mo"),
-    "1h": ("60m", "3mo"), "4h": ("60m", "3mo")
+API_URL = "https://api.twelvedata.com"
+
+st.title("🥇 ICT BABA — GOLD TRADING")
+st.caption("Real XAU/USD OHLC Market Data | Twelve Data")
+
+# Read API key securely
+try:
+    API_KEY = st.secrets["TWELVE_DATA_API_KEY"]
+except Exception:
+    API_KEY = ""
+
+if not API_KEY:
+    st.error("API key missing. Streamlit Secrets check karein.")
+    st.stop()
+
+
+@st.cache_data(ttl=20)
+def get_price():
+    response = requests.get(
+        f"{API_URL}/price",
+        params={
+            "symbol": "XAU/USD",
+            "apikey": API_KEY
+        },
+        timeout=20
+    )
+    data = response.json()
+
+    if "price" not in data:
+        raise ValueError(data.get("message", str(data)))
+
+    return float(data["price"])
+
+
+@st.cache_data(ttl=30)
+def get_candles(interval):
+    response = requests.get(
+        f"{API_URL}/time_series",
+        params={
+            "symbol": "XAU/USD",
+            "interval": interval,
+            "outputsize": 300,
+            "order": "asc",
+            "timezone": "UTC",
+            "apikey": API_KEY
+        },
+        timeout=30
+    )
+
+    data = response.json()
+
+    if "values" not in data:
+        raise ValueError(data.get("message", str(data)))
+
+    df = pd.DataFrame(data["values"])
+
+    for col in ["open", "high", "low", "close"]:
+        df[col] = pd.to_numeric(df[col], errors="coerce")
+
+    df["datetime"] = pd.to_datetime(df["datetime"])
+    df = df.dropna()
+    df = df.sort_values("datetime")
+
+    return df
+
+
+# Live price
+try:
+    price = get_price()
+    st.metric("LIVE GOLD PRICE — XAU/USD", f"${price:,.2f}")
+except Exception as e:
+    st.warning(f"Live price error: {e}")
+
+st.divider()
+
+# Timeframes
+timeframes = {
+    "1 Minute": "1min",
+    "5 Minutes": "5min",
+    "15 Minutes": "15min",
+    "1 Hour": "1h",
+    "4 Hours": "4h"
 }
 
-@st.cache_data(ttl=15, show_spinner=False)
-def fetch_gold(tf, refresh_token):
-    interval, period = TIMEFRAMES[tf]
-    data = yf.download("XAUUSD=X", interval=interval, period=period,
-                       auto_adjust=False, progress=False, threads=False)
-    if data is None or data.empty:
-        return pd.DataFrame()
-    if isinstance(data.columns, pd.MultiIndex):
-        data.columns = data.columns.get_level_values(0)
-    data.columns = [str(c).title() for c in data.columns]
-    cols = ["Open", "High", "Low", "Close"]
-    if not all(c in data.columns for c in cols):
-        return pd.DataFrame()
-    data = data[cols].apply(pd.to_numeric, errors="coerce").dropna()
-    data.index = pd.to_datetime(data.index)
-    if tf == "4h":
-        data = data.resample("4h").agg(
-            {"Open": "first", "High": "max", "Low": "min", "Close": "last"}
-        ).dropna()
-    return data.tail(300)
+selected = st.selectbox(
+    "Select Gold Timeframe",
+    list(timeframes.keys())
+)
 
-with st.sidebar:
-    st.header("Chart controls")
-    tf = st.selectbox("Gold timeframe", ["1m", "5m", "15m", "1h", "4h"], index=1)
-    count = st.slider("Candles", 50, 300, 180, 10)
-    liquidity_on = st.checkbox("Liquidity sweep markers", True)
-    fvg_on = st.checkbox("FVG markers", True)
-    bos_on = st.checkbox("BOS markers", True)
-    st.caption("Feed: Yahoo Finance XAUUSD=X. Availability and delay depend on provider.")
+interval = timeframes[selected]
 
-if st.button("🔄 Refresh Gold", use_container_width=True):
+if st.button("🔄 Refresh Market Data"):
     st.cache_data.clear()
     st.rerun()
 
-with st.spinner("Gold OHLC candles load ho rahi hain..."):
-    df = fetch_gold(tf, int(datetime.now().timestamp() // 15))
+# Real OHLC chart
+try:
+    df = get_candles(interval)
 
-if df.empty:
-    st.error("Gold data abhi provider se nahi mila. Refresh dabayein ya kuch dair baad dobara try karein.")
-    st.info("Agar data baar-baar unavailable ho, broker ya paid market-data API ka feed connect karna hoga.")
-    st.stop()
+    if df.empty:
+        st.error("Gold candles available nahi hain.")
+        st.stop()
 
-df = df.copy()
-prior_high = df["High"].rolling(20, min_periods=5).max().shift(1)
-prior_low = df["Low"].rolling(20, min_periods=5).min().shift(1)
-df["BuySweep"] = (df["High"] > prior_high) & (df["Close"] < prior_high)
-df["SellSweep"] = (df["Low"] < prior_low) & (df["Close"] > prior_low)
-df["BullFVG"] = df["Low"] > df["High"].shift(2)
-df["BearFVG"] = df["High"] < df["Low"].shift(2)
-df["BullBOS"] = df["Close"] > df["High"].rolling(10).max().shift(1)
-df["BearBOS"] = df["Close"] < df["Low"].rolling(10).min().shift(1)
-df = df.tail(count)
+    fig = go.Figure()
 
-last = df.iloc[-1]
-previous = float(df["Close"].iloc[-2]) if len(df) > 1 else float(last["Close"])
-price = float(last["Close"])
-delta = price - previous
-pct = delta / previous * 100 if previous else 0
+    fig.add_trace(go.Candlestick(
+        x=df["datetime"],
+        open=df["open"],
+        high=df["high"],
+        low=df["low"],
+        close=df["close"],
+        increasing_line_color="#00C853",
+        decreasing_line_color="#FF1744",
+        name="XAU/USD"
+    ))
 
-a, b, c, d = st.columns(4)
-a.metric("XAUUSD Gold", f"${price:,.2f}", f"{delta:+.2f} ({pct:+.2f}%)")
-b.metric("Latest candle high", f"${float(last['High']):,.2f}")
-c.metric("Latest candle low", f"${float(last['Low']):,.2f}")
-d.metric("Timeframe", tf)
+    fig.update_layout(
+        title=f"XAU/USD REAL GOLD — {selected}",
+        xaxis_title="Time (UTC)",
+        yaxis_title="Gold Price (USD)",
+        template="plotly_dark",
+        height=650,
+        xaxis_rangeslider_visible=False,
+        margin=dict(l=10, r=10, t=50, b=10)
+    )
 
-fig = go.Figure()
-fig.add_trace(go.Candlestick(
-    x=df.index, open=df["Open"], high=df["High"], low=df["Low"], close=df["Close"],
-    name="XAUUSD OHLC", increasing_line_color="#16a34a",
-    decreasing_line_color="#dc2626", increasing_fillcolor="#16a34a",
-    decreasing_fillcolor="#dc2626"
-))
+    st.plotly_chart(fig, use_container_width=True)
 
-def add_markers(mask, y_col, name, color, symbol):
-    pts = df[mask]
-    if not pts.empty:
-        fig.add_trace(go.Scatter(
-            x=pts.index, y=pts[y_col], mode="markers", name=name,
-            marker=dict(color=color, size=10, symbol=symbol)
-        ))
+    st.subheader("Latest Gold OHLC")
 
-if liquidity_on:
-    add_markers(df["BuySweep"], "High", "Buy-side sweep", "#f59e0b", "triangle-down")
-    add_markers(df["SellSweep"], "Low", "Sell-side sweep", "#06b6d4", "triangle-up")
-if fvg_on:
-    add_markers(df["BullFVG"], "Low", "Bullish FVG", "#22c55e", "circle")
-    add_markers(df["BearFVG"], "High", "Bearish FVG", "#ef4444", "circle")
-if bos_on:
-    add_markers(df["BullBOS"], "Low", "Bullish BOS", "#15803d", "star")
-    add_markers(df["BearBOS"], "High", "Bearish BOS", "#b91c1c", "star")
+    latest = df.iloc[-1]
 
-fig.update_layout(
-    title=f"XAUUSD — {tf} Real OHLC Candles", height=650,
-    xaxis_rangeslider_visible=False, margin=dict(l=8, r=8, t=55, b=8),
-    legend=dict(orientation="h", y=1.02, x=0)
-)
-fig.update_yaxes(title="USD per troy ounce")
-st.plotly_chart(fig, use_container_width=True)
+    c1, c2, c3, c4 = st.columns(4)
+    c1.metric("OPEN", f"{latest['open']:.2f}")
+    c2.metric("HIGH", f"{latest['high']:.2f}")
+    c3.metric("LOW", f"{latest['low']:.2f}")
+    c4.metric("CLOSE", f"{latest['close']:.2f}")
 
-st.subheader("Recent candles")
-st.dataframe(df[["Open", "High", "Low", "Close"]].tail(12).sort_index(ascending=False),
-             use_container_width=True)
-st.warning(
-    "Data note: XAUUSD=X is Yahoo Finance's spot-gold symbol. Quotes may be delayed, "
-    "and intraday history/availability can be limited. 4h candles are aggregated from 1h data. "
-    "Sweep, FVG and BOS markers are simplified educational approximations, not guaranteed trade signals."
-)
-st.caption("Updated UTC: " + datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S"))
+    with st.expander("View OHLC Data"):
+        st.dataframe(
+            df.tail(50).iloc[::-1],
+            use_container_width=True
+        )
+
+    st.success(
+        f"Gold data loaded: {len(df)} real OHLC candles"
+    )
+
+except Exception as e:
+    st.error(f"Gold data error: {e}")
+    st.info(
+        "Twelve Data API plan, API credits aur XAU/USD access check karein."
+    )
+
+st.divider()
+st.caption("ICT BABA | XAU/USD | Powered by Twelve Data")
