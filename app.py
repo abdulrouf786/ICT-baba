@@ -1,4 +1,7 @@
-import streamlit as st
+from pathlib import Path
+import zipfile, textwrap
+
+app_code = r'''import streamlit as st
 import pandas as pd
 import yfinance as yf
 import plotly.graph_objects as go
@@ -167,3 +170,19 @@ st.warning(
     "ICT markers simplified technical approximations hain, financial advice ya guaranteed entry signals nahi."
 )
 st.caption(f"Last app update (UTC): {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S')}")
+'''
+
+requirements = """streamlit>=1.32.0
+pandas>=2.0.0
+plotly>=5.18.0
+yfinance>=0.2.40
+"""
+
+base = Path("/mnt/data")
+(base / "app.py").write_text(app_code, encoding="utf-8")
+(base / "requirements.txt").write_text(requirements, encoding="utf-8")
+with zipfile.ZipFile(base / "ict_baba_gold_app.zip", "w", zipfile.ZIP_DEFLATED) as z:
+    z.write(base / "app.py", "app.py")
+    z.write(base / "requirements.txt", "requirements.txt")
+
+print("Created app.py, requirements.txt, and ict_baba_gold_app.zip")
