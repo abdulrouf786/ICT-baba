@@ -220,15 +220,14 @@ try:
 
     # Optional overlays are off by default so the real candles stay clear.
     if show_overlays:
-        # Confirmed swing levels
         swing_highs = chart_df[chart_df["swing_high"]]
         swing_lows = chart_df[chart_df["swing_low"]]
         if not swing_highs.empty:
-        fig.add_trace(go.Scatter(
-            x=swing_highs["datetime"], y=swing_highs["high"], mode="markers",
-            marker=dict(symbol="triangle-down", color="#FFB300", size=8),
-            name="Swing High"
-        ))
+            fig.add_trace(go.Scatter(
+                x=swing_highs["datetime"], y=swing_highs["high"], mode="markers",
+                marker=dict(symbol="triangle-down", color="#FFB300", size=8),
+                name="Swing High"
+            ))
         if not swing_lows.empty:
             fig.add_trace(go.Scatter(
                 x=swing_lows["datetime"], y=swing_lows["low"], mode="markers",
@@ -237,12 +236,12 @@ try:
             ))
 
         for col, label, color, symbol, y_col in [
-        ("sweep_bull", "Sell-side Sweep", "#00BCD4", "circle", "low"),
-        ("sweep_bear", "Buy-side Sweep", "#FF9800", "circle", "high"),
-        ("mss_bull", "Bullish MSS", "#00E676", "star", "close"),
-        ("mss_bear", "Bearish MSS", "#FF5252", "star", "close"),
-        ("entry_bull", "BUY Entry", "#00E676", "triangle-up", "low"),
-        ("entry_bear", "SELL Entry", "#FF1744", "triangle-down", "high")
+            ("sweep_bull", "Sell-side Sweep", "#00BCD4", "circle", "low"),
+            ("sweep_bear", "Buy-side Sweep", "#FF9800", "circle", "high"),
+            ("mss_bull", "Bullish MSS", "#00E676", "star", "close"),
+            ("mss_bear", "Bearish MSS", "#FF5252", "star", "close"),
+            ("entry_bull", "BUY Entry", "#00E676", "triangle-up", "low"),
+            ("entry_bear", "SELL Entry", "#FF1744", "triangle-down", "high")
         ]:
             points = chart_df[chart_df[col]]
             if not points.empty:
@@ -253,8 +252,8 @@ try:
                 ))
 
         # Draw only the latest three FVG zones to avoid clutter.
-        setups = chart_df[chart_df["entry_bull"] | chart_df["entry_bear"]]
-        for _, setup in setups.tail(3).iterrows():
+        overlay_setups = chart_df[chart_df["entry_bull"] | chart_df["entry_bear"]]
+        for _, setup in overlay_setups.tail(3).iterrows():
             color = "rgba(0,230,118,0.16)" if setup["entry_bull"] else "rgba(255,82,82,0.16)"
             fig.add_shape(
                 type="rect", x0=setup["datetime"], x1=chart_df["datetime"].iloc[-1],
