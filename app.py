@@ -54,8 +54,17 @@ def get_candles(interval):
     df = pd.DataFrame(data["values"])
     for col in ["open", "high", "low", "close"]:
         df[col] = pd.to_numeric(df[col], errors="coerce")
-    df["datetime"] = pd.to_datetime(df["datetime"], errors="coerce")
+    df["datetime"] = pd.to_datetime(df["datetime"], errors="coerce", utc=True)
     df = df.dropna(subset=["datetime", "open", "high", "low", "close"])
+    df = df.drop_duplicates(subset=["datetime"], keep="last")
+    # Reject malformed OHLC rows instead of drawing misleading candles.
+    body_top = df[["open", "close"]].max(axis=1)
+    body_bottom = df[["open", "close"]].min(axis=1)
+    df = df[
+        (df["high"] >= body_top) &
+        (df["low"] <= body_bottom) &
+        (df["high"] >= df["low"])
+    ]
     return df.sort_values("datetime").reset_index(drop=True)
 
 
@@ -195,61 +204,73 @@ try:
 
     df = add_ict_signals(raw_df, swing_length=3)
 
+    # Keep the chart readable on mobile: calculations use all fetched bars,
+    # while the display focuses on the most recent 150 real OHLC candles.
+    chart_df = df.tail(150).copy()
+    show_overlays = st.checkbox("Chart par ICT markers / FVG zones dikhayein", value=False)
+
     fig = go.Figure()
     fig.add_trace(go.Candlestick(
-        x=df["datetime"], open=df["open"], high=df["high"],
-        low=df["low"], close=df["close"],
+        x=chart_df["datetime"], open=chart_df["open"], high=chart_df["high"],
+        low=chart_df["low"], close=chart_df["close"],
         increasing_line_color="#00C853", decreasing_line_color="#FF1744",
-        name="XAU/USD"
+        increasing_fillcolor="#00C853", decreasing_fillcolor="#FF1744",
+        whiskerwidth=0.5, name="XAU/USD Real OHLC"
     ))
 
-    # Confirmed swing levels
-    swing_highs = df[df["swing_high"]]
-    swing_lows = df[df["swing_low"]]
-    if not swing_highs.empty:
+    # Optional overlays are off by default so the real candles stay clear.
+    if show_overlays:
+        # Confirmed swing levels
+        swing_highs = chart_df[chart_df["swing_high"]]
+        swing_lows = chart_df[chart_df["swing_low"]]
+        if not swing_highs.empty:
         fig.add_trace(go.Scatter(
             x=swing_highs["datetime"], y=swing_highs["high"], mode="markers",
             marker=dict(symbol="triangle-down", color="#FFB300", size=8),
             name="Swing High"
         ))
-    if not swing_lows.empty:
-        fig.add_trace(go.Scatter(
-            x=swing_lows["datetime"], y=swing_lows["low"], mode="markers",
-            marker=dict(symbol="triangle-up", color="#29B6F6", size=8),
-            name="Swing Low"
-        ))
+        if not swing_lows.empty:
+            fig.add_trace(go.Scatter(
+                x=swing_lows["datetime"], y=swing_lows["low"], mode="markers",
+                marker=dict(symbol="triangle-up", color="#29B6F6", size=8),
+                name="Swing Low"
+            ))
 
-    for col, label, color, symbol, y_col in [
+        for col, label, color, symbol, y_col in [
         ("sweep_bull", "Sell-side Sweep", "#00BCD4", "circle", "low"),
         ("sweep_bear", "Buy-side Sweep", "#FF9800", "circle", "high"),
         ("mss_bull", "Bullish MSS", "#00E676", "star", "close"),
         ("mss_bear", "Bearish MSS", "#FF5252", "star", "close"),
         ("entry_bull", "BUY Entry", "#00E676", "triangle-up", "low"),
         ("entry_bear", "SELL Entry", "#FF1744", "triangle-down", "high")
-    ]:
-        points = df[df[col]]
-        if not points.empty:
-            fig.add_trace(go.Scatter(
-                x=points["datetime"], y=points[y_col], mode="markers",
-                marker=dict(symbol=symbol, color=color, size=12),
-                name=label
-            ))
+        ]:
+            points = chart_df[chart_df[col]]
+            if not points.empty:
+                fig.add_trace(go.Scatter(
+                    x=points["datetime"], y=points[y_col], mode="markers",
+                    marker=dict(symbol=symbol, color=color, size=10),
+                    name=label
+                ))
 
-    # Draw FVG zones and entry / SL / TP on the latest valid setup.
+        # Draw only the latest three FVG zones to avoid clutter.
+        setups = chart_df[chart_df["entry_bull"] | chart_df["entry_bear"]]
+        for _, setup in setups.tail(3).iterrows():
+            color = "rgba(0,230,118,0.16)" if setup["entry_bull"] else "rgba(255,82,82,0.16)"
+            fig.add_shape(
+                type="rect", x0=setup["datetime"], x1=chart_df["datetime"].iloc[-1],
+                y0=setup["fvg_low"], y1=setup["fvg_high"],
+                fillcolor=color, line=dict(width=1), layer="below"
+            )
+
     setups = df[df["entry_bull"] | df["entry_bear"]]
-    for _, setup in setups.tail(8).iterrows():
-        color = "rgba(0,230,118,0.18)" if setup["entry_bull"] else "rgba(255,82,82,0.18)"
-        fig.add_shape(
-            type="rect", x0=setup["datetime"], x1=df["datetime"].iloc[-1],
-            y0=setup["fvg_low"], y1=setup["fvg_high"],
-            fillcolor=color, line=dict(width=1), layer="below"
-        )
 
     fig.update_layout(
         title=f"XAU/USD ICT Setup — {selected}",
         xaxis_title="Time (UTC)", yaxis_title="Gold Price (USD)",
         template="plotly_dark", height=680,
         xaxis_rangeslider_visible=False,
+        xaxis=dict(type="date", fixedrange=False),
+        yaxis=dict(fixedrange=False, autorange=True),
         margin=dict(l=10, r=10, t=55, b=10),
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0)
     )
