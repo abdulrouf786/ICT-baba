@@ -233,6 +233,47 @@ try:
     with st.spinner("Gold candles aur ICT levels load ho rahe hain..."):
         ict_df = load_ohlc(api_interval)
 
+    # Calculate common technical indicators on the same XAUUSD OHLC feed.
+    close = ict_df["close"]
+    high = ict_df["high"]
+    low = ict_df["low"]
+    ict_df["EMA 20"] = close.ewm(span=20, adjust=False).mean()
+    ict_df["EMA 50"] = close.ewm(span=50, adjust=False).mean()
+
+    delta = close.diff()
+    gain = delta.clip(lower=0).ewm(alpha=1/14, adjust=False).mean()
+    loss = (-delta.clip(upper=0)).ewm(alpha=1/14, adjust=False).mean()
+    rs = gain / loss.replace(0, float("nan"))
+    ict_df["RSI 14"] = 100 - (100 / (1 + rs))
+
+    ema12 = close.ewm(span=12, adjust=False).mean()
+    ema26 = close.ewm(span=26, adjust=False).mean()
+    ict_df["MACD"] = ema12 - ema26
+    ict_df["MACD Signal"] = ict_df["MACD"].ewm(span=9, adjust=False).mean()
+
+    bb_mid = close.rolling(20).mean()
+    bb_std = close.rolling(20).std()
+    ict_df["BB Upper"] = bb_mid + 2 * bb_std
+    ict_df["BB Middle"] = bb_mid
+    ict_df["BB Lower"] = bb_mid - 2 * bb_std
+
+    previous_close = close.shift(1)
+    true_range = pd.concat(
+        [(high - low), (high - previous_close).abs(), (low - previous_close).abs()],
+        axis=1,
+    ).max(axis=1)
+    ict_df["ATR 14"] = true_range.ewm(alpha=1/14, adjust=False).mean()
+
+    up_move = high.diff()
+    down_move = -low.diff()
+    plus_dm = up_move.where((up_move > down_move) & (up_move > 0), 0.0)
+    minus_dm = down_move.where((down_move > up_move) & (down_move > 0), 0.0)
+    atr_safe = ict_df["ATR 14"].replace(0, float("nan"))
+    plus_di = 100 * plus_dm.ewm(alpha=1/14, adjust=False).mean() / atr_safe
+    minus_di = 100 * minus_dm.ewm(alpha=1/14, adjust=False).mean() / atr_safe
+    dx = 100 * (plus_di - minus_di).abs() / (plus_di + minus_di).replace(0, float("nan"))
+    ict_df["ADX 14"] = dx.ewm(alpha=1/14, adjust=False).mean()
+
     last = ict_df.iloc[-1]
     price_col1, price_col2, price_col3 = st.columns(3)
     price_col1.metric("MT5 XAUUSD price", f"{last['close']:,.2f}")
@@ -249,6 +290,16 @@ try:
         increasing_line_color="#26a69a",
         decreasing_line_color="#ef5350",
     )])
+    fig.add_trace(go.Scatter(
+        x=ict_df["openTime"], y=ict_df["EMA 20"],
+        mode="lines", name="EMA 20",
+        line=dict(color="#f5c542", width=1.5),
+    ))
+    fig.add_trace(go.Scatter(
+        x=ict_df["openTime"], y=ict_df["EMA 50"],
+        mode="lines", name="EMA 50",
+        line=dict(color="#42a5f5", width=1.5),
+    ))
     add_ict_marks(fig, ict_df)
     fig.update_layout(
         height=620,
@@ -262,6 +313,73 @@ try:
         showlegend=False,
     )
     st.plotly_chart(fig, use_container_width=True, config={"displaylogo": False})
+    st.subheader("📊 Technical Indicators — EMA, RSI + 4")
+    st.caption("Same XAUUSD OHLC feed par calculate kiye gaye indicators; EMA 20/50 chart par bhi plotted hain.")
+    ind1, ind2, ind3 = st.columns(3)
+    ind1.metric("EMA 20", f"{last['EMA 20']:,.2f}")
+    ind2.metric("EMA 50", f"{last['EMA 50']:,.2f}")
+    ind3.metric("RSI 14", "—" if pd.isna(last["RSI 14"]) else f"{last['RSI 14']:.1f}")
+    ind4, ind5, ind6 = st.columns(3)
+    ind4.metric("MACD", "—" if pd.isna(last["MACD"]) else f"{last['MACD']:.3f}")
+    ind5.metric("Bollinger Upper", "—" if pd.isna(last["BB Upper"]) else f"{last['BB Upper']:,.2f}")
+    ind6.metric("Bollinger Lower", "—" if pd.isna(last["BB Lower"]) else f"{last['BB Lower']:,.2f}")
+    ind7, ind8 = st.columns(2)
+    ind7.metric("ATR 14", "—" if pd.isna(last["ATR 14"]) else f"{last['ATR 14']:.3f}")
+    ind8.metric("ADX 14", "—" if pd.isna(last["ADX 14"]) else f"{last['ADX 14']:.1f}")
+
+    bullish_checks = [
+        last["close"] > last["EMA 20"] > last["EMA 50"],
+        pd.notna(last["RSI 14"]) and last["RSI 14"] > 50,
+        pd.notna(last["MACD"]) and last["MACD"] > last["MACD Signal"],
+    ]
+    bearish_checks = [
+        last["close"] < last["EMA 20"] < last["EMA 50"],
+        pd.notna(last["RSI 14"]) and last["RSI 14"] < 50,
+        pd.notna(last["MACD"]) and last["MACD"] < last["MACD Signal"],
+    ]
+    bullish_score = sum(bool(x) for x in bullish_checks)
+    bearish_score = sum(bool(x) for x in bearish_checks)
+    score1, score2 = st.columns(2)
+    score1.metric("Basic bullish checks", f"{bullish_score}/3")
+    score2.metric("Basic bearish checks", f"{bearish_score}/3")
+
+    # Pipflow-style rule-based confluence summary (analysis only; no orders).
+    st.subheader("🤖 AI CONFLUENCE — EMA + RSI + 4 INDICATORS")
+    ema_bull = bool(last["close"] > last["EMA 20"] > last["EMA 50"])
+    ema_bear = bool(last["close"] < last["EMA 20"] < last["EMA 50"])
+    rsi_bull = bool(pd.notna(last["RSI 14"]) and last["RSI 14"] > 50)
+    rsi_bear = bool(pd.notna(last["RSI 14"]) and last["RSI 14"] < 50)
+    macd_bull = bool(pd.notna(last["MACD"]) and last["MACD"] > last["MACD Signal"])
+    macd_bear = bool(pd.notna(last["MACD"]) and last["MACD"] < last["MACD Signal"])
+    bb_bull = bool(pd.notna(last["BB Middle"]) and last["close"] > last["BB Middle"])
+    bb_bear = bool(pd.notna(last["BB Middle"]) and last["close"] < last["BB Middle"])
+    bull_total = sum([ema_bull, rsi_bull, macd_bull, bb_bull])
+    bear_total = sum([ema_bear, rsi_bear, macd_bear, bb_bear])
+
+    ai_left, ai_right = st.columns(2)
+    ai_left.metric("Bullish confluence", f"{bull_total}/4")
+    ai_right.metric("Bearish confluence", f"{bear_total}/4")
+    if bull_total >= 3 and bull_total > bear_total:
+        st.success("AI-style bias: BULLISH — multiple indicators agree. Wait for ICT entry confirmation.")
+    elif bear_total >= 3 and bear_total > bull_total:
+        st.error("AI-style bias: BEARISH — multiple indicators agree. Wait for ICT entry confirmation.")
+    else:
+        st.info("AI-style bias: NEUTRAL / MIXED — indicators do not agree strongly.")
+
+    adx_value = last["ADX 14"]
+    atr_value = last["ATR 14"]
+    rsi_value = last["RSI 14"]
+    rsi_state = "Overbought zone" if pd.notna(rsi_value) and rsi_value >= 70 else ("Oversold zone" if pd.notna(rsi_value) and rsi_value <= 30 else "Middle range")
+    adx_state = "Strong trend" if pd.notna(adx_value) and adx_value >= 25 else "Weak / developing trend"
+    atr_state = "High volatility" if pd.notna(atr_value) and atr_value > ict_df["ATR 14"].tail(50).median() else "Normal / low volatility"
+    s1, s2, s3 = st.columns(3)
+    s1.metric("RSI condition", rsi_state)
+    s2.metric("ADX condition", adx_state)
+    s3.metric("ATR condition", atr_state)
+    st.caption("This is a transparent indicator checklist, not machine-learning prediction or a guaranteed trade signal. It does not place orders.")
+
+    st.caption("ADX trend strength aur ATR volatility measure karta hai; Bollinger Bands price range/volatility dikhate hain. Yeh analysis hai, guaranteed BUY/SELL signal nahi.")
+
     st.caption(
         "ICT labels are rule-based technical markers for study, not guaranteed trade entries. "
         "Pivot levels confirm only after the selected swing length; current candle may still be open."
