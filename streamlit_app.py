@@ -53,14 +53,23 @@ body { overscroll-behavior-y:auto !important; }
 </style>
 """, unsafe_allow_html=True)
 
-SYMBOL = "VANTAGE:XAUUSD"
+ASSETS = {
+    "Gold (XAUUSD)": {"tv": "VANTAGE:XAUUSD", "feed": "XAUUSD", "label": "Gold"},
+    "Bitcoin (BTCUSDT)": {"tv": "BINANCE:BTCUSDT", "feed": "BTCUSDT", "label": "Bitcoin"},
+    "Ethereum (ETHUSDT)": {"tv": "BINANCE:ETHUSDT", "feed": "ETHUSDT", "label": "Ethereum"},
+}
+selected_asset = st.selectbox("Market pair", list(ASSETS.keys()), index=0)
+asset = ASSETS[selected_asset]
+SYMBOL = asset["tv"]
+FEED_SYMBOL = asset["feed"]
+ASSET_LABEL = asset["label"]
 
 st.title("👑 ABDUL RAUF KING")
-st.caption("VANTAGE GOLD — XAUUSD")
+st.caption(f"{ASSET_LABEL.upper()} — {FEED_SYMBOL}")
 
 # Original TradingView Vantage Gold quote strip.
 ticker_config = {
-    "symbols": [{"proName": SYMBOL, "title": "Vantage Gold"}],
+    "symbols": [{"proName": SYMBOL, "title": ASSET_LABEL}],
     "colorTheme": "dark",
     "isTransparent": False,
     "displayMode": "adaptive",
@@ -85,7 +94,7 @@ timeframes = {
     "1 Hour": ("60", "1h"),
     "4 Hours": ("240", "4h"),
 }
-selected = st.selectbox("Gold timeframe", list(timeframes.keys()), index=2)
+selected = st.selectbox("Chart timeframe", list(timeframes.keys()), index=2)
 tv_interval, api_interval = timeframes[selected]
 
 # The original Vantage TradingView chart is preserved unchanged.
@@ -125,7 +134,7 @@ widget_html = f"""
 components.html(widget_html, height=CHART_HEIGHT + 20, scrolling=True)
 
 st.divider()
-st.subheader("📍 ICT BABA — Liquidity / MSS / FVG")
+st.subheader(f"📍 ICT BABA — {FEED_SYMBOL} Liquidity / MSS / FVG")
 st.warning(
     "Original TradingView Vantage chart upar safe hai. Neeche ICT markings ek alag "
     "public MT5 XAUUSD data feed par calculate hoti hain; yeh Vantage broker candles "
