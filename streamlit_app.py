@@ -388,7 +388,26 @@ try:
     plus_di = 100 * plus_dm.ewm(alpha=1/14, adjust=False).mean() / atr_safe
     minus_di = 100 * minus_dm.ewm(alpha=1/14, adjust=False).mean() / atr_safe
     dx = 100 * (plus_di - minus_di).abs() / (plus_di + minus_di).replace(0, float("nan"))
+    ict_df["+DI 14"] = plus_di
+    ict_df["-DI 14"] = minus_di
     ict_df["ADX 14"] = dx.ewm(alpha=1/14, adjust=False).mean()
+
+    # Additional confirmations: session VWAP, Stochastic RSI and volume.
+    if "volume" not in ict_df.columns:
+        ict_df["volume"] = float("nan")
+    ict_df["volume"] = pd.to_numeric(ict_df["volume"], errors="coerce")
+    typical_price = (high + low + close) / 3
+    session_key = ict_df["openTime"].dt.date
+    cum_pv = (typical_price * ict_df["volume"].fillna(0)).groupby(session_key).cumsum()
+    cum_vol = ict_df["volume"].fillna(0).groupby(session_key).cumsum()
+    ict_df["VWAP"] = (cum_pv / cum_vol.replace(0, float("nan")))
+
+    rsi_min = ict_df["RSI 14"].rolling(14).min()
+    rsi_max = ict_df["RSI 14"].rolling(14).max()
+    stoch_raw = 100 * (ict_df["RSI 14"] - rsi_min) / (rsi_max - rsi_min).replace(0, float("nan"))
+    ict_df["Stoch RSI K"] = stoch_raw.rolling(3).mean()
+    ict_df["Stoch RSI D"] = ict_df["Stoch RSI K"].rolling(3).mean()
+    ict_df["Volume SMA 20"] = ict_df["volume"].rolling(20).mean()
 
     last = ict_df.iloc[-1]
     price_col1, price_col2, price_col3 = st.columns(3)
@@ -418,6 +437,7 @@ try:
     ))
     fig.add_trace(go.Scatter(x=ict_df["openTime"], y=ict_df["Supertrend 10,3"].where(ict_df["Supertrend Direction"] == "BULLISH"), mode="lines", name="Supertrend bullish", line=dict(color="#27d69a", width=2)))
     fig.add_trace(go.Scatter(x=ict_df["openTime"], y=ict_df["Supertrend 10,3"].where(ict_df["Supertrend Direction"] == "BEARISH"), mode="lines", name="Supertrend bearish", line=dict(color="#ff6577", width=2)))
+    fig.add_trace(go.Scatter(x=ict_df["openTime"], y=ict_df["VWAP"], mode="lines", name="Session VWAP", line=dict(color="#c792ea", width=1.6)))
     add_ict_marks(fig, ict_df)
     fig.update_layout(
         height=620,
@@ -442,12 +462,19 @@ try:
     bb_bear = bool(pd.notna(last["BB Middle"]) and last["close"] < last["BB Middle"])
     supertrend_bull = bool(last["Supertrend Direction"] == "BULLISH")
     supertrend_bear = bool(last["Supertrend Direction"] == "BEARISH")
-    bull_total = sum([ema_bull, rsi_bull, macd_bull, bb_bull, supertrend_bull])
-    bear_total = sum([ema_bear, rsi_bear, macd_bear, bb_bear, supertrend_bear])
+    vwap_bull = bool(pd.notna(last["VWAP"]) and last["close"] > last["VWAP"])
+    vwap_bear = bool(pd.notna(last["VWAP"]) and last["close"] < last["VWAP"])
+    stoch_bull = bool(pd.notna(last["Stoch RSI K"]) and pd.notna(last["Stoch RSI D"]) and last["Stoch RSI K"] > last["Stoch RSI D"] and last["Stoch RSI K"] > 50)
+    stoch_bear = bool(pd.notna(last["Stoch RSI K"]) and pd.notna(last["Stoch RSI D"]) and last["Stoch RSI K"] < last["Stoch RSI D"] and last["Stoch RSI K"] < 50)
+    dmi_bull = bool(pd.notna(last["+DI 14"]) and last["+DI 14"] > last["-DI 14"])
+    dmi_bear = bool(pd.notna(last["+DI 14"]) and last["-DI 14"] > last["+DI 14"])
+    volume_confirm = bool(pd.notna(last["volume"]) and pd.notna(last["Volume SMA 20"]) and last["volume"] > last["Volume SMA 20"])
+    bull_total = sum([ema_bull, rsi_bull, macd_bull, bb_bull, supertrend_bull, vwap_bull, stoch_bull, dmi_bull, volume_confirm])
+    bear_total = sum([ema_bear, rsi_bear, macd_bear, bb_bear, supertrend_bear, vwap_bear, stoch_bear, dmi_bear, volume_confirm])
 
-    if bull_total >= 3 and bull_total > bear_total:
+    if bull_total >= 5 and bull_total > bear_total:
         bias, pill_class, bias_detail = "BULLISH", "bull", "Bullish conditions are stronger; wait for ICT entry confirmation."
-    elif bear_total >= 3 and bear_total > bull_total:
+    elif bear_total >= 5 and bear_total > bull_total:
         bias, pill_class, bias_detail = "BEARISH", "", "Bearish conditions are stronger; wait for ICT entry confirmation."
     else:
         bias, pill_class, bias_detail = "NEUTRAL", "neutral", "Signals are mixed; wait for a clearer setup."
@@ -490,17 +517,21 @@ try:
       <div class="ark-card"><div class="ark-label">ATR 14</div><div class="ark-value">{atr_text}</div><div class="ark-note">{atr_state}</div></div>
       <div class="ark-card"><div class="ark-label">ADX 14</div><div class="ark-value">{adx_text}</div><div class="ark-note">{adx_state}</div></div>
       <div class="ark-card"><div class="ark-label">SUPERTREND 10,3</div><div class="ark-value">{last["Supertrend Direction"]}</div><div class="ark-note">ATR trend confirmation</div></div>
+      <div class="ark-card"><div class="ark-label">VWAP</div><div class="ark-value">{last["VWAP"]:,.2f}</div><div class="ark-note">Session fair value</div></div>
+      <div class="ark-card"><div class="ark-label">STOCH RSI K/D</div><div class="ark-value">{last["Stoch RSI K"]:.1f} / {last["Stoch RSI D"]:.1f}</div><div class="ark-note">Momentum trigger</div></div>
+      <div class="ark-card"><div class="ark-label">DMI +DI / -DI</div><div class="ark-value">{last["+DI 14"]:.1f} / {last["-DI 14"]:.1f}</div><div class="ark-note">Directional trend</div></div>
+      <div class="ark-card"><div class="ark-label">VOLUME CONFIRM</div><div class="ark-value">{"YES" if volume_confirm else "NO / N.A."}</div><div class="ark-note">Current vs 20-bar average</div></div>
     </div>
     """, unsafe_allow_html=True)
 
     st.markdown('<div class="ark-section">🧠 Signal confluence</div>', unsafe_allow_html=True)
     st.markdown(f"""
     <div class="ark-score-wrap">
-      <div class="ark-score-row"><span>Bullish confirmation</span><strong>{bull_total}/5</strong></div>
-      <div class="ark-track"><div class="ark-fill-bull" style="width:{bull_total * 20}%"></div></div>
-      <div class="ark-score-row"><span>Bearish confirmation</span><strong>{bear_total}/5</strong></div>
-      <div class="ark-track"><div class="ark-fill-bear" style="width:{bear_total * 20}%"></div></div>
-      <div class="ark-note">EMA trend · RSI momentum · MACD momentum · Bollinger position · Supertrend direction</div>
+      <div class="ark-score-row"><span>Bullish confirmation</span><strong>{bull_total}/9</strong></div>
+      <div class="ark-track"><div class="ark-fill-bull" style="width:{bull_total / 9 * 100}%"></div></div>
+      <div class="ark-score-row"><span>Bearish confirmation</span><strong>{bear_total}/9</strong></div>
+      <div class="ark-track"><div class="ark-fill-bear" style="width:{bear_total / 9 * 100}%"></div></div>
+      <div class="ark-note">EMA · RSI · MACD · Bollinger · Supertrend · VWAP · Stoch RSI · DMI · Volume</div>
     </div>
     """, unsafe_allow_html=True)
     if bias == "BULLISH":
@@ -542,9 +573,9 @@ try:
                         for i in range(max(sj + 1, len(closed) - 8), len(closed))
                         if i >= 2
                     ))
-                    if mss_confirmed and fvg_confirmed and bull_total >= 2:
+                    if mss_confirmed and fvg_confirmed and bull_total >= 5 and float(closed.iloc[-1]["ADX 14"]) >= 18:
                         signal_side = "BUY"
-                        signal_reasons = ["Sell-side liquidity sweep", "Bullish MSS", "Bullish FVG", f"{bull_total}/5 bullish indicator checks"]
+                        signal_reasons = ["Sell-side liquidity sweep", "Bullish MSS", "Bullish FVG", f"{bull_total}/9 bullish indicator checks"]
                 else:
                     mss_confirmed = bool((later["close"] < structure_level).any())
                     fvg_confirmed = bool(any(
@@ -552,9 +583,9 @@ try:
                         for i in range(max(sj + 1, len(closed) - 8), len(closed))
                         if i >= 2
                     ))
-                    if mss_confirmed and fvg_confirmed and bear_total >= 2:
+                    if mss_confirmed and fvg_confirmed and bear_total >= 5 and float(closed.iloc[-1]["ADX 14"]) >= 18:
                         signal_side = "SELL"
-                        signal_reasons = ["Buy-side liquidity sweep", "Bearish MSS", "Bearish FVG", f"{bear_total}/5 bearish indicator checks"]
+                        signal_reasons = ["Buy-side liquidity sweep", "Bearish MSS", "Bearish FVG", f"{bear_total}/9 bearish indicator checks"]
 
     signal_entry = float(closed.iloc[-1]["close"])
     signal_atr = float(closed.iloc[-1]["ATR 14"]) if pd.notna(closed.iloc[-1]["ATR 14"]) else 0.0
@@ -616,7 +647,7 @@ try:
           <div class="ark-card"><div class="ark-label">RISK / REWARD</div><div class="ark-value">{plan_rr}</div><div class="ark-note">Indicative, before spread/slippage</div></div>
         </div>
         """, unsafe_allow_html=True)
-        st.caption("Signal logic: recent 20-bar liquidity level, confirmed candle close, recent FVG aur kam az kam 2/5 indicator checks (EMA, RSI, MACD, Bollinger, Supertrend). Latest open candle ignore ki gayi hai.")
+        st.caption("Signal logic: recent 20-bar liquidity level, confirmed candle close, recent FVG aur kam az kam 5/9 indicator checks (EMA, RSI, MACD, Bollinger, Supertrend, VWAP, Stoch RSI, DMI, volume) aur ADX >= 18. Latest open candle ignore ki gayi hai.")
     else:
         st.markdown(f"""
         <div class="ark-hero">
