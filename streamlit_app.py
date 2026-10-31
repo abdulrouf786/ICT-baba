@@ -14,40 +14,38 @@ st.set_page_config(
 
 st.markdown("""
 <style>
-.stApp { background: #080d18; color: #e8edf7; }
-.block-container {
-    max-width: 1120px !important;
-    padding-top: .7rem !important;
-    padding-left: .8rem !important;
-    padding-right: .8rem !important;
-    padding-bottom: 2rem !important;
-}
-h1 { font-size: 1.55rem !important; line-height: 1.15 !important; margin: 0 0 .2rem 0 !important; }
-h2, h3, p, label, [data-testid="stMarkdownContainer"] { color: #e8edf7; }
-[data-testid="stSelectbox"] > div > div { background: #111a2b; border: 1px solid #26344d; border-radius: 12px; }
-[data-testid="stMetric"] { background: #111a2b; border: 1px solid #26344d; padding: 12px 14px; border-radius: 13px; }
-[data-testid="stMetricLabel"] { color: #91a2bd !important; }
-[data-testid="stMetricValue"] { color: #f4f7ff !important; }
-div[data-testid="stAlert"] { border-radius: 14px; }
-.ark-hero { background: linear-gradient(120deg,#121f35,#101827 65%,#172b40); border:1px solid #2a3c59; border-radius:17px; padding:17px; margin:8px 0 14px; }
-.ark-kicker { color:#8ea5c7; font-size:11px; letter-spacing:1.5px; font-weight:700; }
-.ark-title { color:#f7f9ff; font-size:23px; font-weight:800; margin-top:3px; }
-.ark-sub { color:#9aabc4; font-size:12px; margin-top:4px; }
-.ark-pill { display:inline-block; padding:6px 11px; border-radius:99px; font-size:11px; font-weight:800; letter-spacing:.7px; background:#3b1b25; color:#ff8d9a; border:1px solid #71313d; }
-.ark-pill.bull { background:#123629; color:#72e3ad; border-color:#24664a; }
-.ark-pill.neutral { background:#342d18; color:#f2d27c; border-color:#66552a; }
-.ark-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; margin:12px 0 16px; }
-.ark-card { background:#111a2b; border:1px solid #26344d; border-radius:13px; padding:12px; min-width:0; }
-.ark-label { color:#8ea0bb; font-size:11px; font-weight:650; letter-spacing:.35px; }
-.ark-value { color:#f5f7fc; font-size:20px; font-weight:750; margin-top:5px; overflow-wrap:anywhere; }
-.ark-note { color:#8293ad; font-size:10px; margin-top:3px; }
-.ark-section { color:#f2f5fc; font-size:16px; font-weight:800; margin:18px 0 7px; }
-.ark-score-wrap { background:#111a2b; border:1px solid #26344d; border-radius:14px; padding:13px; margin:10px 0; }
-.ark-score-row { display:flex; justify-content:space-between; gap:10px; color:#a9b8ce; font-size:12px; margin:5px 0; }
-.ark-track { height:7px; border-radius:99px; background:#25334a; overflow:hidden; margin-bottom:10px; }
-.ark-fill-bull { height:100%; background:#28c58b; }
-.ark-fill-bear { height:100%; background:#ed6474; }
+.stApp { background: radial-gradient(ellipse at 12% 0%,#172a45 0%,#0a1220 42%,#070b13 100%); color:#edf3ff; }
+.block-container { max-width:1180px !important; padding:.65rem .75rem 2.2rem !important; }
+h1 { font-size:1.45rem !important; line-height:1.15 !important; margin:0 0 .2rem !important; }
+h2,h3,p,label,[data-testid="stMarkdownContainer"] { color:#e8edf7; }
+[data-testid="stSelectbox"] > div > div { background:linear-gradient(135deg,#17243a,#101a2b); border:1px solid #344967; border-radius:13px; min-height:44px; }
+[data-testid="stSelectbox"] label { color:#a9bbd6 !important; font-size:12px !important; font-weight:700 !important; }
+[data-testid="stMetric"] { background:linear-gradient(145deg,#17243a,#101827); border:1px solid #30425f; padding:13px 14px; border-radius:15px; box-shadow:0 8px 22px #0003; }
+[data-testid="stMetricLabel"] { color:#9eb1ce !important; }
+[data-testid="stMetricValue"] { color:#f4f7ff !important; }
+div[data-testid="stAlert"] { border-radius:14px; border:1px solid #354966; }
+.stButton button { border-radius:12px; border:1px solid #3c5273; background:linear-gradient(135deg,#1c3554,#14243b); color:#f5f8ff; font-weight:700; }
+.ark-hero { background:linear-gradient(115deg,#172b49 0%,#101b2d 55%,#172c3b 100%); border:1px solid #3b5272; border-radius:19px; padding:18px; margin:9px 0 15px; box-shadow:0 12px 28px #0004; position:relative; overflow:hidden; }
+.ark-kicker { color:#a7c2e8; font-size:10px; letter-spacing:1.7px; font-weight:800; }
+.ark-title { color:#fff; font-size:25px; font-weight:850; margin-top:4px; letter-spacing:-.4px; }
+.ark-sub { color:#a9bad2; font-size:12px; margin-top:5px; line-height:1.5; }
+.ark-pill { display:inline-block; padding:7px 12px; border-radius:99px; font-size:11px; font-weight:850; letter-spacing:.8px; background:#48212b; color:#ff9aa6; border:1px solid #82404d; }
+.ark-pill.bull { background:#123c31; color:#80f0bc; border-color:#28785b; }
+.ark-pill.neutral { background:#40351b; color:#ffe08a; border-color:#80652a; }
+.ark-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; margin:12px 0 17px; }
+.ark-card { background:linear-gradient(145deg,#17243a,#101827); border:1px solid #30435f; border-radius:15px; padding:13px; min-width:0; box-shadow:0 7px 18px #0002; }
+.ark-label { color:#9eb2cf; font-size:10px; font-weight:800; letter-spacing:.65px; }
+.ark-value { color:#f7f9ff; font-size:20px; font-weight:800; margin-top:6px; overflow-wrap:anywhere; }
+.ark-note { color:#91a2bc; font-size:10px; margin-top:4px; line-height:1.4; }
+.ark-section { color:#f6f8ff; font-size:16px; font-weight:850; margin:20px 0 8px; letter-spacing:.1px; }
+.ark-score-wrap { background:linear-gradient(145deg,#17243a,#101827); border:1px solid #30435f; border-radius:15px; padding:14px; margin:10px 0; box-shadow:0 7px 18px #0002; }
+.ark-score-row { display:flex; justify-content:space-between; gap:10px; color:#b6c5da; font-size:12px; margin:6px 0; }
+.ark-score-row strong { color:#f7f9ff; }
+.ark-track { height:8px; border-radius:99px; background:#293a53; overflow:hidden; margin-bottom:11px; }
+.ark-fill-bull { height:100%; background:linear-gradient(90deg,#169b71,#49e0a4); border-radius:99px; }
+.ark-fill-bear { height:100%; background:linear-gradient(90deg,#bd405b,#ff7887); border-radius:99px; }
 @media (min-width:700px) { .ark-grid { grid-template-columns:repeat(4,minmax(0,1fr)); } }
+@media (max-width:480px) { .block-container { padding-left:.55rem !important; padding-right:.55rem !important; } .ark-hero { padding:15px; border-radius:16px; } .ark-title { font-size:22px; } .ark-value { font-size:18px; } .ark-card { padding:11px; } }
 iframe { width:100% !important; touch-action:pan-y !important; }
 body { overscroll-behavior-y:auto !important; }
 </style>
@@ -67,8 +65,13 @@ SYMBOL = asset["tv"]
 FEED_SYMBOL = asset["feed"]
 ASSET_LABEL = asset["label"]
 
-st.title("👑 ABDUL RAUF KING")
-st.caption(f"{ASSET_LABEL.upper()} — {FEED_SYMBOL}")
+st.markdown(f"""
+<div class="ark-hero" style="margin-top:4px">
+  <div class="ark-kicker">✦ SMART MARKET TERMINAL · FREE ANALYSIS</div>
+  <div class="ark-title">👑 ABDUL RAUF KING</div>
+  <div class="ark-sub">{ASSET_LABEL.upper()} · {FEED_SYMBOL} · ICT + MULTI-INDICATOR DASHBOARD</div>
+</div>
+""", unsafe_allow_html=True)
 
 # TradingView market quote strip for the selected pair.
 ticker_config = {
