@@ -6,7 +6,7 @@ import streamlit as st
 import streamlit.components.v1 as components
 
 st.set_page_config(
-    page_title="Abdul Rauf King - Vantage Gold",
+    page_title="Abdul Rauf King - Multi Market AI",
     page_icon="🥇",
     layout="wide",
     initial_sidebar_state="collapsed",
@@ -67,7 +67,7 @@ ASSET_LABEL = asset["label"]
 st.title("👑 ABDUL RAUF KING")
 st.caption(f"{ASSET_LABEL.upper()} — {FEED_SYMBOL}")
 
-# Original TradingView Vantage Gold quote strip.
+# TradingView market quote strip for the selected pair.
 ticker_config = {
     "symbols": [{"proName": SYMBOL, "title": ASSET_LABEL}],
     "colorTheme": "dark",
@@ -97,7 +97,7 @@ timeframes = {
 selected = st.selectbox("Chart timeframe", list(timeframes.keys()), index=2)
 tv_interval, api_interval = timeframes[selected]
 
-# The original Vantage TradingView chart is preserved unchanged.
+# TradingView chart follows the selected market pair.
 CHART_HEIGHT = 650
 widget_config = {
     "autosize": False,
@@ -558,5 +558,5 @@ try:
 except Exception:
     # Avoid exposing raw upstream/server exception details in the public UI.
     st.error("ICT data load nahi ho saka. Data feed ya network temporarily unavailable ho sakta hai.")
-    st.info("Original TradingView Vantage chart upar available rehna chahiye. Thori dair baad refresh karein.")
+    st.info("Selected market feed ya network check karein, phir refresh karein.")
 
