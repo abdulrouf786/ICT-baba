@@ -409,6 +409,100 @@ try:
 
 
 
+    # Full ICT + indicator signal. Use closed candles only to avoid intrabar repaint.
+    closed = ict_df.iloc[:-1].copy() if len(ict_df) > 3 else ict_df.copy()
+    signal_side = "WAIT"
+    signal_reasons = []
+    sweep_index = None
+    mss_confirmed = False
+    fvg_confirmed = False
+    if len(closed) >= 30:
+        recent_start = max(20, len(closed) - 12)
+        for j in range(recent_start, len(closed)):
+            prior = closed.iloc[max(0, j - 20):j]
+            bar = closed.iloc[j]
+            prior_low = float(prior["low"].min())
+            prior_high = float(prior["high"].max())
+            if float(bar["low"]) < prior_low and float(bar["close"]) > prior_low:
+                sweep_index = (j, "BUY", prior_high)
+            elif float(bar["high"]) > prior_high and float(bar["close"]) < prior_high:
+                sweep_index = (j, "SELL", prior_low)
+
+        if sweep_index is not None:
+            sj, sweep_direction, structure_level = sweep_index
+            later = closed.iloc[sj + 1:]
+            if not later.empty:
+                if sweep_direction == "BUY":
+                    mss_confirmed = bool((later["close"] > structure_level).any())
+                    fvg_confirmed = bool(any(
+                        float(closed.iloc[i]["low"]) > float(closed.iloc[i - 2]["high"])
+                        for i in range(max(sj + 1, len(closed) - 8), len(closed))
+                        if i >= 2
+                    ))
+                    if mss_confirmed and fvg_confirmed and bull_total >= 2:
+                        signal_side = "BUY"
+                        signal_reasons = ["Sell-side liquidity sweep", "Bullish MSS", "Bullish FVG", f"{bull_total}/4 bullish indicator checks"]
+                else:
+                    mss_confirmed = bool((later["close"] < structure_level).any())
+                    fvg_confirmed = bool(any(
+                        float(closed.iloc[i]["high"]) < float(closed.iloc[i - 2]["low"])
+                        for i in range(max(sj + 1, len(closed) - 8), len(closed))
+                        if i >= 2
+                    ))
+                    if mss_confirmed and fvg_confirmed and bear_total >= 2:
+                        signal_side = "SELL"
+                        signal_reasons = ["Buy-side liquidity sweep", "Bearish MSS", "Bearish FVG", f"{bear_total}/4 bearish indicator checks"]
+
+    signal_entry = float(closed.iloc[-1]["close"])
+    signal_atr = float(closed.iloc[-1]["ATR 14"]) if pd.notna(closed.iloc[-1]["ATR 14"]) else 0.0
+    signal_sl = signal_tp1 = signal_tp2 = signal_tp3 = None
+    signal_rr = "—"
+    if signal_side == "BUY" and signal_atr > 0:
+        signal_sl = float(closed["low"].tail(8).min()) - 0.15 * signal_atr
+        risk = signal_entry - signal_sl
+        if risk > 0:
+            signal_tp1, signal_tp2, signal_tp3 = signal_entry + risk, signal_entry + 2*risk, signal_entry + 3*risk
+            signal_rr = "1:1 / 1:2 / 1:3"
+        else:
+            signal_side = "WAIT"
+    elif signal_side == "SELL" and signal_atr > 0:
+        signal_sl = float(closed["high"].tail(8).max()) + 0.15 * signal_atr
+        risk = signal_sl - signal_entry
+        if risk > 0:
+            signal_tp1, signal_tp2, signal_tp3 = signal_entry - risk, signal_entry - 2*risk, signal_entry - 3*risk
+            signal_rr = "1:1 / 1:2 / 1:3"
+        else:
+            signal_side = "WAIT"
+    else:
+        signal_side = "WAIT"
+
+    st.markdown('<div class="ark-section">🎯 Full trading signal</div>', unsafe_allow_html=True)
+    if signal_side == "WAIT":
+        st.info("WAIT — abhi closed candles par Liquidity Sweep + MSS + FVG aur indicator confirmation ek saath nahi mile. Entry, SL aur TP abhi issue nahi kiye gaye.")
+        st.caption("Signal logic: recent 20-bar liquidity level, confirmed candle close, recent FVG aur kam az kam 2/4 indicator checks. Latest open candle ignore ki gayi hai.")
+    else:
+        st.markdown(f"""
+        <div class="ark-hero">
+          <div class="ark-kicker">XAUUSD · {selected} · CLOSED-CANDLE SETUP</div>
+          <div class="ark-title">{signal_side} SIGNAL</div>
+          <div class="ark-sub">ICT sweep + MSS + FVG and indicator confluence confirmed by the rule set.</div>
+        </div>
+        """, unsafe_allow_html=True)
+        def fmt_level(value):
+            return f"{value:,.2f}" if value is not None else "—"
+        st.markdown(f"""
+        <div class="ark-grid">
+          <div class="ark-card"><div class="ark-label">ENTRY reference</div><div class="ark-value">{fmt_level(signal_entry)}</div><div class="ark-note">Last closed candle; not a live fill price</div></div>
+          <div class="ark-card"><div class="ark-label">STOP LOSS</div><div class="ark-value">{fmt_level(signal_sl)}</div><div class="ark-note">Beyond recent 8-bar swing + ATR buffer</div></div>
+          <div class="ark-card"><div class="ark-label">TAKE PROFIT 1</div><div class="ark-value">{fmt_level(signal_tp1)}</div><div class="ark-note">1R target</div></div>
+          <div class="ark-card"><div class="ark-label">TAKE PROFIT 2</div><div class="ark-value">{fmt_level(signal_tp2)}</div><div class="ark-note">2R target</div></div>
+          <div class="ark-card"><div class="ark-label">TAKE PROFIT 3</div><div class="ark-value">{fmt_level(signal_tp3)}</div><div class="ark-note">3R target</div></div>
+          <div class="ark-card"><div class="ark-label">RISK / REWARD</div><div class="ark-value">{signal_rr}</div><div class="ark-note">Calculated from entry to stop</div></div>
+        </div>
+        """, unsafe_allow_html=True)
+        st.success("Signal confirmations: " + " · ".join(signal_reasons))
+        st.warning("Ye educational rule-based setup hai, guaranteed prediction ya broker order nahi. Spread, slippage, contract size aur broker digits check karke demo par verify karein.")
+
     st.caption("ADX trend strength aur ATR volatility measure karta hai; Bollinger Bands price range/volatility dikhate hain. Yeh analysis hai, guaranteed BUY/SELL signal nahi.")
 
     st.caption(
