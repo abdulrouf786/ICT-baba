@@ -57,6 +57,9 @@ ASSETS = {
     "Gold (XAUUSD)": {"tv": "VANTAGE:XAUUSD", "feed": "XAUUSD", "label": "Gold"},
     "Bitcoin (BTCUSDT)": {"tv": "BINANCE:BTCUSDT", "feed": "BTCUSDT", "label": "Bitcoin"},
     "Ethereum (ETHUSDT)": {"tv": "BINANCE:ETHUSDT", "feed": "ETHUSDT", "label": "Ethereum"},
+    "EUR/USD": {"tv": "FX:EURUSD", "feed": "YAHOO:EURUSD=X", "label": "Euro / US Dollar"},
+    "GBP/USD": {"tv": "FX:GBPUSD", "feed": "YAHOO:GBPUSD=X", "label": "British Pound / US Dollar"},
+    "USD/JPY": {"tv": "FX:USDJPY", "feed": "YAHOO:USDJPY=X", "label": "US Dollar / Japanese Yen"},
 }
 selected_asset = st.selectbox("Market pair", list(ASSETS.keys()), index=0)
 asset = ASSETS[selected_asset]
@@ -157,6 +160,40 @@ def load_ohlc(feed_symbol, interval):
         if not isinstance(bars, list) or not bars or len(bars) > 1000:
             raise ValueError("Gold feed ne valid candle list return nahi ki.")
         frame = pd.DataFrame(bars)
+    elif feed_symbol.startswith("YAHOO:"):
+        # Public Yahoo Finance FX candles; no API key is required.
+        yahoo_symbol = feed_symbol.split(":", 1)[1]
+        yahoo_interval = "60m" if interval == "4h" else interval
+        period = "5d" if interval == "1m" else "1mo"
+        url = f"https://query1.finance.yahoo.com/v8/finance/chart/{yahoo_symbol}"
+        response = requests.get(
+            url,
+            params={"interval": yahoo_interval, "range": period},
+            timeout=(5, 15),
+            headers={**headers, "User-Agent": "Mozilla/5.0"},
+        )
+        response.raise_for_status()
+        if len(response.content) > 2_000_000:
+            raise ValueError("FX data response is unexpectedly large.")
+        payload = response.json()
+        result = payload.get("chart", {}).get("result")
+        if not result:
+            raise ValueError("Yahoo FX feed ne candles return nahi ki.")
+        quote = result[0].get("indicators", {}).get("quote", [{}])[0]
+        timestamps = result[0].get("timestamp", [])
+        if not timestamps or not quote:
+            raise ValueError("FX candle data is empty.")
+        frame = pd.DataFrame({
+            "openTime": pd.to_datetime(timestamps, unit="s", utc=True),
+            "open": quote.get("open", []),
+            "high": quote.get("high", []),
+            "low": quote.get("low", []),
+            "close": quote.get("close", []),
+        })
+        if interval == "4h":
+            frame = frame.set_index("openTime").resample("4h").agg({
+                "open": "first", "high": "max", "low": "min", "close": "last"
+            }).dropna().reset_index()
     else:
         # Binance public spot klines for BTCUSDT and ETHUSDT; no API key required.
         url = "https://api.binance.com/api/v3/klines"
@@ -180,7 +217,7 @@ def load_ohlc(feed_symbol, interval):
     required = ["openTime", "open", "high", "low", "close"]
     if not all(col in frame.columns for col in required):
         raise ValueError("OHLC response ka format expected format se different hai.")
-    if feed_symbol != "XAUUSD":
+    if feed_symbol in ("BTCUSDT", "ETHUSDT"):
         frame["openTime"] = pd.to_datetime(frame["openTime"], unit="ms", utc=True, errors="coerce")
     else:
         frame["openTime"] = pd.to_datetime(frame["openTime"], utc=True, errors="coerce")
