@@ -161,6 +161,7 @@ def load_ohlc(interval):
     return frame.tail(450).reset_index(drop=True)
 
 def add_ict_marks(fig, df, swing_len=5):
+    """Draw a small, recent set of ICT marks so labels stay readable on mobile."""
     highs = df["high"].tolist()
     lows = df["low"].tolist()
     closes = df["close"].tolist()
@@ -170,10 +171,12 @@ def add_ict_marks(fig, df, swing_len=5):
     last_pl = None
     swept_high = False
     swept_low = False
-    swing_highs = []
-    swing_lows = []
+    recent_from = max(0, len(df) - 80)
+    sweep_events = []
+    mss_events = []
+    fvg_events = []
 
-    # Confirm pivots only after swing_len bars have formed on the right.
+    # Process all bars to keep swing structure correct; only display recent marks.
     for i in range(len(df)):
         p = i - swing_len
         if p >= swing_len:
@@ -182,79 +185,51 @@ def add_ict_marks(fig, df, swing_len=5):
             if highs[p] == max(window_h) and window_h.count(highs[p]) == 1:
                 last_ph = highs[p]
                 swept_high = False
-                swing_highs.append((p, last_ph))
             if lows[p] == min(window_l) and window_l.count(lows[p]) == 1:
                 last_pl = lows[p]
                 swept_low = False
-                swing_lows.append((p, last_pl))
 
-        # BSL / SSL reference levels
-        if i == len(df) - 1:
-            if last_ph is not None:
-                fig.add_hline(y=last_ph, line_dash="dot", line_color="#ff5c6c",
-                              annotation_text="BSL", annotation_position="top left")
-            if last_pl is not None:
-                fig.add_hline(y=last_pl, line_dash="dot", line_color="#35c9c0",
-                              annotation_text="SSL", annotation_position="bottom left")
+        if i >= recent_from:
+            if last_ph is not None and not swept_high and highs[i] > last_ph and closes[i] < last_ph:
+                sweep_events.append((times[i], highs[i], "BSL sweep", "#ff7b86", -30))
+                swept_high = True
+            if last_pl is not None and not swept_low and lows[i] < last_pl and closes[i] > last_pl:
+                sweep_events.append((times[i], lows[i], "SSL sweep", "#35c9c0", 30))
+                swept_low = True
 
-        # Liquidity sweep: wick runs the swing level, candle closes back through it.
-        if last_ph is not None and not swept_high and highs[i] > last_ph and closes[i] < last_ph:
-            fig.add_annotation(x=times[i], y=highs[i], text="BSL SWEEP",
-                               showarrow=True, arrowhead=2, ax=0, ay=-35,
-                               font=dict(color="#ff7b86", size=10))
-            swept_high = True
-        if last_pl is not None and not swept_low and lows[i] < last_pl and closes[i] > last_pl:
-            fig.add_annotation(x=times[i], y=lows[i], text="SSL SWEEP",
-                               showarrow=True, arrowhead=2, ax=0, ay=35,
-                               font=dict(color="#35c9c0", size=10))
-            swept_low = True
+            prev_close = closes[i - 1] if i > 0 else closes[i]
+            if last_ph is not None and prev_close <= last_ph < closes[i]:
+                mss_events.append((times[i], last_ph, "MSS ↑", "#75e69a", -38))
+            if last_pl is not None and prev_close >= last_pl > closes[i]:
+                mss_events.append((times[i], last_pl, "MSS ↓", "#ff7b86", 38))
 
-        # MSS: close crosses the latest confirmed swing level.
-        prev_close = closes[i - 1] if i > 0 else closes[i]
-        if last_ph is not None and prev_close <= last_ph < closes[i]:
-            fig.add_annotation(x=times[i], y=last_ph, text="MSS ↑",
-                               showarrow=True, arrowhead=2, ax=0, ay=-48,
-                               font=dict(color="#75e69a", size=11))
-            fig.add_trace(go.Scatter(
-                x=[times[i]], y=[lows[i]], mode="markers+text",
-                marker=dict(symbol="triangle-up", size=13, color="#75e69a"),
-                text=["BUY"], textposition="bottom center",
-                textfont=dict(color="#75e69a"), showlegend=False,
-            ))
-        if last_pl is not None and prev_close >= last_pl > closes[i]:
-            fig.add_annotation(x=times[i], y=last_pl, text="MSS ↓",
-                               showarrow=True, arrowhead=2, ax=0, ay=48,
-                               font=dict(color="#ff7b86", size=11))
-            fig.add_trace(go.Scatter(
-                x=[times[i]], y=[highs[i]], mode="markers+text",
-                marker=dict(symbol="triangle-down", size=13, color="#ff7b86"),
-                text=["SELL"], textposition="top center",
-                textfont=dict(color="#ff7b86"), showlegend=False,
-            ))
+            # Keep only recent FVG zones; do not print a text label on every candle.
+            if i >= 2 and lows[i] > highs[i - 2]:
+                fvg_events.append((times[i - 2], times[i], highs[i - 2], lows[i], "bull"))
+            if i >= 2 and highs[i] < lows[i - 2]:
+                fvg_events.append((times[i - 2], times[i], highs[i], lows[i - 2], "bear"))
 
-        # Three-candle Fair Value Gaps.
-        if i >= 2 and lows[i] > highs[i - 2]:
-            fig.add_shape(
-                type="rect", x0=times[i - 2], x1=times[i],
-                y0=highs[i - 2], y1=lows[i],
-                fillcolor="rgba(55,210,130,0.16)",
-                line=dict(color="rgba(55,210,130,0.65)", width=1),
-                layer="below",
-            )
-            fig.add_annotation(x=times[i], y=(highs[i - 2] + lows[i]) / 2,
-                               text="Bull FVG", showarrow=False,
-                               font=dict(color="#75e69a", size=8))
-        if i >= 2 and highs[i] < lows[i - 2]:
-            fig.add_shape(
-                type="rect", x0=times[i - 2], x1=times[i],
-                y0=highs[i], y1=lows[i - 2],
-                fillcolor="rgba(255,85,100,0.14)",
-                line=dict(color="rgba(255,85,100,0.65)", width=1),
-                layer="below",
-            )
-            fig.add_annotation(x=times[i], y=(highs[i] + lows[i - 2]) / 2,
-                               text="Bear FVG", showarrow=False,
-                               font=dict(color="#ff7b86", size=8))
+    if last_ph is not None:
+        fig.add_hline(y=last_ph, line_dash="dot", line_color="#ff5c6c",
+                      annotation_text="BSL", annotation_position="top left")
+    if last_pl is not None:
+        fig.add_hline(y=last_pl, line_dash="dot", line_color="#35c9c0",
+                      annotation_text="SSL", annotation_position="bottom left")
+
+    # Limit labels to the latest two events of each type.
+    for x, y, label, color, offset in sweep_events[-2:]:
+        fig.add_annotation(x=x, y=y, text=label, showarrow=True, arrowhead=2,
+                           ax=0, ay=offset, font=dict(color=color, size=9))
+    for x, y, label, color, offset in mss_events[-2:]:
+        fig.add_annotation(x=x, y=y, text=label, showarrow=True, arrowhead=2,
+                           ax=0, ay=offset, font=dict(color=color, size=10))
+
+    for x0, x1, y0, y1, direction in fvg_events[-5:]:
+        bullish = direction == "bull"
+        color = "rgba(55,210,130,0.14)" if bullish else "rgba(255,85,100,0.12)"
+        edge = "rgba(55,210,130,0.55)" if bullish else "rgba(255,85,100,0.50)"
+        fig.add_shape(type="rect", x0=x0, x1=x1, y0=y0, y1=y1,
+                      fillcolor=color, line=dict(color=edge, width=1), layer="below")
 
 try:
     with st.spinner("Gold candles aur ICT levels load ho rahe hain..."):
