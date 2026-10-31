@@ -436,7 +436,7 @@ try:
       <div class="ark-track"><div class="ark-fill-bull" style="width:{bull_total * 20}%"></div></div>
       <div class="ark-score-row"><span>Bearish confirmation</span><strong>{bear_total}/5</strong></div>
       <div class="ark-track"><div class="ark-fill-bear" style="width:{bear_total * 20}%"></div></div>
-      <div class="ark-note">EMA trend · RSI momentum · MACD momentum · Bollinger position</div>
+      <div class="ark-note">EMA trend · RSI momentum · MACD momentum · Bollinger position · Supertrend direction</div>
     </div>
     """, unsafe_allow_html=True)
     if bias == "BULLISH":
@@ -518,7 +518,7 @@ try:
     st.markdown('<div class="ark-section">🎯 Full trading signal</div>', unsafe_allow_html=True)
     if signal_side == "WAIT":
         st.info("WAIT — abhi closed candles par Liquidity Sweep + MSS + FVG aur indicator confirmation ek saath nahi mile. Entry, SL aur TP abhi issue nahi kiye gaye.")
-        st.caption("Signal logic: recent 20-bar liquidity level, confirmed candle close, recent FVG aur kam az kam 2/4 indicator checks. Latest open candle ignore ki gayi hai.")
+        st.caption("Signal logic: recent 20-bar liquidity level, confirmed candle close, recent FVG aur kam az kam 2/5 indicator checks (EMA, RSI, MACD, Bollinger, Supertrend). Latest open candle ignore ki gayi hai.")
     else:
         st.markdown(f"""
         <div class="ark-hero">
