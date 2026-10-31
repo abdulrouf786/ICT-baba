@@ -1,0 +1,81 @@
+//@version=6
+indicator("ABDUL RAUF KING | ICT Baba", overlay=true, max_lines_count=100, max_boxes_count=100, max_labels_count=100)
+
+// Inputs
+swingLen = input.int(5, "Swing pivot length", minval=2, maxval=20)
+showLiquidity = input.bool(true, "Show BSL / SSL")
+showSweeps = input.bool(true, "Show liquidity sweeps")
+showMSS = input.bool(true, "Show MSS")
+showFVG = input.bool(true, "Show Fair Value Gaps")
+showEntries = input.bool(true, "Show BUY / SELL signals")
+fvgExtend = input.int(20, "FVG box extension (bars)", minval=1, maxval=200)
+
+// Confirmed swing points
+pivotHigh = ta.pivothigh(high, swingLen, swingLen)
+pivotLow = ta.pivotlow(low, swingLen, swingLen)
+
+var float lastSwingHigh = na
+var float lastSwingLow = na
+var bool bslAlreadySwept = false
+var bool sslAlreadySwept = false
+
+if not na(pivotHigh)
+    lastSwingHigh := pivotHigh
+    bslAlreadySwept := false
+
+if not na(pivotLow)
+    lastSwingLow := pivotLow
+    sslAlreadySwept := false
+
+// Liquidity levels
+plot(showLiquidity ? lastSwingHigh : na, "BSL", color=color.new(color.red, 15), linewidth=1, style=plot.style_linebr)
+plot(showLiquidity ? lastSwingLow : na, "SSL", color=color.new(color.aqua, 15), linewidth=1, style=plot.style_linebr)
+
+// Liquidity sweeps: wick takes a confirmed swing and candle closes back inside
+bslSweep = not na(lastSwingHigh) and high > lastSwingHigh and close < lastSwingHigh and not bslAlreadySwept
+sslSweep = not na(lastSwingLow) and low < lastSwingLow and close > lastSwingLow and not sslAlreadySwept
+
+if bslSweep
+    bslAlreadySwept := true
+if sslSweep
+    sslAlreadySwept := true
+
+plotshape(showSweeps and bslSweep, title="BSL sweep", text="BSL SWEEP", style=shape.labeldown, location=location.abovebar, color=color.red, textcolor=color.white, size=size.tiny)
+plotshape(showSweeps and sslSweep, title="SSL sweep", text="SSL SWEEP", style=shape.labelup, location=location.belowbar, color=color.teal, textcolor=color.white, size=size.tiny)
+
+// Market Structure Shift: close breaks the latest confirmed opposing swing
+bullMSS = not na(lastSwingHigh) and ta.crossover(close, lastSwingHigh)
+bearMSS = not na(lastSwingLow) and ta.crossunder(close, lastSwingLow)
+
+if showMSS and bullMSS
+    line.new(bar_index - 1, lastSwingHigh, bar_index, lastSwingHigh, extend=extend.right, color=color.lime, width=2, style=line.style_dashed)
+    label.new(bar_index, lastSwingHigh, "MSS ↑", style=label.style_label_up, color=color.lime, textcolor=color.black, size=size.tiny)
+
+if showMSS and bearMSS
+    line.new(bar_index - 1, lastSwingLow, bar_index, lastSwingLow, extend=extend.right, color=color.red, width=2, style=line.style_dashed)
+    label.new(bar_index, lastSwingLow, "MSS ↓", style=label.style_label_down, color=color.red, textcolor=color.white, size=size.tiny)
+
+// Three-candle Fair Value Gaps (FVG)
+bullFVG = bar_index >= 2 and low > high[2]
+bearFVG = bar_index >= 2 and high < low[2]
+
+if showFVG and bullFVG
+    box.new(left=bar_index - 2, top=low, right=bar_index + fvgExtend, bottom=high[2], bgcolor=color.new(color.lime, 88), border_color=color.new(color.lime, 35), text="Bull FVG", text_color=color.lime, text_size=size.tiny)
+
+if showFVG and bearFVG
+    box.new(left=bar_index - 2, top=low[2], right=bar_index + fvgExtend, bottom=high, bgcolor=color.new(color.red, 88), border_color=color.new(color.red, 35), text="Bear FVG", text_color=color.red, text_size=size.tiny)
+
+// Simple structure-break signals; these are educational rule-based markers, not trade advice
+buySignal = bullMSS
+sellSignal = bearMSS
+
+plotshape(showEntries and buySignal, title="BUY", text="BUY", style=shape.labelup, location=location.belowbar, color=color.lime, textcolor=color.black, size=size.small)
+plotshape(showEntries and sellSignal, title="SELL", text="SELL", style=shape.labeldown, location=location.abovebar, color=color.red, textcolor=color.white, size=size.small)
+
+// Alerts
+alertcondition(bslSweep, "BSL Liquidity Sweep", "BSL liquidity sweep detected")
+alertcondition(sslSweep, "SSL Liquidity Sweep", "SSL liquidity sweep detected")
+alertcondition(bullMSS, "Bullish MSS / BUY", "Bullish market structure shift")
+alertcondition(bearMSS, "Bearish MSS / SELL", "Bearish market structure shift")
+alertcondition(bullFVG, "Bullish FVG", "Bullish fair value gap formed")
+alertcondition(bearFVG, "Bearish FVG", "Bearish fair value gap formed")
