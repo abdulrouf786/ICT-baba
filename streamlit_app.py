@@ -13,6 +13,7 @@ st.markdown("""
 <style>
 .block-container {
     max-width: 100% !important;
+    zoom: 0.92;
     padding-top: 0.15rem !important;
     padding-left: 0.15rem !important;
     padding-right: 0.15rem !important;
@@ -26,8 +27,8 @@ iframe { width: 100% !important; }
 
 SYMBOL = "VANTAGE:XAUUSD"
 st.markdown(
-    "<div style=\"font-size:26px;font-weight:800;line-height:1.2;margin:2px 0 10px 0;\">👑 ABDUL RAUF KING</div>"
-    "<div style=\"font-size:13px;opacity:0.8;margin-top:-7px;margin-bottom:10px;\">VANTAGE GOLD — XAUUSD</div>",
+    "<div style=\"font-size:22px;font-weight:800;line-height:1.2;margin:2px 0 10px 0;\">👑 ABDUL RAUF KING</div>"
+    "<div style=\"font-size:11px;opacity:0.8;margin-top:-7px;margin-bottom:10px;\">VANTAGE GOLD — XAUUSD</div>",
     unsafe_allow_html=True,
 )
 
@@ -41,7 +42,7 @@ timeframes = {
 selected = st.selectbox("Gold timeframe", list(timeframes.keys()), index=2)
 
 # Only the chart height is increased; the rest of the app layout is unchanged.
-CHART_HEIGHT = 1300
+CHART_HEIGHT = 1200
 
 widget_config = {
     "autosize": False,
