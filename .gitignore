@@ -1,0 +1,21 @@
+# Secrets and local credentials
+.streamlit/secrets.toml
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Python/runtime
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.envrc
+.DS_Store
+
+# Local logs and data
+*.log
+*.sqlite3
+*.db
