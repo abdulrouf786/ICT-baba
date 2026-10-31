@@ -13,11 +13,13 @@ st.markdown("""
 <style>
 .block-container {
     max-width: 100% !important;
-    padding-top: 0.25rem !important;
+    padding-top: 0.15rem !important;
     padding-left: 0.15rem !important;
     padding-right: 0.15rem !important;
     padding-bottom: 0 !important;
 }
+h1 { font-size: 1.45rem !important; margin-bottom: 0.35rem !important; }
+[data-testid='stSelectbox'] { margin-bottom: 0.25rem !important; }
 iframe { width: 100% !important; }
 </style>
 """, unsafe_allow_html=True)
@@ -35,7 +37,7 @@ timeframes = {
 selected = st.selectbox("Gold timeframe", list(timeframes.keys()), index=2)
 
 # Only the chart height is increased; the rest of the app layout is unchanged.
-CHART_HEIGHT = 1500
+CHART_HEIGHT = 1300
 
 widget_config = {
     "autosize": False,
