@@ -138,11 +138,21 @@ components.html(widget_html, height=CHART_HEIGHT + 20, scrolling=True)
 
 st.divider()
 st.subheader(f"📍 ICT BABA — {FEED_SYMBOL} Liquidity / MSS / FVG")
-st.warning(
-    "Original TradingView Vantage chart upar safe hai. Neeche ICT markings ek alag "
-    "public MT5 XAUUSD data feed par calculate hoti hain; yeh Vantage broker candles "
-    "nahi hain, isliye dono charts ke prices mein farq ho sakta hai."
-)
+if FEED_SYMBOL == "XAUUSD":
+    st.warning(
+        "Gold ICT markings public XAUUSD feed se calculate hoti hain. "
+        "Yeh Vantage broker candles se mukhtalif ho sakti hain."
+    )
+elif FEED_SYMBOL in ("BTCUSDT", "ETHUSDT"):
+    st.info(
+        "Crypto ICT candles Binance public SPOT data se calculate hoti hain. "
+        "TradingView chart aur spot feed mein price ka halka farq ho sakta hai."
+    )
+else:
+    st.info(
+        "Forex ICT candles Yahoo Finance public reference data se calculate hoti hain; "
+        "yeh broker feed se mukhtalif ho sakti hain."
+    )
 
 @st.cache_data(ttl=30, show_spinner=False)
 def load_ohlc(feed_symbol, interval):
@@ -196,14 +206,27 @@ def load_ohlc(feed_symbol, interval):
             }).dropna().reset_index()
     else:
         # Binance public spot klines for BTCUSDT and ETHUSDT; no API key required.
-        url = "https://api.binance.com/api/v3/klines"
-        response = requests.get(
-            url,
-            params={"symbol": feed_symbol, "interval": interval, "limit": 500},
-            timeout=(5, 15),
-            headers=headers,
-        )
-        response.raise_for_status()
+        # Binance's official market-data mirror is more accessible where
+        # api.binance.com is region/WAF blocked. Fall back to the primary host.
+        params = {"symbol": feed_symbol, "interval": interval, "limit": 500}
+        response = None
+        last_error = None
+        for base_url in (
+            "https://data-api.binance.vision/api/v3/klines",
+            "https://api.binance.com/api/v3/klines",
+        ):
+            try:
+                response = requests.get(
+                    base_url, params=params, timeout=(5, 15), headers=headers
+                )
+                response.raise_for_status()
+                break
+            except requests.RequestException as exc:
+                last_error = exc
+        if response is None or not response.ok:
+            raise RuntimeError(
+                f"Binance public candle feed unavailable ({type(last_error).__name__})"
+            )
         if len(response.content) > 2_000_000:
             raise ValueError("Market data response is unexpectedly large.")
         bars = response.json()
