@@ -65,12 +65,7 @@ def load_gold_data(api_interval, period):
         frame[col] = pd.to_numeric(frame[col], errors="coerce")
     frame = frame.dropna(subset=["time", "o", "h", "l", "c"]).sort_values("time")
     frame = frame.drop_duplicates(subset=["time"]).set_index("time")
-    if api_interval == "1h" and period == "6mo" and interval == "4h":
-        frame = frame.resample("4h").agg(
-            {"o": "first", "h": "max", "l": "min", "c": "last"}
-        ).dropna().reset_index()
-    else:
-        frame = frame.reset_index()
+    frame = frame.reset_index()
     return frame, payload.get("data_state", {})
 
 def add_ict_marks(frame, fig):
