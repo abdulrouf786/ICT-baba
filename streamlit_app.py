@@ -574,9 +574,9 @@ try:
                         for i in range(max(sj + 1, len(closed) - 8), len(closed))
                         if i >= 2
                     ))
-                    if mss_confirmed and fvg_confirmed and bull_total >= 5 and float(closed.iloc[-1]["ADX 14"]) >= 18:
+                    if mss_confirmed and fvg_confirmed and bull_total >= 7 and float(closed.iloc[-1]["ADX 14"]) >= 25:
                         signal_side = "BUY"
-                        signal_reasons = ["Sell-side liquidity sweep", "Bullish MSS", "Bullish FVG", f"{bull_total}/9 bullish indicator checks"]
+                        signal_reasons = ["Sell-side liquidity sweep", "Bullish MSS", "Bullish FVG", f"{bull_total}/9 bullish indicator checks · STRONG"]
                 else:
                     mss_confirmed = bool((later["close"] < structure_level).any())
                     fvg_confirmed = bool(any(
@@ -584,9 +584,9 @@ try:
                         for i in range(max(sj + 1, len(closed) - 8), len(closed))
                         if i >= 2
                     ))
-                    if mss_confirmed and fvg_confirmed and bear_total >= 5 and float(closed.iloc[-1]["ADX 14"]) >= 18:
+                    if mss_confirmed and fvg_confirmed and bear_total >= 7 and float(closed.iloc[-1]["ADX 14"]) >= 25:
                         signal_side = "SELL"
-                        signal_reasons = ["Buy-side liquidity sweep", "Bearish MSS", "Bearish FVG", f"{bear_total}/9 bearish indicator checks"]
+                        signal_reasons = ["Buy-side liquidity sweep", "Bearish MSS", "Bearish FVG", f"{bear_total}/9 bearish indicator checks · STRONG"]
 
     signal_entry = float(closed.iloc[-1]["close"])
     signal_atr = float(closed.iloc[-1]["ATR 14"]) if pd.notna(closed.iloc[-1]["ATR 14"]) else 0.0
@@ -648,13 +648,13 @@ try:
           <div class="ark-card"><div class="ark-label">RISK / REWARD</div><div class="ark-value">{plan_rr}</div><div class="ark-note">Indicative, before spread/slippage</div></div>
         </div>
         """, unsafe_allow_html=True)
-        st.caption("Signal logic: recent 20-bar liquidity level, confirmed candle close, recent FVG aur kam az kam 5/9 indicator checks (EMA, RSI, MACD, Bollinger, Supertrend, VWAP, Stoch RSI, DMI, volume) aur ADX >= 18. Latest open candle ignore ki gayi hai.")
+        st.caption("Signal logic: recent 20-bar liquidity level, confirmed candle close, recent FVG aur kam az kam 7/9 indicator checks (EMA, RSI, MACD, Bollinger, Supertrend, VWAP, Stoch RSI, DMI, volume) aur ADX >= 25. Latest open candle ignore ki gayi hai.")
     else:
         st.markdown(f"""
         <div class="ark-hero">
           <div class="ark-kicker">{FEED_SYMBOL} · {selected} · CLOSED-CANDLE SETUP</div>
-          <div class="ark-title">{signal_side} SIGNAL</div>
-          <div class="ark-sub">ICT sweep + MSS + FVG and indicator confluence confirmed by the rule set.</div>
+          <div class="ark-title">STRONG {signal_side} SIGNAL</div>
+          <div class="ark-sub">Strong setup: ICT sweep + MSS + FVG, at least 7/9 indicator checks and ADX >= 25. Closed candles only.</div>
         </div>
         """, unsafe_allow_html=True)
         def fmt_level(value):
