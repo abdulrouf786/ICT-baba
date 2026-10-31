@@ -135,12 +135,21 @@ st.warning(
 @st.cache_data(ttl=30, show_spinner=False)
 def load_ohlc(interval):
     url = f"https://biquote.io/api/XAUUSD/ohlc?interval={interval}&limit=500"
-    response = requests.get(url, timeout=15)
+    # Fixed HTTPS endpoint only; TLS certificate verification remains enabled.
+    response = requests.get(
+        url,
+        timeout=(5, 15),
+        headers={"Accept": "application/json", "User-Agent": "AbdulRaufKing-Chart/1.0"},
+    )
     response.raise_for_status()
+    if len(response.content) > 2_000_000:
+        raise ValueError("Gold data response is unexpectedly large.")
     payload = response.json()
+    if not isinstance(payload, dict):
+        raise ValueError("Gold data response format is invalid.")
     bars = payload.get("bars", [])
-    if not bars:
-        raise ValueError("Gold OHLC feed ne candles return nahi ki.")
+    if not isinstance(bars, list) or not bars or len(bars) > 1000:
+        raise ValueError("Gold OHLC feed ne valid candle list return nahi ki.")
     frame = pd.DataFrame(bars)
     required = ["openTime", "open", "high", "low", "close"]
     if not all(col in frame.columns for col in required):
@@ -512,7 +521,8 @@ try:
     if st.button("Refresh ICT data"):
         st.cache_data.clear()
         st.rerun()
-except Exception as exc:
-    st.error(f"ICT data load nahi ho saka: {exc}")
+except Exception:
+    # Avoid exposing raw upstream/server exception details in the public UI.
+    st.error("ICT data load nahi ho saka. Data feed ya network temporarily unavailable ho sakta hai.")
     st.info("Original TradingView Vantage chart upar available rehna chahiye. Thori dair baad refresh karein.")
 
