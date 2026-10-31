@@ -9,24 +9,20 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-# Give the chart the maximum available page width.
 st.markdown("""
 <style>
 .block-container {
     max-width: 100% !important;
-    padding-top: 0.35rem !important;
+    padding-top: 0.25rem !important;
     padding-left: 0.15rem !important;
     padding-right: 0.15rem !important;
     padding-bottom: 0 !important;
 }
-iframe {
-    width: 100% !important;
-}
+iframe { width: 100% !important; }
 </style>
 """, unsafe_allow_html=True)
 
 SYMBOL = "VANTAGE:XAUUSD"
-
 st.title("🥇 ICT BABA — VANTAGE GOLD")
 
 timeframes = {
@@ -37,6 +33,8 @@ timeframes = {
     "4 Hours": "240",
 }
 selected = st.selectbox("Gold timeframe", list(timeframes.keys()), index=2)
+
+CHART_HEIGHT = 1800
 
 widget_config = {
     "autosize": True,
@@ -60,8 +58,8 @@ widget_config = {
 }
 
 widget_html = f"""
-<div class="tradingview-widget-container" style="height:1240px;width:100%">
-  <div class="tradingview-widget-container__widget" style="height:1220px;width:100%"></div>
+<div class="tradingview-widget-container" style="height:{CHART_HEIGHT}px;width:100%">
+  <div class="tradingview-widget-container__widget" style="height:{CHART_HEIGHT}px;width:100%"></div>
   <script type="text/javascript"
     src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js"
     async>
@@ -70,7 +68,12 @@ widget_html = f"""
 </div>
 """
 
-components.html(widget_html, height=1260, width="100%", scrolling=False)
+components.html(
+    widget_html,
+    height=CHART_HEIGHT + 20,
+    width="100%",
+    scrolling=False,
+)
 
 st.info(
     "TradingView VANTAGE:XAUUSD chart. ICT Sweep, MSS, FVG aur BUY/SELL "
