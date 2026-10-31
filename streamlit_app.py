@@ -291,6 +291,31 @@ try:
     ).max(axis=1)
     ict_df["ATR 14"] = true_range.ewm(alpha=1/14, adjust=False).mean()
 
+    # Supertrend (10, 3): ATR-based trend direction and trailing line.
+    st_period = 10
+    st_multiplier = 3.0
+    st_atr = true_range.ewm(alpha=1/st_period, adjust=False).mean()
+    hl2 = (high + low) / 2
+    basic_upper = hl2 + st_multiplier * st_atr
+    basic_lower = hl2 - st_multiplier * st_atr
+    final_upper = basic_upper.copy()
+    final_lower = basic_lower.copy()
+    st_line = pd.Series(index=ict_df.index, dtype="float64")
+    st_direction = pd.Series(index=ict_df.index, dtype="object")
+    for i in range(len(ict_df)):
+        if i > 0:
+            final_upper.iloc[i] = basic_upper.iloc[i] if basic_upper.iloc[i] < final_upper.iloc[i-1] or close.iloc[i-1] > final_upper.iloc[i-1] else final_upper.iloc[i-1]
+            final_lower.iloc[i] = basic_lower.iloc[i] if basic_lower.iloc[i] > final_lower.iloc[i-1] or close.iloc[i-1] < final_lower.iloc[i-1] else final_lower.iloc[i-1]
+        if i == 0:
+            st_direction.iloc[i] = "BULLISH" if close.iloc[i] >= hl2.iloc[i] else "BEARISH"
+        elif st_direction.iloc[i-1] == "BEARISH":
+            st_direction.iloc[i] = "BULLISH" if close.iloc[i] > final_upper.iloc[i] else "BEARISH"
+        else:
+            st_direction.iloc[i] = "BEARISH" if close.iloc[i] < final_lower.iloc[i] else "BULLISH"
+        st_line.iloc[i] = final_lower.iloc[i] if st_direction.iloc[i] == "BULLISH" else final_upper.iloc[i]
+    ict_df["Supertrend 10,3"] = st_line
+    ict_df["Supertrend Direction"] = st_direction
+
     up_move = high.diff()
     down_move = -low.diff()
     plus_dm = up_move.where((up_move > down_move) & (up_move > 0), 0.0)
@@ -327,6 +352,8 @@ try:
         mode="lines", name="EMA 50",
         line=dict(color="#42a5f5", width=1.5),
     ))
+    fig.add_trace(go.Scatter(x=ict_df["openTime"], y=ict_df["Supertrend 10,3"].where(ict_df["Supertrend Direction"] == "BULLISH"), mode="lines", name="Supertrend bullish", line=dict(color="#27d69a", width=2)))
+    fig.add_trace(go.Scatter(x=ict_df["openTime"], y=ict_df["Supertrend 10,3"].where(ict_df["Supertrend Direction"] == "BEARISH"), mode="lines", name="Supertrend bearish", line=dict(color="#ff6577", width=2)))
     add_ict_marks(fig, ict_df)
     fig.update_layout(
         height=620,
@@ -349,8 +376,10 @@ try:
     macd_bear = bool(pd.notna(last["MACD"]) and last["MACD"] < last["MACD Signal"])
     bb_bull = bool(pd.notna(last["BB Middle"]) and last["close"] > last["BB Middle"])
     bb_bear = bool(pd.notna(last["BB Middle"]) and last["close"] < last["BB Middle"])
-    bull_total = sum([ema_bull, rsi_bull, macd_bull, bb_bull])
-    bear_total = sum([ema_bear, rsi_bear, macd_bear, bb_bear])
+    supertrend_bull = bool(last["Supertrend Direction"] == "BULLISH")
+    supertrend_bear = bool(last["Supertrend Direction"] == "BEARISH")
+    bull_total = sum([ema_bull, rsi_bull, macd_bull, bb_bull, supertrend_bull])
+    bear_total = sum([ema_bear, rsi_bear, macd_bear, bb_bear, supertrend_bear])
 
     if bull_total >= 3 and bull_total > bear_total:
         bias, pill_class, bias_detail = "BULLISH", "bull", "Bullish conditions are stronger; wait for ICT entry confirmation."
@@ -396,16 +425,17 @@ try:
       <div class="ark-card"><div class="ark-label">Bollinger lower</div><div class="ark-value">{bb_lower_text}</div><div class="ark-note">Lower volatility band</div></div>
       <div class="ark-card"><div class="ark-label">ATR 14</div><div class="ark-value">{atr_text}</div><div class="ark-note">{atr_state}</div></div>
       <div class="ark-card"><div class="ark-label">ADX 14</div><div class="ark-value">{adx_text}</div><div class="ark-note">{adx_state}</div></div>
+      <div class="ark-card"><div class="ark-label">SUPERTREND 10,3</div><div class="ark-value">{last["Supertrend Direction"]}</div><div class="ark-note">ATR trend confirmation</div></div>
     </div>
     """, unsafe_allow_html=True)
 
     st.markdown('<div class="ark-section">🧠 Signal confluence</div>', unsafe_allow_html=True)
     st.markdown(f"""
     <div class="ark-score-wrap">
-      <div class="ark-score-row"><span>Bullish confirmation</span><strong>{bull_total}/4</strong></div>
-      <div class="ark-track"><div class="ark-fill-bull" style="width:{bull_total * 25}%"></div></div>
-      <div class="ark-score-row"><span>Bearish confirmation</span><strong>{bear_total}/4</strong></div>
-      <div class="ark-track"><div class="ark-fill-bear" style="width:{bear_total * 25}%"></div></div>
+      <div class="ark-score-row"><span>Bullish confirmation</span><strong>{bull_total}/5</strong></div>
+      <div class="ark-track"><div class="ark-fill-bull" style="width:{bull_total * 20}%"></div></div>
+      <div class="ark-score-row"><span>Bearish confirmation</span><strong>{bear_total}/5</strong></div>
+      <div class="ark-track"><div class="ark-fill-bear" style="width:{bear_total * 20}%"></div></div>
       <div class="ark-note">EMA trend · RSI momentum · MACD momentum · Bollinger position</div>
     </div>
     """, unsafe_allow_html=True)
@@ -450,7 +480,7 @@ try:
                     ))
                     if mss_confirmed and fvg_confirmed and bull_total >= 2:
                         signal_side = "BUY"
-                        signal_reasons = ["Sell-side liquidity sweep", "Bullish MSS", "Bullish FVG", f"{bull_total}/4 bullish indicator checks"]
+                        signal_reasons = ["Sell-side liquidity sweep", "Bullish MSS", "Bullish FVG", f"{bull_total}/5 bullish indicator checks"]
                 else:
                     mss_confirmed = bool((later["close"] < structure_level).any())
                     fvg_confirmed = bool(any(
@@ -460,7 +490,7 @@ try:
                     ))
                     if mss_confirmed and fvg_confirmed and bear_total >= 2:
                         signal_side = "SELL"
-                        signal_reasons = ["Buy-side liquidity sweep", "Bearish MSS", "Bearish FVG", f"{bear_total}/4 bearish indicator checks"]
+                        signal_reasons = ["Buy-side liquidity sweep", "Bearish MSS", "Bearish FVG", f"{bear_total}/5 bearish indicator checks"]
 
     signal_entry = float(closed.iloc[-1]["close"])
     signal_atr = float(closed.iloc[-1]["ATR 14"]) if pd.notna(closed.iloc[-1]["ATR 14"]) else 0.0
