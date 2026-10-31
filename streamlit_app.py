@@ -11,7 +11,7 @@ st.set_page_config(
 SYMBOL = "VANTAGE:XAUUSD"
 
 st.title("🥇 ICT BABA — VANTAGE GOLD")
-st.caption("TradingView market chart | VANTAGE:XAUUSD | Real-time data subject to TradingView availability")
+st.caption("TradingView market chart | VANTAGE:XAUUSD")
 
 timeframes = {
     "1 Minute": "1",
@@ -23,9 +23,6 @@ timeframes = {
 
 selected = st.selectbox("Gold timeframe", list(timeframes.keys()), index=2)
 
-# Official TradingView Advanced Chart widget.
-# This displays TradingView's own VANTAGE:XAUUSD feed instead of relabelling
-# Twelve Data candles as Vantage candles.
 widget_config = {
     "autosize": True,
     "symbol": SYMBOL,
@@ -48,8 +45,8 @@ widget_config = {
 }
 
 widget_html = f"""
-<div class="tradingview-widget-container" style="height:720px;width:100%">
-  <div class="tradingview-widget-container__widget" style="height:700px;width:100%"></div>
+<div class="tradingview-widget-container" style="height:940px;width:100%">
+  <div class="tradingview-widget-container__widget" style="height:920px;width:100%"></div>
   <script type="text/javascript"
     src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js"
     async>
@@ -58,16 +55,15 @@ widget_html = f"""
 </div>
 """
 
-components.html(widget_html, height=730, scrolling=False)
+components.html(widget_html, height=960, scrolling=False)
 
 st.info(
     "Chart TradingView ke VANTAGE:XAUUSD feed se aa raha hai. "
-    "Liquidity Sweep, MSS, FVG aur BUY/SELL signals filhaal band hain, "
-    "kyunki unhein isi Vantage feed ke verified OHLC data par calculate karna zaroori hai. "
-    "Doosre provider ki candles par Vantage signals dikhana ghalat ho sakta hai."
+    "Liquidity Sweep, MSS, FVG aur BUY/SELL signals filhaal band hain; "
+    "unhein activate karne ke liye isi Vantage feed ka verified OHLC data connection chahiye."
 )
 
 st.caption(
     "ICT Baba | TradingView chart is embedded for analysis. "
-    "TradingView data availability and any exchange/broker permissions apply."
+    "TradingView data availability and broker permissions apply."
 )
