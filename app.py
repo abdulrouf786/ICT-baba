@@ -21,7 +21,7 @@ st.markdown("""
 }
 h1 { font-size: 1.3rem !important; line-height: 1.15 !important; white-space: nowrap !important; margin-top: 0 !important; margin-bottom: 0.25rem !important; }
 [data-testid='stSelectbox'] { margin-bottom: 0.25rem !important; }
-iframe { width: 100% !important; }
+iframe { width: 100% !important; touch-action: pan-y !important; }\nbody { overscroll-behavior-y: auto !important; }\n.block-container { padding-bottom: 220px !important; }
 </style>
 """, unsafe_allow_html=True)
 
