@@ -31,6 +31,10 @@ div[data-testid="stAlert"] { border-radius:15px !important; border:1px solid #40
 .stButton button:hover { border-color:#d8b86a; color:#fff; background:linear-gradient(135deg,#31577f,#1b3858); }
 .ark-hero { background:radial-gradient(ellipse at 90% 0%,#c7a75b22 0%,transparent 42%),linear-gradient(118deg,#1b3455 0%,#111e32 56%,#122c31 100%); border:1px solid #6b7890; border-radius:22px; padding:21px 20px; margin:10px 0 16px; box-shadow:0 16px 38px #0006,inset 0 1px #ffffff18; position:relative; overflow:hidden; }
 .ark-hero:after { content:""; position:absolute; width:170px; height:170px; right:-62px; bottom:-105px; border:1px solid #d7b96a66; border-radius:50%; box-shadow:0 0 0 16px #d7b96a0b,0 0 0 34px #d7b96a08; pointer-events:none; }
+.ark-profile-row { display:flex; align-items:center; gap:17px; position:relative; z-index:1; }
+.ark-avatar { width:104px; height:104px; flex:0 0 104px; object-fit:cover; object-position:center 28%; border-radius:50%; border:3px solid #d8b86a; padding:3px; background:#101a2a; box-shadow:0 0 0 5px #d8b86a20,0 8px 22px #0007; }
+.ark-profile-copy { min-width:0; }
+@media(max-width:520px) { .ark-hero { padding:15px 13px; } .ark-profile-row { gap:12px; } .ark-avatar { width:82px; height:82px; flex-basis:82px; } .ark-title { font-size:22px !important; } .ark-kicker { font-size:9px; letter-spacing:1.1px; } .ark-sub { font-size:10px; } }
 .ark-kicker { color:#e0c783; font-size:10px; letter-spacing:2px; font-weight:900; }
 .ark-title { color:#fff; font-size:clamp(23px,4vw,31px); font-weight:950; margin-top:6px; letter-spacing:.15px; text-shadow:0 3px 18px #0008; }
 .ark-sub { color:#c0cde0; font-size:12px; margin-top:7px; line-height:1.6; letter-spacing:.35px; }
@@ -81,12 +85,30 @@ SYMBOL = asset["tv"]
 FEED_SYMBOL = asset["feed"]
 ASSET_LABEL = asset["label"]
 
+# Load the owner's profile portrait from this repository.
+try:
+    profile_b64 = requests.get(
+        "https://raw.githubusercontent.com/abdulrouf786/ict-baba/main/profile_photo.b64",
+        timeout=12,
+    ).text.strip()
+    profile_photo_html = (
+        f'<img src="data:image/jpeg;base64,{profile_b64}" '
+        'class="ark-avatar" alt="Abdul Rauf King profile photo">'
+    )
+except Exception:
+    profile_photo_html = ""
+
 st.markdown(f"""
 <div class="ark-hero" style="margin-top:4px">
-  <div class="ark-kicker">✦ PREMIUM MARKET TERMINAL · FREE ANALYSIS</div>
-  <div class="ark-title">👑 ABDUL RAUF KING</div>
-  <div class="ark-sub">{ASSET_LABEL.upper()} · {FEED_SYMBOL} · ICT SMART MONEY + MULTI-INDICATOR SUITE</div>
-  <div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:12px">
+  <div class="ark-profile-row">
+    {profile_photo_html}
+    <div class="ark-profile-copy">
+      <div class="ark-kicker">✦ PREMIUM MARKET TERMINAL · FREE ANALYSIS</div>
+      <div class="ark-title">👑 ABDUL RAUF KING</div>
+      <div class="ark-sub">{ASSET_LABEL.upper()} · {FEED_SYMBOL} · ICT SMART MONEY + MULTI-INDICATOR SUITE</div>
+    </div>
+  </div>
+  <div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:14px">
     <span class="ark-pill bull">● LIVE MARKET</span>
     <span class="ark-pill neutral">✦ ICT ANALYSIS</span>
     <span class="ark-pill">⚡ STRONG SIGNAL FILTER</span>
