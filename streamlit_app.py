@@ -14,24 +14,42 @@ st.set_page_config(
 
 st.markdown("""
 <style>
+.stApp { background: #080d18; color: #e8edf7; }
 .block-container {
-    max-width: 100% !important;
-    zoom: 0.75;
-    padding-top: 0.15rem !important;
-    padding-left: 0.15rem !important;
-    padding-right: 0.15rem !important;
-    padding-bottom: 1rem !important;
+    max-width: 1120px !important;
+    padding-top: .7rem !important;
+    padding-left: .8rem !important;
+    padding-right: .8rem !important;
+    padding-bottom: 2rem !important;
 }
-h1 {
-    font-size: 1.3rem !important;
-    line-height: 1.15 !important;
-    white-space: nowrap !important;
-    margin-top: 0 !important;
-    margin-bottom: 0.25rem !important;
-}
-[data-testid='stSelectbox'] { margin-bottom: 0.25rem !important; }
-iframe { width: 100% !important; touch-action: pan-y !important; }
-body { overscroll-behavior-y: auto !important; }
+h1 { font-size: 1.55rem !important; line-height: 1.15 !important; margin: 0 0 .2rem 0 !important; }
+h2, h3, p, label, [data-testid="stMarkdownContainer"] { color: #e8edf7; }
+[data-testid="stSelectbox"] > div > div { background: #111a2b; border: 1px solid #26344d; border-radius: 12px; }
+[data-testid="stMetric"] { background: #111a2b; border: 1px solid #26344d; padding: 12px 14px; border-radius: 13px; }
+[data-testid="stMetricLabel"] { color: #91a2bd !important; }
+[data-testid="stMetricValue"] { color: #f4f7ff !important; }
+div[data-testid="stAlert"] { border-radius: 14px; }
+.ark-hero { background: linear-gradient(120deg,#121f35,#101827 65%,#172b40); border:1px solid #2a3c59; border-radius:17px; padding:17px; margin:8px 0 14px; }
+.ark-kicker { color:#8ea5c7; font-size:11px; letter-spacing:1.5px; font-weight:700; }
+.ark-title { color:#f7f9ff; font-size:23px; font-weight:800; margin-top:3px; }
+.ark-sub { color:#9aabc4; font-size:12px; margin-top:4px; }
+.ark-pill { display:inline-block; padding:6px 11px; border-radius:99px; font-size:11px; font-weight:800; letter-spacing:.7px; background:#3b1b25; color:#ff8d9a; border:1px solid #71313d; }
+.ark-pill.bull { background:#123629; color:#72e3ad; border-color:#24664a; }
+.ark-pill.neutral { background:#342d18; color:#f2d27c; border-color:#66552a; }
+.ark-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; margin:12px 0 16px; }
+.ark-card { background:#111a2b; border:1px solid #26344d; border-radius:13px; padding:12px; min-width:0; }
+.ark-label { color:#8ea0bb; font-size:11px; font-weight:650; letter-spacing:.35px; }
+.ark-value { color:#f5f7fc; font-size:20px; font-weight:750; margin-top:5px; overflow-wrap:anywhere; }
+.ark-note { color:#8293ad; font-size:10px; margin-top:3px; }
+.ark-section { color:#f2f5fc; font-size:16px; font-weight:800; margin:18px 0 7px; }
+.ark-score-wrap { background:#111a2b; border:1px solid #26344d; border-radius:14px; padding:13px; margin:10px 0; }
+.ark-score-row { display:flex; justify-content:space-between; gap:10px; color:#a9b8ce; font-size:12px; margin:5px 0; }
+.ark-track { height:7px; border-radius:99px; background:#25334a; overflow:hidden; margin-bottom:10px; }
+.ark-fill-bull { height:100%; background:#28c58b; }
+.ark-fill-bear { height:100%; background:#ed6474; }
+@media (min-width:700px) { .ark-grid { grid-template-columns:repeat(4,minmax(0,1fr)); } }
+iframe { width:100% !important; touch-action:pan-y !important; }
+body { overscroll-behavior-y:auto !important; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -313,38 +331,7 @@ try:
         showlegend=False,
     )
     st.plotly_chart(fig, use_container_width=True, config={"displaylogo": False})
-    st.subheader("📊 Technical Indicators — EMA, RSI + 4")
-    st.caption("Same XAUUSD OHLC feed par calculate kiye gaye indicators; EMA 20/50 chart par bhi plotted hain.")
-    ind1, ind2, ind3 = st.columns(3)
-    ind1.metric("EMA 20", f"{last['EMA 20']:,.2f}")
-    ind2.metric("EMA 50", f"{last['EMA 50']:,.2f}")
-    ind3.metric("RSI 14", "—" if pd.isna(last["RSI 14"]) else f"{last['RSI 14']:.1f}")
-    ind4, ind5, ind6 = st.columns(3)
-    ind4.metric("MACD", "—" if pd.isna(last["MACD"]) else f"{last['MACD']:.3f}")
-    ind5.metric("Bollinger Upper", "—" if pd.isna(last["BB Upper"]) else f"{last['BB Upper']:,.2f}")
-    ind6.metric("Bollinger Lower", "—" if pd.isna(last["BB Lower"]) else f"{last['BB Lower']:,.2f}")
-    ind7, ind8 = st.columns(2)
-    ind7.metric("ATR 14", "—" if pd.isna(last["ATR 14"]) else f"{last['ATR 14']:.3f}")
-    ind8.metric("ADX 14", "—" if pd.isna(last["ADX 14"]) else f"{last['ADX 14']:.1f}")
-
-    bullish_checks = [
-        last["close"] > last["EMA 20"] > last["EMA 50"],
-        pd.notna(last["RSI 14"]) and last["RSI 14"] > 50,
-        pd.notna(last["MACD"]) and last["MACD"] > last["MACD Signal"],
-    ]
-    bearish_checks = [
-        last["close"] < last["EMA 20"] < last["EMA 50"],
-        pd.notna(last["RSI 14"]) and last["RSI 14"] < 50,
-        pd.notna(last["MACD"]) and last["MACD"] < last["MACD Signal"],
-    ]
-    bullish_score = sum(bool(x) for x in bullish_checks)
-    bearish_score = sum(bool(x) for x in bearish_checks)
-    score1, score2 = st.columns(2)
-    score1.metric("Basic bullish checks", f"{bullish_score}/3")
-    score2.metric("Basic bearish checks", f"{bearish_score}/3")
-
-    # Pipflow-style rule-based confluence summary (analysis only; no orders).
-    st.subheader("🤖 AI CONFLUENCE — EMA + RSI + 4 INDICATORS")
+    # Pipflow-inspired mobile-first analysis dashboard.
     ema_bull = bool(last["close"] > last["EMA 20"] > last["EMA 50"])
     ema_bear = bool(last["close"] < last["EMA 20"] < last["EMA 50"])
     rsi_bull = bool(pd.notna(last["RSI 14"]) and last["RSI 14"] > 50)
@@ -356,27 +343,71 @@ try:
     bull_total = sum([ema_bull, rsi_bull, macd_bull, bb_bull])
     bear_total = sum([ema_bear, rsi_bear, macd_bear, bb_bear])
 
-    ai_left, ai_right = st.columns(2)
-    ai_left.metric("Bullish confluence", f"{bull_total}/4")
-    ai_right.metric("Bearish confluence", f"{bear_total}/4")
     if bull_total >= 3 and bull_total > bear_total:
-        st.success("AI-style bias: BULLISH — multiple indicators agree. Wait for ICT entry confirmation.")
+        bias, pill_class, bias_detail = "BULLISH", "bull", "Bullish conditions are stronger; wait for ICT entry confirmation."
     elif bear_total >= 3 and bear_total > bull_total:
-        st.error("AI-style bias: BEARISH — multiple indicators agree. Wait for ICT entry confirmation.")
+        bias, pill_class, bias_detail = "BEARISH", "", "Bearish conditions are stronger; wait for ICT entry confirmation."
     else:
-        st.info("AI-style bias: NEUTRAL / MIXED — indicators do not agree strongly.")
+        bias, pill_class, bias_detail = "NEUTRAL", "neutral", "Signals are mixed; wait for a clearer setup."
 
+    rsi_value = last["RSI 14"]
     adx_value = last["ADX 14"]
     atr_value = last["ATR 14"]
-    rsi_value = last["RSI 14"]
-    rsi_state = "Overbought zone" if pd.notna(rsi_value) and rsi_value >= 70 else ("Oversold zone" if pd.notna(rsi_value) and rsi_value <= 30 else "Middle range")
-    adx_state = "Strong trend" if pd.notna(adx_value) and adx_value >= 25 else "Weak / developing trend"
-    atr_state = "High volatility" if pd.notna(atr_value) and atr_value > ict_df["ATR 14"].tail(50).median() else "Normal / low volatility"
-    s1, s2, s3 = st.columns(3)
-    s1.metric("RSI condition", rsi_state)
-    s2.metric("ADX condition", adx_state)
-    s3.metric("ATR condition", atr_state)
-    st.caption("This is a transparent indicator checklist, not machine-learning prediction or a guaranteed trade signal. It does not place orders.")
+    macd_value = last["MACD"]
+    bb_upper = last["BB Upper"]
+    bb_lower = last["BB Lower"]
+    rsi_text = "—" if pd.isna(rsi_value) else f"{rsi_value:.1f}"
+    macd_text = "—" if pd.isna(macd_value) else f"{macd_value:.3f}"
+    bb_upper_text = "—" if pd.isna(bb_upper) else f"{bb_upper:,.2f}"
+    bb_lower_text = "—" if pd.isna(bb_lower) else f"{bb_lower:,.2f}"
+    atr_text = "—" if pd.isna(atr_value) else f"{atr_value:.3f}"
+    adx_text = "—" if pd.isna(adx_value) else f"{adx_value:.1f}"
+    rsi_state = "Overbought" if pd.notna(rsi_value) and rsi_value >= 70 else ("Oversold" if pd.notna(rsi_value) and rsi_value <= 30 else "Middle range")
+    adx_state = "Strong trend" if pd.notna(adx_value) and adx_value >= 25 else "Weak / developing"
+    atr_state = "High volatility" if pd.notna(atr_value) and atr_value > ict_df["ATR 14"].tail(50).median() else "Normal volatility"
+
+    st.markdown(f"""
+    <div class="ark-hero">
+      <div class="ark-kicker">ABDUL RAUF KING · GOLD MARKET INTELLIGENCE</div>
+      <div class="ark-title">AI Market Analyst</div>
+      <div class="ark-sub">XAUUSD · {selected} · Rule-based indicator confluence</div>
+      <div style="margin-top:13px"><span class="ark-pill {pill_class}">{bias} MARKET BIAS</span></div>
+      <div class="ark-sub" style="margin-top:10px">{bias_detail}</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown('<div class="ark-section">📊 Indicator dashboard</div>', unsafe_allow_html=True)
+    st.markdown(f"""
+    <div class="ark-grid">
+      <div class="ark-card"><div class="ark-label">EMA 20</div><div class="ark-value">{last["EMA 20"]:,.2f}</div><div class="ark-note">Short trend</div></div>
+      <div class="ark-card"><div class="ark-label">EMA 50</div><div class="ark-value">{last["EMA 50"]:,.2f}</div><div class="ark-note">Long trend</div></div>
+      <div class="ark-card"><div class="ark-label">RSI 14</div><div class="ark-value">{rsi_text}</div><div class="ark-note">{rsi_state}</div></div>
+      <div class="ark-card"><div class="ark-label">MACD</div><div class="ark-value">{macd_text}</div><div class="ark-note">Momentum</div></div>
+      <div class="ark-card"><div class="ark-label">Bollinger upper</div><div class="ark-value">{bb_upper_text}</div><div class="ark-note">Upper volatility band</div></div>
+      <div class="ark-card"><div class="ark-label">Bollinger lower</div><div class="ark-value">{bb_lower_text}</div><div class="ark-note">Lower volatility band</div></div>
+      <div class="ark-card"><div class="ark-label">ATR 14</div><div class="ark-value">{atr_text}</div><div class="ark-note">{atr_state}</div></div>
+      <div class="ark-card"><div class="ark-label">ADX 14</div><div class="ark-value">{adx_text}</div><div class="ark-note">{adx_state}</div></div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown('<div class="ark-section">🧠 Signal confluence</div>', unsafe_allow_html=True)
+    st.markdown(f"""
+    <div class="ark-score-wrap">
+      <div class="ark-score-row"><span>Bullish confirmation</span><strong>{bull_total}/4</strong></div>
+      <div class="ark-track"><div class="ark-fill-bull" style="width:{bull_total * 25}%"></div></div>
+      <div class="ark-score-row"><span>Bearish confirmation</span><strong>{bear_total}/4</strong></div>
+      <div class="ark-track"><div class="ark-fill-bear" style="width:{bear_total * 25}%"></div></div>
+      <div class="ark-note">EMA trend · RSI momentum · MACD momentum · Bollinger position</div>
+    </div>
+    """, unsafe_allow_html=True)
+    if bias == "BULLISH":
+        st.success("BULLISH BIAS — ICT sweep, MSS aur FVG confirmation ka intezar karein.")
+    elif bias == "BEARISH":
+        st.error("BEARISH BIAS — ICT sweep, MSS aur FVG confirmation ka intezar karein.")
+    else:
+        st.info("NEUTRAL BIAS — abhi indicators ek direction par agree nahi kar rahe.")
+
+
 
     st.caption("ADX trend strength aur ATR volatility measure karta hai; Bollinger Bands price range/volatility dikhate hain. Yeh analysis hai, guaranteed BUY/SELL signal nahi.")
 
