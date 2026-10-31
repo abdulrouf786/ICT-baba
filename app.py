@@ -1,4 +1,7 @@
 import json
+import requests
+import pandas as pd
+import plotly.graph_objects as go
 import streamlit as st
 import streamlit.components.v1 as components
 
@@ -27,10 +30,7 @@ h1 {
     margin-bottom: 0.25rem !important;
 }
 [data-testid='stSelectbox'] { margin-bottom: 0.25rem !important; }
-iframe {
-    width: 100% !important;
-    touch-action: pan-y !important;
-}
+iframe { width: 100% !important; touch-action: pan-y !important; }
 body { overscroll-behavior-y: auto !important; }
 </style>
 """, unsafe_allow_html=True)
@@ -40,7 +40,7 @@ SYMBOL = "VANTAGE:XAUUSD"
 st.title("👑 ABDUL RAUF KING")
 st.caption("VANTAGE GOLD — XAUUSD")
 
-# TradingView quote strip for the same Vantage Gold symbol.
+# Original TradingView Vantage Gold quote strip.
 ticker_config = {
     "symbols": [{"proName": SYMBOL, "title": "Vantage Gold"}],
     "colorTheme": "dark",
@@ -61,21 +61,23 @@ ticker_html = f"""
 components.html(ticker_html, height=50, scrolling=False)
 
 timeframes = {
-    "1 Minute": "1",
-    "5 Minutes": "5",
-    "15 Minutes": "15",
-    "1 Hour": "60",
-    "4 Hours": "240",
+    "1 Minute": ("1", "1m"),
+    "5 Minutes": ("5", "5m"),
+    "15 Minutes": ("15", "15m"),
+    "1 Hour": ("60", "1h"),
+    "4 Hours": ("240", "4h"),
 }
 selected = st.selectbox("Gold timeframe", list(timeframes.keys()), index=2)
+tv_interval, api_interval = timeframes[selected]
 
+# The original Vantage TradingView chart is preserved unchanged.
 CHART_HEIGHT = 650
 widget_config = {
     "autosize": False,
     "height": CHART_HEIGHT,
     "width": "100%",
     "symbol": SYMBOL,
-    "interval": timeframes[selected],
+    "interval": tv_interval,
     "timezone": "Asia/Karachi",
     "theme": "dark",
     "style": "1",
@@ -92,7 +94,6 @@ widget_config = {
     "withdateranges": True,
     "support_host": "https://www.tradingview.com",
 }
-
 widget_html = f"""
 <div class="tradingview-widget-container" style="height:{CHART_HEIGHT}px;width:100%">
   <div class="tradingview-widget-container__widget" style="height:{CHART_HEIGHT}px;width:100%"></div>
@@ -105,9 +106,170 @@ widget_html = f"""
 """
 components.html(widget_html, height=CHART_HEIGHT + 20, scrolling=True)
 
-st.caption(
-    "Original TradingView VANTAGE:XAUUSD candles. "
-    "Custom ICT marks (Liquidity Sweep, MSS, FVG, BUY/SELL) are not overlaid yet: "
-    "TradingView's embedded chart does not allow this app to inject custom Pine indicators. "
-    "A compatible OHLC data connection or TradingView charting integration is required."
+st.divider()
+st.subheader("📍 ICT BABA — Liquidity / MSS / FVG")
+st.warning(
+    "Original TradingView Vantage chart upar safe hai. Neeche ICT markings ek alag "
+    "public MT5 XAUUSD data feed par calculate hoti hain; yeh Vantage broker candles "
+    "nahi hain, isliye dono charts ke prices mein farq ho sakta hai."
 )
+
+@st.cache_data(ttl=30, show_spinner=False)
+def load_ohlc(interval):
+    url = f"https://biquote.io/api/XAUUSD/ohlc?interval={interval}&limit=500"
+    response = requests.get(url, timeout=15)
+    response.raise_for_status()
+    payload = response.json()
+    bars = payload.get("bars", [])
+    if not bars:
+        raise ValueError("Gold OHLC feed ne candles return nahi ki.")
+    frame = pd.DataFrame(bars)
+    required = ["openTime", "open", "high", "low", "close"]
+    if not all(col in frame.columns for col in required):
+        raise ValueError("OHLC response ka format expected format se different hai.")
+    frame["openTime"] = pd.to_datetime(frame["openTime"], utc=True, errors="coerce")
+    for col in ["open", "high", "low", "close"]:
+        frame[col] = pd.to_numeric(frame[col], errors="coerce")
+    frame = frame.dropna(subset=required).sort_values("openTime").drop_duplicates("openTime")
+    return frame.tail(450).reset_index(drop=True)
+
+def add_ict_marks(fig, df, swing_len=5):
+    highs = df["high"].tolist()
+    lows = df["low"].tolist()
+    closes = df["close"].tolist()
+    times = df["openTime"].tolist()
+
+    last_ph = None
+    last_pl = None
+    swept_high = False
+    swept_low = False
+    swing_highs = []
+    swing_lows = []
+
+    # Confirm pivots only after swing_len bars have formed on the right.
+    for i in range(len(df)):
+        p = i - swing_len
+        if p >= swing_len:
+            window_h = highs[p - swing_len:p + swing_len + 1]
+            window_l = lows[p - swing_len:p + swing_len + 1]
+            if highs[p] == max(window_h) and window_h.count(highs[p]) == 1:
+                last_ph = highs[p]
+                swept_high = False
+                swing_highs.append((p, last_ph))
+            if lows[p] == min(window_l) and window_l.count(lows[p]) == 1:
+                last_pl = lows[p]
+                swept_low = False
+                swing_lows.append((p, last_pl))
+
+        # BSL / SSL reference levels
+        if i == len(df) - 1:
+            if last_ph is not None:
+                fig.add_hline(y=last_ph, line_dash="dot", line_color="#ff5c6c",
+                              annotation_text="BSL", annotation_position="top left")
+            if last_pl is not None:
+                fig.add_hline(y=last_pl, line_dash="dot", line_color="#35c9c0",
+                              annotation_text="SSL", annotation_position="bottom left")
+
+        # Liquidity sweep: wick runs the swing level, candle closes back through it.
+        if last_ph is not None and not swept_high and highs[i] > last_ph and closes[i] < last_ph:
+            fig.add_annotation(x=times[i], y=highs[i], text="BSL SWEEP",
+                               showarrow=True, arrowhead=2, ax=0, ay=-35,
+                               font=dict(color="#ff7b86", size=10))
+            swept_high = True
+        if last_pl is not None and not swept_low and lows[i] < last_pl and closes[i] > last_pl:
+            fig.add_annotation(x=times[i], y=lows[i], text="SSL SWEEP",
+                               showarrow=True, arrowhead=2, ax=0, ay=35,
+                               font=dict(color="#35c9c0", size=10))
+            swept_low = True
+
+        # MSS: close crosses the latest confirmed swing level.
+        prev_close = closes[i - 1] if i > 0 else closes[i]
+        if last_ph is not None and prev_close <= last_ph < closes[i]:
+            fig.add_annotation(x=times[i], y=last_ph, text="MSS ↑",
+                               showarrow=True, arrowhead=2, ax=0, ay=-48,
+                               font=dict(color="#75e69a", size=11))
+            fig.add_trace(go.Scatter(
+                x=[times[i]], y=[lows[i]], mode="markers+text",
+                marker=dict(symbol="triangle-up", size=13, color="#75e69a"),
+                text=["BUY"], textposition="bottom center",
+                textfont=dict(color="#75e69a"), showlegend=False,
+            ))
+        if last_pl is not None and prev_close >= last_pl > closes[i]:
+            fig.add_annotation(x=times[i], y=last_pl, text="MSS ↓",
+                               showarrow=True, arrowhead=2, ax=0, ay=48,
+                               font=dict(color="#ff7b86", size=11))
+            fig.add_trace(go.Scatter(
+                x=[times[i]], y=[highs[i]], mode="markers+text",
+                marker=dict(symbol="triangle-down", size=13, color="#ff7b86"),
+                text=["SELL"], textposition="top center",
+                textfont=dict(color="#ff7b86"), showlegend=False,
+            ))
+
+        # Three-candle Fair Value Gaps.
+        if i >= 2 and lows[i] > highs[i - 2]:
+            fig.add_shape(
+                type="rect", x0=times[i - 2], x1=times[i],
+                y0=highs[i - 2], y1=lows[i],
+                fillcolor="rgba(55,210,130,0.16)",
+                line=dict(color="rgba(55,210,130,0.65)", width=1),
+                layer="below",
+            )
+            fig.add_annotation(x=times[i], y=(highs[i - 2] + lows[i]) / 2,
+                               text="Bull FVG", showarrow=False,
+                               font=dict(color="#75e69a", size=8))
+        if i >= 2 and highs[i] < lows[i - 2]:
+            fig.add_shape(
+                type="rect", x0=times[i - 2], x1=times[i],
+                y0=highs[i], y1=lows[i - 2],
+                fillcolor="rgba(255,85,100,0.14)",
+                line=dict(color="rgba(255,85,100,0.65)", width=1),
+                layer="below",
+            )
+            fig.add_annotation(x=times[i], y=(highs[i] + lows[i - 2]) / 2,
+                               text="Bear FVG", showarrow=False,
+                               font=dict(color="#ff7b86", size=8))
+
+try:
+    with st.spinner("Gold candles aur ICT levels load ho rahe hain..."):
+        ict_df = load_ohlc(api_interval)
+
+    last = ict_df.iloc[-1]
+    price_col1, price_col2, price_col3 = st.columns(3)
+    price_col1.metric("MT5 XAUUSD price", f"{last['close']:,.2f}")
+    price_col2.metric("Feed timeframe", selected)
+    price_col3.metric("Bars loaded", f"{len(ict_df)}")
+
+    fig = go.Figure(data=[go.Candlestick(
+        x=ict_df["openTime"],
+        open=ict_df["open"],
+        high=ict_df["high"],
+        low=ict_df["low"],
+        close=ict_df["close"],
+        name="MT5 XAUUSD",
+        increasing_line_color="#26a69a",
+        decreasing_line_color="#ef5350",
+    )])
+    add_ict_marks(fig, ict_df)
+    fig.update_layout(
+        height=620,
+        template="plotly_dark",
+        paper_bgcolor="#0e1117",
+        plot_bgcolor="#0e1117",
+        margin=dict(l=8, r=8, t=30, b=20),
+        xaxis_rangeslider_visible=False,
+        xaxis_title="Time (UTC)",
+        yaxis_title="Gold price (USD/oz)",
+        showlegend=False,
+    )
+    st.plotly_chart(fig, use_container_width=True, config={"displaylogo": False})
+    st.caption(
+        "ICT labels are rule-based technical markers for study, not guaranteed trade entries. "
+        "Pivot levels confirm only after the selected swing length; current candle may still be open."
+    )
+    if st.button("Refresh ICT data"):
+        st.cache_data.clear()
+        st.rerun()
+except Exception as exc:
+    st.error(f"ICT data load nahi ho saka: {exc}")
+    st.info("Original TradingView Vantage chart upar available rehna chahiye. Thori dair baad refresh karein.")
+
