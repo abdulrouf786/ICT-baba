@@ -13,13 +13,13 @@ st.markdown("""
 <style>
 .block-container {
     max-width: 100% !important;
-    zoom: 0.92;
+    zoom: 0.85;
     padding-top: 0.15rem !important;
     padding-left: 0.15rem !important;
     padding-right: 0.15rem !important;
     padding-bottom: 0 !important;
 }
-h1 { font-size: 1.45rem !important; margin-bottom: 0.35rem !important; }
+h1 { font-size: 1.3rem !important; line-height: 1.15 !important; white-space: nowrap !important; margin-top: 0 !important; margin-bottom: 0.25rem !important; }
 [data-testid='stSelectbox'] { margin-bottom: 0.25rem !important; }
 iframe { width: 100% !important; }
 </style>
