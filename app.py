@@ -342,6 +342,42 @@ try:
     score1, score2 = st.columns(2)
     score1.metric("Basic bullish checks", f"{bullish_score}/3")
     score2.metric("Basic bearish checks", f"{bearish_score}/3")
+
+    # Pipflow-style rule-based confluence summary (analysis only; no orders).
+    st.subheader("🤖 AI CONFLUENCE — EMA + RSI + 4 INDICATORS")
+    ema_bull = bool(last["close"] > last["EMA 20"] > last["EMA 50"])
+    ema_bear = bool(last["close"] < last["EMA 20"] < last["EMA 50"])
+    rsi_bull = bool(pd.notna(last["RSI 14"]) and last["RSI 14"] > 50)
+    rsi_bear = bool(pd.notna(last["RSI 14"]) and last["RSI 14"] < 50)
+    macd_bull = bool(pd.notna(last["MACD"]) and last["MACD"] > last["MACD Signal"])
+    macd_bear = bool(pd.notna(last["MACD"]) and last["MACD"] < last["MACD Signal"])
+    bb_bull = bool(pd.notna(last["BB Middle"]) and last["close"] > last["BB Middle"])
+    bb_bear = bool(pd.notna(last["BB Middle"]) and last["close"] < last["BB Middle"])
+    bull_total = sum([ema_bull, rsi_bull, macd_bull, bb_bull])
+    bear_total = sum([ema_bear, rsi_bear, macd_bear, bb_bear])
+
+    ai_left, ai_right = st.columns(2)
+    ai_left.metric("Bullish confluence", f"{bull_total}/4")
+    ai_right.metric("Bearish confluence", f"{bear_total}/4")
+    if bull_total >= 3 and bull_total > bear_total:
+        st.success("AI-style bias: BULLISH — multiple indicators agree. Wait for ICT entry confirmation.")
+    elif bear_total >= 3 and bear_total > bull_total:
+        st.error("AI-style bias: BEARISH — multiple indicators agree. Wait for ICT entry confirmation.")
+    else:
+        st.info("AI-style bias: NEUTRAL / MIXED — indicators do not agree strongly.")
+
+    adx_value = last["ADX 14"]
+    atr_value = last["ATR 14"]
+    rsi_value = last["RSI 14"]
+    rsi_state = "Overbought zone" if pd.notna(rsi_value) and rsi_value >= 70 else ("Oversold zone" if pd.notna(rsi_value) and rsi_value <= 30 else "Middle range")
+    adx_state = "Strong trend" if pd.notna(adx_value) and adx_value >= 25 else "Weak / developing trend"
+    atr_state = "High volatility" if pd.notna(atr_value) and atr_value > ict_df["ATR 14"].tail(50).median() else "Normal / low volatility"
+    s1, s2, s3 = st.columns(3)
+    s1.metric("RSI condition", rsi_state)
+    s2.metric("ADX condition", adx_state)
+    s3.metric("ATR condition", atr_state)
+    st.caption("This is a transparent indicator checklist, not machine-learning prediction or a guaranteed trade signal. It does not place orders.")
+
     st.caption("ADX trend strength aur ATR volatility measure karta hai; Bollinger Bands price range/volatility dikhate hain. Yeh analysis hai, guaranteed BUY/SELL signal nahi.")
 
     st.caption(
