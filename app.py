@@ -40,6 +40,26 @@ SYMBOL = "VANTAGE:XAUUSD"
 st.title("👑 ABDUL RAUF KING")
 st.caption("VANTAGE GOLD — XAUUSD")
 
+# TradingView quote strip for the same Vantage Gold symbol.
+ticker_config = {
+    "symbols": [{"proName": SYMBOL, "title": "Vantage Gold"}],
+    "colorTheme": "dark",
+    "isTransparent": False,
+    "displayMode": "adaptive",
+    "locale": "en",
+}
+ticker_html = f"""
+<div class="tradingview-widget-container" style="width:100%;height:46px">
+  <div class="tradingview-widget-container__widget"></div>
+  <script type="text/javascript"
+    src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js"
+    async>
+    {json.dumps(ticker_config)}
+  </script>
+</div>
+"""
+components.html(ticker_html, height=50, scrolling=False)
+
 timeframes = {
     "1 Minute": "1",
     "5 Minutes": "5",
@@ -50,7 +70,6 @@ timeframes = {
 selected = st.selectbox("Gold timeframe", list(timeframes.keys()), index=2)
 
 CHART_HEIGHT = 650
-
 widget_config = {
     "autosize": False,
     "height": CHART_HEIGHT,
@@ -84,14 +103,11 @@ widget_html = f"""
   </script>
 </div>
 """
+components.html(widget_html, height=CHART_HEIGHT + 20, scrolling=True)
 
-components.html(
-    widget_html,
-    height=CHART_HEIGHT + 20,
-    scrolling=True,
-)
-
-st.info(
-    "Live TradingView VANTAGE:XAUUSD chart. Custom ICT marks abhi enable nahi hain; "
-    "unhein add karne ke liye compatible custom chart/data connection zaroori hai."
+st.caption(
+    "Original TradingView VANTAGE:XAUUSD candles. "
+    "Custom ICT marks (Liquidity Sweep, MSS, FVG, BUY/SELL) are not overlaid yet: "
+    "TradingView's embedded chart does not allow this app to inject custom Pine indicators. "
+    "A compatible OHLC data connection or TradingView charting integration is required."
 )
