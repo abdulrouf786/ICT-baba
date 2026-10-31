@@ -34,10 +34,13 @@ timeframes = {
 }
 selected = st.selectbox("Gold timeframe", list(timeframes.keys()), index=2)
 
+# Only the chart height is increased; the rest of the app layout is unchanged.
 CHART_HEIGHT = 1800
 
 widget_config = {
-    "autosize": True,
+    "autosize": False,
+    "height": CHART_HEIGHT,
+    "width": "100%",
     "symbol": SYMBOL,
     "interval": timeframes[selected],
     "timezone": "Asia/Karachi",
@@ -71,7 +74,6 @@ widget_html = f"""
 components.html(
     widget_html,
     height=CHART_HEIGHT + 20,
-    width="100%",
     scrolling=False,
 )
 
