@@ -199,6 +199,7 @@ def load_ohlc(feed_symbol, interval):
             "high": quote.get("high", []),
             "low": quote.get("low", []),
             "close": quote.get("close", []),
+            "volume": quote.get("volume", [float("nan")] * len(timestamps)),
         })
         if interval == "4h":
             frame = frame.set_index("openTime").resample("4h").agg({
