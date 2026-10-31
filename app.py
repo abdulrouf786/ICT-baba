@@ -26,11 +26,8 @@ iframe { width: 100% !important; }
 """, unsafe_allow_html=True)
 
 SYMBOL = "VANTAGE:XAUUSD"
-st.markdown(
-    "<div style=\"font-size:22px;font-weight:800;line-height:1.2;margin:2px 0 10px 0;\">👑 ABDUL RAUF KING</div>"
-    "<div style=\"font-size:11px;opacity:0.8;margin-top:-7px;margin-bottom:10px;\">VANTAGE GOLD — XAUUSD</div>",
-    unsafe_allow_html=True,
-)
+st.title("👑 ABDUL RAUF KING")
+st.caption("VANTAGE GOLD — XAUUSD")
 
 timeframes = {
     "1 Minute": "1",
