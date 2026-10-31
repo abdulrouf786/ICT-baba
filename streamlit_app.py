@@ -133,28 +133,48 @@ st.warning(
 )
 
 @st.cache_data(ttl=30, show_spinner=False)
-def load_ohlc(interval):
-    url = f"https://biquote.io/api/XAUUSD/ohlc?interval={interval}&limit=500"
-    # Fixed HTTPS endpoint only; TLS certificate verification remains enabled.
-    response = requests.get(
-        url,
-        timeout=(5, 15),
-        headers={"Accept": "application/json", "User-Agent": "AbdulRaufKing-Chart/1.0"},
-    )
-    response.raise_for_status()
-    if len(response.content) > 2_000_000:
-        raise ValueError("Gold data response is unexpectedly large.")
-    payload = response.json()
-    if not isinstance(payload, dict):
-        raise ValueError("Gold data response format is invalid.")
-    bars = payload.get("bars", [])
-    if not isinstance(bars, list) or not bars or len(bars) > 1000:
-        raise ValueError("Gold OHLC feed ne valid candle list return nahi ki.")
-    frame = pd.DataFrame(bars)
+def load_ohlc(feed_symbol, interval):
+    headers = {"Accept": "application/json", "User-Agent": "AbdulRaufKing-Chart/1.0"}
+    if feed_symbol == "XAUUSD":
+        url = f"https://biquote.io/api/XAUUSD/ohlc?interval={interval}&limit=500"
+        response = requests.get(url, timeout=(5, 15), headers=headers)
+        response.raise_for_status()
+        if len(response.content) > 2_000_000:
+            raise ValueError("Market data response is unexpectedly large.")
+        payload = response.json()
+        if not isinstance(payload, dict):
+            raise ValueError("Market data response format is invalid.")
+        bars = payload.get("bars", [])
+        if not isinstance(bars, list) or not bars or len(bars) > 1000:
+            raise ValueError("Gold feed ne valid candle list return nahi ki.")
+        frame = pd.DataFrame(bars)
+    else:
+        # Binance public spot klines for BTCUSDT and ETHUSDT; no API key required.
+        url = "https://api.binance.com/api/v3/klines"
+        response = requests.get(
+            url,
+            params={"symbol": feed_symbol, "interval": interval, "limit": 500},
+            timeout=(5, 15),
+            headers=headers,
+        )
+        response.raise_for_status()
+        if len(response.content) > 2_000_000:
+            raise ValueError("Market data response is unexpectedly large.")
+        bars = response.json()
+        if not isinstance(bars, list) or not bars or len(bars) > 500:
+            raise ValueError("Crypto feed ne valid candle list return nahi ki.")
+        frame = pd.DataFrame(bars, columns=[
+            "openTime", "open", "high", "low", "close", "volume",
+            "closeTime", "quoteVolume", "trades", "takerBuyBase",
+            "takerBuyQuote", "ignore",
+        ])
     required = ["openTime", "open", "high", "low", "close"]
     if not all(col in frame.columns for col in required):
         raise ValueError("OHLC response ka format expected format se different hai.")
-    frame["openTime"] = pd.to_datetime(frame["openTime"], utc=True, errors="coerce")
+    if feed_symbol != "XAUUSD":
+        frame["openTime"] = pd.to_datetime(frame["openTime"], unit="ms", utc=True, errors="coerce")
+    else:
+        frame["openTime"] = pd.to_datetime(frame["openTime"], utc=True, errors="coerce")
     for col in ["open", "high", "low", "close"]:
         frame[col] = pd.to_numeric(frame[col], errors="coerce")
     frame = frame.dropna(subset=required).sort_values("openTime").drop_duplicates("openTime")
@@ -232,10 +252,10 @@ def add_ict_marks(fig, df, swing_len=5):
                       fillcolor=color, line=dict(color=edge, width=1), layer="below")
 
 try:
-    with st.spinner("Gold candles aur ICT levels load ho rahe hain..."):
-        ict_df = load_ohlc(api_interval)
+    with st.spinner(f"{ASSET_LABEL} candles aur ICT levels load ho rahe hain..."):
+        ict_df = load_ohlc(FEED_SYMBOL, api_interval)
 
-    # Calculate common technical indicators on the same XAUUSD OHLC feed.
+    # Calculate common technical indicators on the selected market feed.
     close = ict_df["close"]
     high = ict_df["high"]
     low = ict_df["low"]
@@ -303,7 +323,7 @@ try:
 
     last = ict_df.iloc[-1]
     price_col1, price_col2, price_col3 = st.columns(3)
-    price_col1.metric("MT5 XAUUSD price", f"{last['close']:,.2f}")
+    price_col1.metric("Selected market price", f"{last['close']:,.2f}")
     price_col2.metric("Feed timeframe", selected)
     price_col3.metric("Bars loaded", f"{len(ict_df)}")
 
@@ -313,7 +333,7 @@ try:
         high=ict_df["high"],
         low=ict_df["low"],
         close=ict_df["close"],
-        name="MT5 XAUUSD",
+        name=FEED_SYMBOL,
         increasing_line_color="#26a69a",
         decreasing_line_color="#ef5350",
     )])
@@ -338,7 +358,7 @@ try:
         margin=dict(l=8, r=8, t=30, b=20),
         xaxis_rangeslider_visible=False,
         xaxis_title="Time (UTC)",
-        yaxis_title="Gold price (USD/oz)",
+        yaxis_title=f"{ASSET_LABEL} price",
         showlegend=False,
     )
     st.plotly_chart(fig, use_container_width=True, config={"displaylogo": False})
@@ -381,9 +401,9 @@ try:
 
     st.markdown(f"""
     <div class="ark-hero">
-      <div class="ark-kicker">ABDUL RAUF KING · GOLD MARKET INTELLIGENCE</div>
+      <div class="ark-kicker">ABDUL RAUF KING · {ASSET_LABEL.upper()} MARKET INTELLIGENCE</div>
       <div class="ark-title">AI Market Analyst</div>
-      <div class="ark-sub">XAUUSD · {selected} · Rule-based indicator confluence</div>
+      <div class="ark-sub">{FEED_SYMBOL} · {selected} · Rule-based indicator confluence</div>
       <div style="margin-top:13px"><span class="ark-pill {pill_class}">{bias} MARKET BIAS</span></div>
       <div class="ark-sub" style="margin-top:10px">{bias_detail}</div>
     </div>
@@ -497,7 +517,7 @@ try:
     else:
         st.markdown(f"""
         <div class="ark-hero">
-          <div class="ark-kicker">XAUUSD · {selected} · CLOSED-CANDLE SETUP</div>
+          <div class="ark-kicker">{FEED_SYMBOL} · {selected} · CLOSED-CANDLE SETUP</div>
           <div class="ark-title">{signal_side} SIGNAL</div>
           <div class="ark-sub">ICT sweep + MSS + FVG and indicator confluence confirmed by the rule set.</div>
         </div>
