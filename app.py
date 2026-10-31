@@ -581,7 +581,41 @@ try:
 
     st.markdown('<div class="ark-section">🎯 Full trading signal</div>', unsafe_allow_html=True)
     if signal_side == "WAIT":
-        st.info("WAIT — abhi closed candles par Liquidity Sweep + MSS + FVG aur indicator confirmation ek saath nahi mile. Entry, SL aur TP abhi issue nahi kiye gaye.")
+        st.info("WAIT — abhi confirmed ICT entry nahi mili. Neeche reference levels sirf planning ke liye hain; inhein live trade signal na samjhein.")
+        # Show the complete SL/TP panel on every refresh. When ICT is not
+        # confirmed, derive clearly-labelled provisional levels from ATR and
+        # the indicator bias; neutral conditions keep risk levels blank.
+        plan_side = "BUY" if bias == "BULLISH" else ("SELL" if bias == "BEARISH" else "WAIT")
+        plan_entry = float(closed.iloc[-1]["close"])
+        plan_sl = plan_tp1 = plan_tp2 = plan_tp3 = None
+        plan_rr = "—"
+        if plan_side == "BUY" and signal_atr > 0:
+            plan_sl = plan_entry - signal_atr
+            plan_risk = plan_entry - plan_sl
+            plan_tp1, plan_tp2, plan_tp3 = plan_entry + plan_risk, plan_entry + 2*plan_risk, plan_entry + 3*plan_risk
+            plan_rr = "1:1 / 1:2 / 1:3"
+        elif plan_side == "SELL" and signal_atr > 0:
+            plan_sl = plan_entry + signal_atr
+            plan_risk = plan_sl - plan_entry
+            plan_tp1, plan_tp2, plan_tp3 = plan_entry - plan_risk, plan_entry - 2*plan_risk, plan_entry - 3*plan_risk
+            plan_rr = "1:1 / 1:2 / 1:3"
+        def fmt_plan(value):
+            return f"{value:,.2f}" if value is not None else "WAIT"
+        st.markdown(f"""
+        <div class="ark-hero">
+          <div class="ark-kicker">{FEED_SYMBOL} · {selected} · INDICATIVE LEVELS</div>
+          <div class="ark-title">{plan_side} PLAN — NOT AN ICT ENTRY</div>
+          <div class="ark-sub">Levels use the last closed candle and 1× ATR. Wait for sweep + MSS + FVG confirmation.</div>
+        </div>
+        <div class="ark-grid">
+          <div class="ark-card"><div class="ark-label">ENTRY REFERENCE</div><div class="ark-value">{fmt_plan(plan_entry)}</div><div class="ark-note">Last closed candle; not a live fill price</div></div>
+          <div class="ark-card"><div class="ark-label">STOP LOSS</div><div class="ark-value">{fmt_plan(plan_sl)}</div><div class="ark-note">Indicative 1× ATR</div></div>
+          <div class="ark-card"><div class="ark-label">TAKE PROFIT 1</div><div class="ark-value">{fmt_plan(plan_tp1)}</div><div class="ark-note">1R target</div></div>
+          <div class="ark-card"><div class="ark-label">TAKE PROFIT 2</div><div class="ark-value">{fmt_plan(plan_tp2)}</div><div class="ark-note">2R target</div></div>
+          <div class="ark-card"><div class="ark-label">TAKE PROFIT 3</div><div class="ark-value">{fmt_plan(plan_tp3)}</div><div class="ark-note">3R target</div></div>
+          <div class="ark-card"><div class="ark-label">RISK / REWARD</div><div class="ark-value">{plan_rr}</div><div class="ark-note">Indicative, before spread/slippage</div></div>
+        </div>
+        """, unsafe_allow_html=True)
         st.caption("Signal logic: recent 20-bar liquidity level, confirmed candle close, recent FVG aur kam az kam 2/5 indicator checks (EMA, RSI, MACD, Bollinger, Supertrend). Latest open candle ignore ki gayi hai.")
     else:
         st.markdown(f"""
