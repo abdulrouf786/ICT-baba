@@ -41,7 +41,7 @@ def get_candles(interval):
             "symbol": "XAU/USD",
             "interval": interval,
             "outputsize": 300,
-            "order": "asc",
+            "order": "desc",
             "timezone": "UTC",
             "apikey": API_KEY
         },
