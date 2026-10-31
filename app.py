@@ -593,7 +593,7 @@ try:
     signal_sl = signal_tp1 = signal_tp2 = signal_tp3 = None
     signal_rr = "—"
     if signal_side == "BUY" and signal_atr > 0:
-        signal_sl = float(closed["low"].tail(8).min()) - 0.15 * signal_atr
+        signal_sl = float(closed["low"].tail(5).min()) - 0.10 * signal_atr
         risk = signal_entry - signal_sl
         if risk > 0:
             signal_tp1, signal_tp2, signal_tp3 = signal_entry + risk, signal_entry + 2*risk, signal_entry + 3*risk
@@ -601,7 +601,7 @@ try:
         else:
             signal_side = "WAIT"
     elif signal_side == "SELL" and signal_atr > 0:
-        signal_sl = float(closed["high"].tail(8).max()) + 0.15 * signal_atr
+        signal_sl = float(closed["high"].tail(5).max()) + 0.10 * signal_atr
         risk = signal_sl - signal_entry
         if risk > 0:
             signal_tp1, signal_tp2, signal_tp3 = signal_entry - risk, signal_entry - 2*risk, signal_entry - 3*risk
@@ -622,12 +622,12 @@ try:
         plan_sl = plan_tp1 = plan_tp2 = plan_tp3 = None
         plan_rr = "—"
         if plan_side == "BUY" and signal_atr > 0:
-            plan_sl = plan_entry - signal_atr
+            plan_sl = plan_entry - 0.5 * signal_atr
             plan_risk = plan_entry - plan_sl
             plan_tp1, plan_tp2, plan_tp3 = plan_entry + plan_risk, plan_entry + 2*plan_risk, plan_entry + 3*plan_risk
             plan_rr = "1:1 / 1:2 / 1:3"
         elif plan_side == "SELL" and signal_atr > 0:
-            plan_sl = plan_entry + signal_atr
+            plan_sl = plan_entry + 0.5 * signal_atr
             plan_risk = plan_sl - plan_entry
             plan_tp1, plan_tp2, plan_tp3 = plan_entry - plan_risk, plan_entry - 2*plan_risk, plan_entry - 3*plan_risk
             plan_rr = "1:1 / 1:2 / 1:3"
@@ -637,11 +637,11 @@ try:
         <div class="ark-hero">
           <div class="ark-kicker">{FEED_SYMBOL} · {selected} · INDICATIVE LEVELS</div>
           <div class="ark-title">{plan_side} PLAN — NOT AN ICT ENTRY</div>
-          <div class="ark-sub">Levels use the last closed candle and 1× ATR. Wait for sweep + MSS + FVG confirmation.</div>
+          <div class="ark-sub">Levels use the last closed candle and 0.5× ATR (tight SL). Wait for sweep + MSS + FVG confirmation.</div>
         </div>
         <div class="ark-grid">
           <div class="ark-card"><div class="ark-label">ENTRY REFERENCE</div><div class="ark-value">{fmt_plan(plan_entry)}</div><div class="ark-note">Last closed candle; not a live fill price</div></div>
-          <div class="ark-card"><div class="ark-label">STOP LOSS</div><div class="ark-value">{fmt_plan(plan_sl)}</div><div class="ark-note">Indicative 1× ATR</div></div>
+          <div class="ark-card"><div class="ark-label">STOP LOSS</div><div class="ark-value">{fmt_plan(plan_sl)}</div><div class="ark-note">Indicative 0.5× ATR (tight SL)</div></div>
           <div class="ark-card"><div class="ark-label">TAKE PROFIT 1</div><div class="ark-value">{fmt_plan(plan_tp1)}</div><div class="ark-note">1R target</div></div>
           <div class="ark-card"><div class="ark-label">TAKE PROFIT 2</div><div class="ark-value">{fmt_plan(plan_tp2)}</div><div class="ark-note">2R target</div></div>
           <div class="ark-card"><div class="ark-label">TAKE PROFIT 3</div><div class="ark-value">{fmt_plan(plan_tp3)}</div><div class="ark-note">3R target</div></div>
