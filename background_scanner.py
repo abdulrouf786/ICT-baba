@@ -162,12 +162,32 @@ def main():
                     key = f"{pair}|{tf}|{model}|{direction}"
                     if state.get(key) == candle_time:
                         continue
-                    price = float(df.iloc[-1].close)
+                    last_candle = df.iloc[-1]
+                    entry = float(last_candle.close)
+                    stop_loss = float(last_candle.low if direction == "BUY" else last_candle.high)
+                    risk = abs(entry - stop_loss)
+                    if risk <= 0:
+                        continue
+                    take_profit = entry + (2 * risk if direction == "BUY" else -2 * risk)
+                    decimals = 3 if pair == "USD/JPY" else (5 if pair in ("EUR/USD", "GBP/USD") else 2)
+                    fmt = lambda value: f"{value:.{decimals}f}"
                     msg = (
-                        "🌍 ICT BABA BACKGROUND ALERT\n"
-                        f"Pair: {pair}\nTimeframe: {tf}\nModel: {model}\n"
-                        f"Direction: {direction}\nClose: {price}\nReason: {reason}\n"
-                        "Educational setup; verify before trading."
+                        "╔════════════════════╗\n"
+                        "      🌍 ICT BABA PRO ALERT\n"
+                        "╚════════════════════╝\n\n"
+                        f"💹 Pair       : {pair}\n"
+                        f"⏱ Timeframe  : {tf}\n"
+                        f"🧠 ICT Model  : {model}\n"
+                        f"📈 Direction  : {'🟢 BUY' if direction == 'BUY' else '🔴 SELL'}\n"
+                        "━━━━━━━━━━━━━━━━━━━━\n"
+                        f"🎯 Entry      : {fmt(entry)}\n"
+                        f"🛑 Stop Loss  : {fmt(stop_loss)}\n"
+                        f"🏁 Take Profit: {fmt(take_profit)}\n"
+                        "⚖️ Risk/Reward: 1:2 (indicative)\n"
+                        "━━━━━━━━━━━━━━━━━━━━\n"
+                        f"🔎 Reason     : {reason}\n\n"
+                        "⚠️ SL = signal candle extreme; TP = 2R estimate. "
+                        "Educational setup only — confirm before trading."
                     )
                     send_telegram(msg)
                     state[key] = candle_time
