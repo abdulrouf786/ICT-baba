@@ -462,32 +462,35 @@ try:
     price_col2.metric("Feed timeframe", selected)
     price_col3.metric("Bars loaded", f"{len(ict_df)}")
 
+    # Mobile-friendly candle view: fewer bars and only the two key EMAs.
+    # The full dataframe remains available for indicator and signal calculations.
+    chart_df = ict_df.tail(120).copy()
     fig = go.Figure(data=[go.Candlestick(
-        x=ict_df["openTime"],
-        open=ict_df["open"],
-        high=ict_df["high"],
-        low=ict_df["low"],
-        close=ict_df["close"],
+        x=chart_df["openTime"],
+        open=chart_df["open"],
+        high=chart_df["high"],
+        low=chart_df["low"],
+        close=chart_df["close"],
         name=FEED_SYMBOL,
         increasing_line_color="#26a69a",
         decreasing_line_color="#ef5350",
+        increasing_fillcolor="#26a69a",
+        decreasing_fillcolor="#ef5350",
+        whiskerwidth=0.7,
     )])
     fig.add_trace(go.Scatter(
-        x=ict_df["openTime"], y=ict_df["EMA 20"],
+        x=chart_df["openTime"], y=chart_df["EMA 20"],
         mode="lines", name="EMA 20",
-        line=dict(color="#f5c542", width=1.5),
+        line=dict(color="#f5c542", width=1.8),
     ))
     fig.add_trace(go.Scatter(
-        x=ict_df["openTime"], y=ict_df["EMA 50"],
+        x=chart_df["openTime"], y=chart_df["EMA 50"],
         mode="lines", name="EMA 50",
-        line=dict(color="#42a5f5", width=1.5),
+        line=dict(color="#42a5f5", width=1.8),
     ))
-    fig.add_trace(go.Scatter(x=ict_df["openTime"], y=ict_df["Supertrend 10,3"].where(ict_df["Supertrend Direction"] == "BULLISH"), mode="lines", name="Supertrend bullish", line=dict(color="#27d69a", width=2)))
-    fig.add_trace(go.Scatter(x=ict_df["openTime"], y=ict_df["Supertrend 10,3"].where(ict_df["Supertrend Direction"] == "BEARISH"), mode="lines", name="Supertrend bearish", line=dict(color="#ff6577", width=2)))
-    fig.add_trace(go.Scatter(x=ict_df["openTime"], y=ict_df["VWAP"], mode="lines", name="Session VWAP", line=dict(color="#c792ea", width=1.6)))
-    add_ict_marks(fig, ict_df)
+    add_ict_marks(fig, chart_df)
     fig.update_layout(
-        height=620,
+        height=480,
         template="plotly_dark",
         paper_bgcolor="#0e1117",
         plot_bgcolor="#0e1117",
@@ -495,9 +498,12 @@ try:
         xaxis_rangeslider_visible=False,
         xaxis_title="Time (UTC)",
         yaxis_title=f"{ASSET_LABEL} price",
-        showlegend=False,
+        showlegend=True,
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0, font=dict(size=10)),
+        xaxis=dict(showgrid=False, rangeslider=dict(visible=False), tickfont=dict(size=10)),
+        yaxis=dict(fixedrange=False, tickfont=dict(size=10), automargin=True),
     )
-    st.plotly_chart(fig, use_container_width=True, config={"displaylogo": False})
+    st.plotly_chart(fig, use_container_width=True, config={"displaylogo": False, "scrollZoom": True})
     # Pipflow-inspired mobile-first analysis dashboard.
     ema_bull = bool(last["close"] > last["EMA 20"] > last["EMA 50"])
     ema_bear = bool(last["close"] < last["EMA 20"] < last["EMA 50"])
