@@ -626,6 +626,63 @@ try:
 
     # Full ICT + indicator signal. Use closed candles only to avoid intrabar repaint.
     closed = ict_df.iloc[:-1].copy() if len(ict_df) > 3 else ict_df.copy()
+
+    # ICT setup monitor: these are educational pattern checks, not guaranteed entries.
+    ict_setups = []
+    if len(closed) >= 25:
+        cur = closed.iloc[-1]
+        prev = closed.iloc[-2]
+        recent = closed.tail(20)
+        direction_up = float(cur["close"]) > float(recent["high"].iloc[:-1].max())
+        direction_down = float(cur["close"]) < float(recent["low"].iloc[:-1].min())
+        bull_sweep = float(recent["low"].iloc[-1]) < float(recent["low"].iloc[:-1].min()) and float(cur["close"]) > float(recent["low"].iloc[:-1].min())
+        bear_sweep = float(recent["high"].iloc[-1]) > float(recent["high"].iloc[:-1].max()) and float(cur["close"]) < float(recent["high"].iloc[:-1].max())
+        bull_fvg = float(cur["low"]) > float(closed.iloc[-3]["high"])
+        bear_fvg = float(cur["high"]) < float(closed.iloc[-3]["low"])
+        # Order block: last opposite candle before a close beyond the recent range.
+        bull_ob = direction_up and bool((closed.iloc[-8:-1]["close"] < closed.iloc[-8:-1]["open"]).any())
+        bear_ob = direction_down and bool((closed.iloc[-8:-1]["close"] > closed.iloc[-8:-1]["open"]).any())
+        # Rejection block proxy: wick sweeps a recent extreme and closes back inside.
+        bull_rejection = bull_sweep and (min(float(cur["open"]), float(cur["close"])) - float(cur["low"])) > abs(float(cur["close"]-cur["open"]))
+        bear_rejection = bear_sweep and (float(cur["high"]) - max(float(cur["open"]), float(cur["close"]))) > abs(float(cur["close"]-cur["open"]))
+        # OTE zone from the recent 50-bar dealing range (62%-79% retracement).
+        dealing = closed.tail(50)
+        swing_hi, swing_lo = float(dealing["high"].max()), float(dealing["low"].min())
+        dealing_range = max(swing_hi - swing_lo, 0.0)
+        bull_ote = dealing_range > 0 and swing_hi - 0.79*dealing_range <= float(cur["close"]) <= swing_hi - 0.62*dealing_range
+        bear_ote = dealing_range > 0 and swing_lo + 0.62*dealing_range <= float(cur["close"]) <= swing_lo + 0.79*dealing_range
+        # Breaker / mitigation are simplified level-retest proxies; confirm with chart context.
+        bull_breaker = bull_sweep and direction_up
+        bear_breaker = bear_sweep and direction_down
+        bull_mitigation = bull_ob and float(cur["low"]) <= float(closed.iloc[-2]["high"]) and float(cur["close"]) > float(cur["open"])
+        bear_mitigation = bear_ob and float(cur["high"]) >= float(closed.iloc[-2]["low"]) and float(cur["close"]) < float(cur["open"])
+        # Unicorn requires breaker context plus a same-direction FVG.
+        bull_unicorn = bull_breaker and bull_fvg
+        bear_unicorn = bear_breaker and bear_fvg
+        ict_setups = [
+            ("Liquidity sweep + MSS", "BUY" if bull_sweep and direction_up else ("SELL" if bear_sweep and direction_down else "WAIT")),
+            ("Fair Value Gap (FVG)", "BUY" if bull_fvg else ("SELL" if bear_fvg else "WAIT")),
+            ("Order Block (OB)", "BUY" if bull_ob else ("SELL" if bear_ob else "WAIT")),
+            ("Breaker Block", "BUY" if bull_breaker else ("SELL" if bear_breaker else "WAIT")),
+            ("Mitigation Block", "BUY" if bull_mitigation else ("SELL" if bear_mitigation else "WAIT")),
+            ("Rejection Block", "BUY" if bull_rejection else ("SELL" if bear_rejection else "WAIT")),
+            ("OTE 62%-79%", "BUY" if bull_ote else ("SELL" if bear_ote else "WAIT")),
+            ("Unicorn (Breaker + FVG)", "BUY" if bull_unicorn else ("SELL" if bear_unicorn else "WAIT")),
+        ]
+    else:
+        ict_setups = [(name, "WAIT") for name in ["Liquidity sweep + MSS", "Fair Value Gap (FVG)", "Order Block (OB)", "Breaker Block", "Mitigation Block", "Rejection Block", "OTE 62%-79%", "Unicorn (Breaker + FVG)"]]
+
+    st.markdown('<div class="ark-section">🏹 ICT entry models</div>', unsafe_allow_html=True)
+    ict_rows = "".join(
+        f'<div style="display:flex;justify-content:space-between;gap:10px;padding:9px 11px;border-bottom:1px solid #29384d">'
+        f'<span style="color:#d5deeb;font-weight:650">{name}</span>'
+        f'<strong style="color:{"#35d6a0" if side == "BUY" else ("#ff7185" if side == "SELL" else "#aab6c8")};white-space:nowrap">{side}</strong></div>'
+        for name, side in ict_setups
+    )
+    st.markdown(
+        f'<div class="ark-score-wrap">{ict_rows}<div class="ark-note" style="padding:10px">BUY/SELL ka matlab pattern detect hua hai, automatic trade call nahi. SMT divergence aur session-based Judas swing ke liye correlated market/session data ki alag confirmation darkaar hai.</div></div>',
+        unsafe_allow_html=True,
+    )
     signal_side = "WAIT"
     signal_reasons = []
     sweep_index = None
