@@ -932,13 +932,13 @@ try:
                         if alert_key not in all_pair_tg_sent:
                             try:
                                 send_telegram_message(
-                                    f"🌍 ICT BABA ALL-PAIR ALERT\\n\\n"
-                                    f"📊 Pair: {pair_symbol}\\n"
-                                    f"⏱ Timeframe: {tf_api_interval}\\n"
-                                    f"🎯 Model: {model_name}\\n"
-                                    f"📈 Direction: {'🟢 BUY' if model_side == 'BUY' else '🔴 SELL'}\\n"
-                                    f"💰 Close: {float(pair_closed.iloc[-1]['close']):.5f}\\n"
-                                    f"📝 Reason: {model_reason}\\n\\n"
+                                    f"🌍 ICT BABA ALL-PAIR ALERT\n\n"
+                                    f"📊 Pair: {pair_symbol}\n"
+                                    f"⏱ Timeframe: {tf_api_interval}\n"
+                                    f"🎯 Model: {model_name}\n"
+                                    f"📈 Direction: {'🟢 BUY' if model_side == 'BUY' else '🔴 SELL'}\n"
+                                    f"💰 Close: {float(pair_closed.iloc[-1]['close']):.5f}\n"
+                                    f"📝 Reason: {model_reason}\n\n"
                                     "⚠️ Educational setup; verify before trading."
                                 )
                                 all_pair_tg_sent.append(alert_key)
