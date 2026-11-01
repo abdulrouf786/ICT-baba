@@ -679,7 +679,7 @@ try:
         tg_alert_key = f"{FEED_SYMBOL}|{api_interval}|{signal_side}|{candle_key}"
         tg_sent_alerts = st.session_state.setdefault("tg_sent_alerts", [])
         if tg_alert_key not in tg_sent_alerts:
-            tg_alert_text = (f"🚨 ICT BABA {signal_side} CONFIRMED\\nPair: {FEED_SYMBOL}\\nTimeframe: {api_interval}\\nEntry: {signal_entry:.5f}\\nSL: {signal_sl:.5f}\\nTP: {signal_tp1:.5f}\\nRR: {signal_rr}\\nReasons: {', '.join(signal_reasons)}")
+            tg_alert_text = (f"🚨 ICT BABA {signal_side} CONFIRMED\nPair: {FEED_SYMBOL}\nTimeframe: {api_interval}\nEntry: {signal_entry:.5f}\nSL: {signal_sl:.5f}\nTP: {signal_tp1:.5f}\nRR: {signal_rr}\nReasons: {', '.join(signal_reasons)}")
             try:
                 send_telegram_message(tg_alert_text)
                 tg_sent_alerts.append(tg_alert_key)
