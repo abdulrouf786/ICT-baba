@@ -168,8 +168,12 @@ def detect_retest_zones(df):
     return list(unique.values())
 
 
+def price_decimals(pair):
+    return 5 if pair == "EUR/USD" else (2 if pair in ("XAUUSD", "BTCUSDT", "ETHUSDT") else 3)
+
+
 def process_retest_alerts(pair, tf, symbol, df, state):
-    """Send one alert when a zone forms, then one when its retest confirms."""
+    """Send a pending-zone alert, then a retest-confirmed alert with 1:1.5 RR."""
     pending = state.setdefault("pending_retests", {})
     current = df.iloc[-1]
     candle_time = str(current.openTime)
@@ -180,16 +184,25 @@ def process_retest_alerts(pair, tf, symbol, df, state):
     for model, direction, zone_low, zone_high, formed_at, reason in detect_retest_zones(df):
         key = f"{pair}|{tf}|{model}|{direction}|{formed_at}"
         if key not in pending:
+            entry_plan = (zone_low + zone_high) / 2
+            stop_plan = zone_low if direction == "BUY" else zone_high
+            risk_plan = abs(entry_plan - stop_plan)
+            target_plan = entry_plan + (1.5 * risk_plan if direction == "BUY" else -1.5 * risk_plan)
+            decimals = price_decimals(pair)
             send_telegram(
                 "📡 ICT BABA SETUP FOUND — RETEST PENDING\n\n"
                 f"📊 Pair: {symbol}\n"
                 f"⏱ Timeframe: {tf}\n"
                 f"🎯 Model: {model}\n"
                 f"📈 Direction: {'🟢 BUY' if direction == 'BUY' else '🔴 SELL'}\n"
-                f"📍 Zone: {zone_low:.5f} – {zone_high:.5f}\n"
+                f"📍 Zone: {zone_low:.{decimals}f} – {zone_high:.{decimals}f}\n"
+                f"💰 Planned Entry (zone midpoint): {entry_plan:.{decimals}f}\n"
+                f"🛑 Planned SL: {stop_plan:.{decimals}f}\n"
+                f"🎯 Planned TP: {target_plan:.{decimals}f}\n"
+                "⚖️ Risk/Reward: 1:1.5\n"
                 "⌛ Status: FVG/OB retest abhi baqi hai\n"
                 f"📝 Reason: {reason}\n\n"
-                "⚠️ Yeh entry confirmation nahi; retest ka intezar karein."
+                "⚠️ Yeh planned zone hai, confirmed entry nahi."
             )
             pending[key] = {
                 "pair": pair, "tf": tf, "model": model, "direction": direction,
@@ -215,16 +228,28 @@ def process_retest_alerts(pair, tf, symbol, df, state):
             (direction == "SELL" and current_close > high)
         )
         if confirmed:
+            entry_price = current_close
+            stop_price = low if direction == "BUY" else high
+            risk = abs(entry_price - stop_price)
+            if risk <= 0:
+                zone["status"] = "invalidated"
+                zone["invalidated_at"] = candle_time
+                continue
+            target_price = entry_price + (1.5 * risk if direction == "BUY" else -1.5 * risk)
+            decimals = price_decimals(pair)
             send_telegram(
                 "🚨 ICT BABA ENTRY RETEST CONFIRMED\n\n"
                 f"📊 Pair: {symbol}\n"
                 f"⏱ Timeframe: {tf}\n"
                 f"🎯 Model: {zone['model']}\n"
                 f"📈 Direction: {'🟢 BUY' if direction == 'BUY' else '🔴 SELL'}\n"
-                f"📍 Retested Zone: {low:.5f} – {high:.5f}\n"
-                f"💰 Confirmation Close: {current_close:.5f}\n"
+                f"📍 Retested Zone: {low:.{decimals}f} – {high:.{decimals}f}\n"
+                f"💰 Entry (confirmation close): {entry_price:.{decimals}f}\n"
+                f"🛑 Stop Loss: {stop_price:.{decimals}f}\n"
+                f"🎯 Take Profit: {target_price:.{decimals}f}\n"
+                "⚖️ Risk/Reward: 1:1.5\n"
                 "✅ Price retested the zone and closed back in the trade direction.\n\n"
-                "⚠️ Educational setup; verify risk and execution before trading."
+                "⚠️ Educational setup; verify execution costs and risk before trading."
             )
             zone["status"] = "confirmed"
             zone["confirmed_at"] = candle_time
@@ -294,18 +319,22 @@ def main():
                     if risk <= 0:
                         continue
                     take_profit = entry + (2 * risk if direction == "BUY" else -2 * risk)
-                    decimals = 3 if pair == "USD/JPY" else (5 if pair in ("EUR/USD", "GBP/USD") else 2)
+                    decimals = price_decimals(pair)
                     fmt = lambda value: f"{value:.{decimals}f}"
+                    target = entry + (1.5 * risk if direction == "BUY" else -1.5 * risk)
                     msg = (
-                        "🌍 ICT BABA ALL-PAIR ALERT\n"
+                        "🌍 ICT BABA ICT CONDITION ALERT\n"
                         "\n"
                         f"📊 Pair: {symbol}\n"
                         f"⏱ Timeframe: {tf}\n"
                         f"🎯 Model: {model}\n"
                         f"📈 Direction: {'🟢 BUY' if direction == 'BUY' else '🔴 SELL'}\n"
-                        f"💰 Close: {fmt(entry)}\n"
+                        f"💰 Entry Reference: {fmt(entry)}\n"
+                        f"🛑 Stop Loss: {fmt(stop_loss)}\n"
+                        f"🎯 Take Profit: {fmt(target)}\n"
+                        "⚖️ Risk/Reward: 1:1.5\n"
                         f"📝 Reason: {reason}\n\n"
-                        "⚠️ Educational setup; verify before trading."
+                        "⚠️ ICT condition alert; confirm the setup and execution manually."
                     )
                     send_telegram(msg)
                     state[key] = {"sent_at": time.time(), "candle": candle_time}
