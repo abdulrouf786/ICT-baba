@@ -27,5 +27,9 @@
   "BTCUSDT|15m|Bullish Mitigation Block|BUY": "2026-11-01 14:00:00+00:00",
   "ETHUSDT|1m|Bullish IFVG|BUY": "2026-11-01 14:24:00+00:00",
   "ETHUSDT|15m|Bearish OTE (62%-79%)|SELL": "2026-11-01 14:00:00+00:00",
-  "BTCUSDT|15m|Bearish OTE (62%-79%)|SELL": "2026-11-01 14:45:00+00:00"
+  "BTCUSDT|15m|Bearish OTE (62%-79%)|SELL": "2026-11-01 14:45:00+00:00",
+  "ETHUSDT|5m|Bearish MSS / CHoCH|SELL": "2026-11-01 15:20:00+00:00",
+  "ETHUSDT|5m|Bearish FVG|SELL": "2026-11-01 15:20:00+00:00",
+  "ETHUSDT|5m|Bearish Order Block|SELL": "2026-11-01 15:20:00+00:00",
+  "ETHUSDT|5m|Bearish Mitigation Block|SELL": "2026-11-01 15:20:00+00:00"
 }
