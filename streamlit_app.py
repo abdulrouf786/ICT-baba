@@ -202,7 +202,8 @@ def load_ohlc(feed_symbol, interval):
             raise ValueError("Market data response is unexpectedly large.")
         payload = response.json()
         if not isinstance(payload, dict):
-            raise ValueError("Market data response format is invalid.")        bars = payload.get("bars", [])
+            raise ValueError("Market data response format is invalid.")
+        bars = payload.get("bars", [])
         if not isinstance(bars, list) or not bars or len(bars) > 1000:
             raise ValueError("Gold feed ne valid candle list return nahi ki.")
         frame = pd.DataFrame(bars)
@@ -401,7 +402,8 @@ def scan_ict_setups(df):
     for k in range(i - 1, max(-1, i - 9), -1):
         row = d.iloc[k]
         if ob_bull is None and float(row["close"]) < float(row["open"]) and bull_mss:
-            ob_bull = (float(row["low"]), float(row["high"]))        if ob_bear is None and float(row["close"]) > float(row["open"]) and bear_mss:
+            ob_bull = (float(row["low"]), float(row["high"]))
+        if ob_bear is None and float(row["close"]) > float(row["open"]) and bear_mss:
             ob_bear = (float(row["low"]), float(row["high"]))
     if ob_bull:
         found.append(("Bullish Order Block", "BUY", "Last bearish candle before bullish structure displacement"))
@@ -600,7 +602,8 @@ try:
     ema_bear = bool(last["close"] < last["EMA 20"] < last["EMA 50"])
     rsi_bull = bool(pd.notna(last["RSI 14"]) and last["RSI 14"] > 50)
     rsi_bear = bool(pd.notna(last["RSI 14"]) and last["RSI 14"] < 50)
-    macd_bull = bool(pd.notna(last["MACD"]) and last["MACD"] > last["MACD Signal"])    macd_bear = bool(pd.notna(last["MACD"]) and last["MACD"] < last["MACD Signal"])
+    macd_bull = bool(pd.notna(last["MACD"]) and last["MACD"] > last["MACD Signal"])
+    macd_bear = bool(pd.notna(last["MACD"]) and last["MACD"] < last["MACD Signal"])
     bb_bull = bool(pd.notna(last["BB Middle"]) and last["close"] > last["BB Middle"])
     bb_bear = bool(pd.notna(last["BB Middle"]) and last["close"] < last["BB Middle"])
     supertrend_bull = bool(last["Supertrend Direction"] == "BULLISH")
@@ -799,7 +802,8 @@ try:
                 st.warning(f"ICT signal mila, Telegram send nahi hua: {exc}")
 
     # Send confirmed closed-candle ICT alerts once per browser session.
-    if signal_side in ("BUY", "SELL") and wa_recipient and wa_recipient.isdigit():        candle_key = str(closed.iloc[-1]["openTime"])
+    if signal_side in ("BUY", "SELL") and wa_recipient and wa_recipient.isdigit():
+        candle_key = str(closed.iloc[-1]["openTime"])
         alert_key = f"{FEED_SYMBOL}|{api_interval}|{signal_side}|{candle_key}"
         sent_alerts = st.session_state.setdefault("wa_sent_alerts", [])
         if alert_key not in sent_alerts:
