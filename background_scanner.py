@@ -173,7 +173,7 @@ def price_decimals(pair):
 
 
 def process_retest_alerts(pair, tf, symbol, df, state):
-    """Send a pending-zone alert, then a retest-confirmed alert with 1:1.5 RR."""
+    """Send a pending-zone alert, then a retest-confirmed alert with 1:5 RR."""
     pending = state.setdefault("pending_retests", {})
     current = df.iloc[-1]
     candle_time = str(current.openTime)
@@ -187,7 +187,7 @@ def process_retest_alerts(pair, tf, symbol, df, state):
             entry_plan = (zone_low + zone_high) / 2
             stop_plan = zone_low if direction == "BUY" else zone_high
             risk_plan = abs(entry_plan - stop_plan)
-            target_plan = entry_plan + (1.5 * risk_plan if direction == "BUY" else -1.5 * risk_plan)
+            target_plan = entry_plan + (5 * risk_plan if direction == "BUY" else -5 * risk_plan)
             decimals = price_decimals(pair)
             send_telegram(
                 "📡 ICT BABA SETUP FOUND — RETEST PENDING\n\n"
@@ -199,7 +199,7 @@ def process_retest_alerts(pair, tf, symbol, df, state):
                 f"💰 Planned Entry (zone midpoint): {entry_plan:.{decimals}f}\n"
                 f"🛑 Planned SL: {stop_plan:.{decimals}f}\n"
                 f"🎯 Planned TP: {target_plan:.{decimals}f}\n"
-                "⚖️ Risk/Reward: 1:1.5\n"
+                "⚖️ Risk/Reward: 1:5\n"
                 "⌛ Status: FVG/OB retest abhi baqi hai\n"
                 f"📝 Reason: {reason}\n\n"
                 "⚠️ Yeh planned zone hai, confirmed entry nahi."
@@ -235,7 +235,7 @@ def process_retest_alerts(pair, tf, symbol, df, state):
                 zone["status"] = "invalidated"
                 zone["invalidated_at"] = candle_time
                 continue
-            target_price = entry_price + (1.5 * risk if direction == "BUY" else -1.5 * risk)
+            target_price = entry_price + (5 * risk if direction == "BUY" else -5 * risk)
             decimals = price_decimals(pair)
             send_telegram(
                 "🚨 ICT BABA ENTRY RETEST CONFIRMED\n\n"
@@ -318,7 +318,7 @@ def main():
                     risk = abs(entry - stop_loss)
                     if risk <= 0:
                         continue
-                    take_profit = entry + (2 * risk if direction == "BUY" else -2 * risk)
+                    take_profit = entry + (5 * risk if direction == "BUY" else -5 * risk)
                     decimals = price_decimals(pair)
                     fmt = lambda value: f"{value:.{decimals}f}"
                     target = entry + (1.5 * risk if direction == "BUY" else -1.5 * risk)
