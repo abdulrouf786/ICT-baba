@@ -172,9 +172,8 @@ def main():
                     decimals = 3 if pair == "USD/JPY" else (5 if pair in ("EUR/USD", "GBP/USD") else 2)
                     fmt = lambda value: f"{value:.{decimals}f}"
                     msg = (
-                        "╔════════════════════╗\n"
-                        "      🌍 ICT BABA PRO ALERT\n"
-                        "╚════════════════════╝\n\n"
+                        "🌍 ICT BABA PRO ALERT\n"
+                        "\n"
                         f"💹 Pair       : {pair}\n"
                         f"⏱ Timeframe  : {tf}\n"
                         f"🧠 ICT Model  : {model}\n"
