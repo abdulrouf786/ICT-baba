@@ -5,6 +5,20 @@ import plotly.graph_objects as go
 import streamlit as st
 import streamlit.components.v1 as components
 
+def send_whatsapp_message(recipient, message):
+    """Send WhatsApp Cloud API text using Streamlit Secrets."""
+    token = st.secrets.get("WHATSAPP_ACCESS_TOKEN", "")
+    phone_number_id = st.secrets.get("WHATSAPP_PHONE_NUMBER_ID", "")
+    if not token or not phone_number_id:
+        raise RuntimeError("WHATSAPP_ACCESS_TOKEN ya WHATSAPP_PHONE_NUMBER_ID Streamlit Secrets mein missing hai.")
+    url = f"https://graph.facebook.com/v23.0/{phone_number_id}/messages"
+    response = requests.post(url, headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json"},
+        json={"messaging_product": "whatsapp", "recipient_type": "individual", "to": recipient, "type": "text",
+              "text": {"preview_url": False, "body": message}}, timeout=20)
+    if not response.ok:
+        raise RuntimeError(f"Meta WhatsApp API {response.status_code}: {response.text}")
+    return response.json()
+
 st.set_page_config(
     page_title="Abdul Rauf King - Multi Market AI",
     page_icon="🥇",
@@ -547,6 +561,23 @@ try:
 
 
 
+    # WhatsApp controls directly beneath the indicator/confluence panel.
+    st.markdown('<div class="ark-section">📲 WhatsApp ICT Alerts</div>', unsafe_allow_html=True)
+    wa_recipient = st.text_input("WhatsApp number with country code (example: 923001234567)", key="wa_recipient_input", help="Digits only. Never paste your API token here.").strip().replace("+", "").replace(" ", "").replace("-", "")
+    wa_left, wa_right = st.columns([1, 1])
+    with wa_left:
+        if st.button("📩 Send test WhatsApp message", use_container_width=True, key="wa_test_button"):
+            if not wa_recipient.isdigit() or len(wa_recipient) < 8:
+                st.error("Pehle apna WhatsApp number country code ke saath likhein.")
+            else:
+                try:
+                    result = send_whatsapp_message(wa_recipient, "ICT Baba: WhatsApp test message. Connection API tak pohanch gaya hai.")
+                    st.success("Meta ne message accept kar liya. WhatsApp inbox check karein.")
+                    st.caption("Message ID: " + str(result.get("messages", [{}])[0].get("id", "accepted")))
+                except Exception as exc:
+                    st.error(f"WhatsApp send failed: {exc}")
+    with wa_right:
+        st.caption("Meta test recipient ko pehle opt-in/allow karna zaroori hai. 24-hour window ke bahar approved template lag sakta hai.")
     # Full ICT + indicator signal. Use closed candles only to avoid intrabar repaint.
     closed = ict_df.iloc[:-1].copy() if len(ict_df) > 3 else ict_df.copy()
     signal_side = "WAIT"
@@ -614,6 +645,20 @@ try:
     else:
         signal_side = "WAIT"
 
+    # Send confirmed closed-candle ICT alerts once per browser session.
+    if signal_side in ("BUY", "SELL") and wa_recipient and wa_recipient.isdigit():
+        candle_key = str(closed.iloc[-1]["openTime"])
+        alert_key = f"{FEED_SYMBOL}|{api_interval}|{signal_side}|{candle_key}"
+        sent_alerts = st.session_state.setdefault("wa_sent_alerts", [])
+        if alert_key not in sent_alerts:
+            alert_text = (f"ICT BABA {signal_side} CONFIRMED\nPair: {FEED_SYMBOL}\nTimeframe: {api_interval}\nEntry: {signal_entry:.5f}\nSL: {signal_sl:.5f}\nTP: {signal_tp1:.5f}\nRR: {signal_rr}\nReasons: {', '.join(signal_reasons)}")
+            try:
+                send_whatsapp_message(wa_recipient, alert_text)
+                sent_alerts.append(alert_key)
+                st.session_state["wa_sent_alerts"] = sent_alerts[-100:]
+                st.success("Confirmed ICT signal Meta WhatsApp API ko bhej diya.")
+            except Exception as exc:
+                st.warning(f"ICT signal mila, WhatsApp send nahi hua: {exc}")
     st.markdown('<div class="ark-section">🎯 Full trading signal</div>', unsafe_allow_html=True)
     if signal_side == "WAIT":
         st.info("WAIT — abhi confirmed ICT entry nahi mili. Neeche reference levels sirf planning ke liye hain; inhein live trade signal na samjhein.")
