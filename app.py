@@ -504,6 +504,34 @@ try:
         yaxis=dict(fixedrange=False, tickfont=dict(size=10), automargin=True),
     )
     st.plotly_chart(fig, use_container_width=True, config={"displaylogo": False, "scrollZoom": True})
+
+    # Show each indicator's current directional reading directly below the chart.
+    indicator_rows = [
+        ("EMA 20 / 50", "BUY" if bool(last["close"] > last["EMA 20"] > last["EMA 50"]) else ("SELL" if bool(last["close"] < last["EMA 20"] < last["EMA 50"]) else "NEUTRAL")),
+        ("RSI 14", "BUY" if pd.notna(last["RSI 14"]) and last["RSI 14"] > 50 else ("SELL" if pd.notna(last["RSI 14"]) and last["RSI 14"] < 50 else "NEUTRAL")),
+        ("MACD", "BUY" if pd.notna(last["MACD"]) and pd.notna(last["MACD Signal"]) and last["MACD"] > last["MACD Signal"] else ("SELL" if pd.notna(last["MACD"]) and pd.notna(last["MACD Signal"]) and last["MACD"] < last["MACD Signal"] else "NEUTRAL")),
+        ("Bollinger", "BUY" if pd.notna(last["BB Middle"]) and last["close"] > last["BB Middle"] else ("SELL" if pd.notna(last["BB Middle"]) and last["close"] < last["BB Middle"] else "NEUTRAL")),
+        ("Supertrend", "BUY" if last["Supertrend Direction"] == "BULLISH" else ("SELL" if last["Supertrend Direction"] == "BEARISH" else "NEUTRAL")),
+        ("VWAP", "BUY" if pd.notna(last["VWAP"]) and last["close"] > last["VWAP"] else ("SELL" if pd.notna(last["VWAP"]) and last["close"] < last["VWAP"] else "NEUTRAL")),
+        ("Stoch RSI", "BUY" if pd.notna(last["Stoch RSI K"]) and pd.notna(last["Stoch RSI D"]) and last["Stoch RSI K"] > last["Stoch RSI D"] else ("SELL" if pd.notna(last["Stoch RSI K"]) and pd.notna(last["Stoch RSI D"]) and last["Stoch RSI K"] < last["Stoch RSI D"] else "NEUTRAL")),
+        ("DMI +DI / -DI", "BUY" if pd.notna(last["+DI 14"]) and pd.notna(last["-DI 14"]) and last["+DI 14"] > last["-DI 14"] else ("SELL" if pd.notna(last["+DI 14"]) and pd.notna(last["-DI 14"]) and last["-DI 14"] > last["+DI 14"] else "NEUTRAL")),
+        ("Volume", "CONFIRM" if pd.notna(last["volume"]) and pd.notna(last["Volume SMA 20"]) and last["volume"] > last["Volume SMA 20"] else "LOW / N.A."),
+    ]
+    indicator_html = "".join(
+        f'<div style="display:flex;justify-content:space-between;gap:12px;padding:9px 11px;border-bottom:1px solid #29384d">'
+        f'<span style="color:#d5deeb;font-weight:650">{name}</span>'
+        f'<strong style="color:{"#35d6a0" if state == "BUY" or state == "CONFIRM" else ("#ff7185" if state == "SELL" else "#aab6c8")};white-space:nowrap">{state}</strong></div>'
+        for name, state in indicator_rows
+    )
+    buy_count = sum(state == "BUY" for _, state in indicator_rows)
+    sell_count = sum(state == "SELL" for _, state in indicator_rows)
+    st.markdown('<div class="ark-section">🧭 Har indicator ka BUY / SELL</div>', unsafe_allow_html=True)
+    st.markdown(
+        f'<div class="ark-score-wrap"><div style="display:flex;justify-content:space-between;gap:8px;padding:4px 10px 10px;color:#dce6f5">'
+        f'<strong style="color:#35d6a0">BUY: {buy_count}</strong><strong style="color:#ff7185">SELL: {sell_count}</strong></div>{indicator_html}'
+        f'<div class="ark-note" style="padding:10px">Har indicator ka apna direction hai; final trade signal ke liye neeche ICT confirmation aur risk checks bhi zaroori hain.</div></div>',
+        unsafe_allow_html=True,
+    )
     # Pipflow-inspired mobile-first analysis dashboard.
     ema_bull = bool(last["close"] > last["EMA 20"] > last["EMA 50"])
     ema_bear = bool(last["close"] < last["EMA 20"] < last["EMA 50"])
