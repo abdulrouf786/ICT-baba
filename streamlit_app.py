@@ -947,7 +947,7 @@ try:
                                 risk = abs(entry_price - stop_price)
                                 if risk <= 0:
                                     continue
-                                target_price = entry_price + (1.5 * risk if model_side == "BUY" else -1.5 * risk)
+                                target_price = entry_price + (5 * risk if model_side == "BUY" else -5 * risk)
                                 price_decimals = 5 if pair_symbol == "YAHOO:EURUSD=X" else 2
                                 price_fmt = lambda value: f"{value:.{price_decimals}f}"
                                 send_telegram_message(
@@ -959,7 +959,7 @@ try:
                                     f"💰 Entry Reference: {price_fmt(entry_price)}\n"
                                     f"🛑 Stop Loss: {price_fmt(stop_price)}\n"
                                     f"🎯 Take Profit: {price_fmt(target_price)}\n"
-                                    "⚖️ Risk/Reward: 1:1.5\n"
+                                    "⚖️ Risk/Reward: 1:5\n"
                                     f"📝 Reason: {model_reason}\n\n"
                                     "⚠️ ICT condition alert; verify setup and execution before trading."
                                 )
