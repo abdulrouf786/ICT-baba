@@ -158,7 +158,17 @@ def main():
                 setups = scan_ict_setups(df)
                 for model, direction, reason in setups:
                     key = f"{pair}|{tf}|{model}|{direction}"
-                    if state.get(key) == candle_time:
+                    previous = state.get(key)
+                    now_ts = time.time()
+                    if isinstance(previous, dict):
+                        last_sent = float(previous.get("sent_at", 0))
+                        if now_ts - last_sent < 4 * 60 * 60:
+                            continue
+                    elif previous:
+                        # Migrate the old candle-timestamp format without resending immediately.
+                        if previous == candle_time:
+                            continue
+                        state[key] = {"sent_at": now_ts, "candle": str(previous)}
                         continue
                     last_candle = df.iloc[-1]
                     entry = float(last_candle.close)
@@ -181,7 +191,7 @@ def main():
                         "⚠️ Educational setup; verify before trading."
                     )
                     send_telegram(msg)
-                    state[key] = candle_time
+                    state[key] = {"sent_at": time.time(), "candle": candle_time}
                     sent += 1
                 time.sleep(0.15)
             except Exception as exc:
