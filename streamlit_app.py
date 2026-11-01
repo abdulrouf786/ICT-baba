@@ -908,7 +908,9 @@ try:
     st.markdown('<div class="ark-section">🌍 All-Pairs · All-Timeframes ICT Scanner</div>', unsafe_allow_html=True)
     st.caption("All 4 configured pairs are checked on 1m, 5m, 15m, 1h and 4h (20 pair/timeframe combinations).")
     all_pair_rows = []
-    all_pair_tg_sent = st.session_state.setdefault("tg_all_pair_sent", [])
+    # Suppress the same pair/timeframe/model/direction for four hours.
+    all_pair_tg_sent = st.session_state.setdefault("tg_all_pair_last_sent", {})
+    alert_now = pd.Timestamp.now(tz="UTC").timestamp()
     for pair_name, pair_cfg in ASSETS.items():
         pair_symbol = pair_cfg["feed"]
         for timeframe_name, (tf_tv_interval, tf_api_interval) in timeframes.items():
@@ -926,8 +928,9 @@ try:
                     all_pair_rows.append({"Pair": pair_symbol, "Timeframe": tf_api_interval, "Signal": signal_label, "ICT models": model_names})
                     candle_stamp = str(pair_closed.iloc[-1]["openTime"])
                     for model_name, model_side, model_reason in pair_setups:
-                        alert_key = f"{pair_symbol}|{tf_api_interval}|{model_name}|{model_side}|{candle_stamp}"
-                        if alert_key not in all_pair_tg_sent:
+                        alert_key = f"{pair_symbol}|{tf_api_interval}|{model_name}|{model_side}"
+                        last_sent = float(all_pair_tg_sent.get(alert_key, 0))
+                        if alert_now - last_sent >= 4 * 60 * 60:
                             try:
                                 send_telegram_message(
                                     f"🌍 ICT BABA ALL-PAIR ALERT\n\n"
@@ -939,14 +942,14 @@ try:
                                     f"📝 Reason: {model_reason}\n\n"
                                     "⚠️ Educational setup; verify before trading."
                                 )
-                                all_pair_tg_sent.append(alert_key)
+                                all_pair_tg_sent[alert_key] = alert_now
                             except Exception as exc:
                                 st.warning(f"{pair_symbol} {tf_api_interval} Telegram alert nahi gaya: {exc}")
                 else:
                     all_pair_rows.append({"Pair": pair_symbol, "Timeframe": tf_api_interval, "Signal": "WAIT", "ICT models": "No setup on latest closed candle"})
             except Exception as exc:
                 all_pair_rows.append({"Pair": pair_symbol, "Timeframe": tf_api_interval, "Signal": "DATA ERROR", "ICT models": str(exc)[:100]})
-    st.session_state["tg_all_pair_sent"] = all_pair_tg_sent[-1000:]
+    st.session_state["tg_all_pair_last_sent"] = all_pair_tg_sent
     if all_pair_rows:
         st.dataframe(pd.DataFrame(all_pair_rows), use_container_width=True, hide_index=True)
         active_count = sum(row["Signal"] not in ("WAIT", "DATA ERROR") for row in all_pair_rows)
