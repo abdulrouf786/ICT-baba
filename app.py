@@ -659,6 +659,23 @@ try:
         # Unicorn requires breaker context plus a same-direction FVG.
         bull_unicorn = bull_breaker and bull_fvg
         bear_unicorn = bear_breaker and bear_fvg
+        # Additional ICT concepts: heuristic pattern checks, not guaranteed trade entries.
+        candle_body = abs(float(cur["close"] - cur["open"]))
+        avg_body = float((closed["close"] - closed["open"]).abs().tail(20).mean())
+        atr_now = max(float(cur["ATR 14"]) if pd.notna(cur["ATR 14"]) else 0.0, 1e-12)
+        bull_displacement = float(cur["close"]) > float(cur["open"]) and candle_body > 1.5 * max(avg_body, 1e-12) and float(cur["close"]) > float(prev["high"])
+        bear_displacement = float(cur["close"]) < float(cur["open"]) and candle_body > 1.5 * max(avg_body, 1e-12) and float(cur["close"]) < float(prev["low"])
+        equal_highs = abs(float(recent["high"].nlargest(2).iloc[0]) - float(recent["high"].nlargest(2).iloc[1])) <= 0.08 * atr_now
+        equal_lows = abs(float(recent["low"].nsmallest(2).iloc[0]) - float(recent["low"].nsmallest(2).iloc[1])) <= 0.08 * atr_now
+        bull_turtle, bear_turtle = bull_sweep, bear_sweep
+        midpoint = (swing_hi + swing_lo) / 2
+        bull_discount, bear_premium = float(cur["close"]) < midpoint, float(cur["close"]) > midpoint
+        prior_range = closed.iloc[-12:-3]
+        was_range_bound = (float(prior_range["high"].max()) - float(prior_range["low"].min())) < 2.5 * atr_now
+        bull_amd = was_range_bound and bull_sweep and (bull_displacement or direction_up)
+        bear_amd = was_range_bound and bear_sweep and (bear_displacement or direction_down)
+        hour_utc = pd.Timestamp(cur["openTime"]).hour
+        london_kz, newyork_kz = 7 <= hour_utc < 10, 12 <= hour_utc < 15
         ict_setups = [
             ("Liquidity sweep + MSS", "BUY" if bull_sweep and direction_up else ("SELL" if bear_sweep and direction_down else "WAIT")),
             ("Fair Value Gap (FVG)", "BUY" if bull_fvg else ("SELL" if bear_fvg else "WAIT")),
@@ -668,9 +685,20 @@ try:
             ("Rejection Block", "BUY" if bull_rejection else ("SELL" if bear_rejection else "WAIT")),
             ("OTE 62%-79%", "BUY" if bull_ote else ("SELL" if bear_ote else "WAIT")),
             ("Unicorn (Breaker + FVG)", "BUY" if bull_unicorn else ("SELL" if bear_unicorn else "WAIT")),
+            ("Turtle Soup", "BUY" if bull_turtle else ("SELL" if bear_turtle else "WAIT")),
+            ("Displacement", "BUY" if bull_displacement else ("SELL" if bear_displacement else "WAIT")),
+            ("Equal Highs / BSL pool", "SELL" if equal_highs else "WAIT"),
+            ("Equal Lows / SSL pool", "BUY" if equal_lows else "WAIT"),
+            ("Premium / Discount", "SELL" if bear_premium else ("BUY" if bull_discount else "WAIT")),
+            ("AMD / Power of 3 proxy", "BUY" if bull_amd else ("SELL" if bear_amd else "WAIT")),
+            ("London Killzone (UTC approx.)", "ACTIVE" if london_kz else "INACTIVE"),
+            ("New York Killzone (UTC approx.)", "ACTIVE" if newyork_kz else "INACTIVE"),
+            ("SMT Divergence", "NEEDS CORRELATED DATA"),
+            ("Judas Swing", "NEEDS SESSION CONFIRMATION"),
         ]
     else:
-        ict_setups = [(name, "WAIT") for name in ["Liquidity sweep + MSS", "Fair Value Gap (FVG)", "Order Block (OB)", "Breaker Block", "Mitigation Block", "Rejection Block", "OTE 62%-79%", "Unicorn (Breaker + FVG)"]]
+        ict_names = ["Liquidity sweep + MSS", "Fair Value Gap (FVG)", "Order Block (OB)", "Breaker Block", "Mitigation Block", "Rejection Block", "OTE 62%-79%", "Unicorn (Breaker + FVG)", "Turtle Soup", "Displacement", "Equal Highs / BSL pool", "Equal Lows / SSL pool", "Premium / Discount", "AMD / Power of 3 proxy", "London Killzone (UTC approx.)", "New York Killzone (UTC approx.)", "SMT Divergence", "Judas Swing"]
+        ict_setups = [(name, "WAIT") for name in ict_names]
 
     st.markdown('<div class="ark-section">🏹 ICT entry models</div>', unsafe_allow_html=True)
     ict_rows = "".join(
@@ -680,7 +708,7 @@ try:
         for name, side in ict_setups
     )
     st.markdown(
-        f'<div class="ark-score-wrap">{ict_rows}<div class="ark-note" style="padding:10px">BUY/SELL ka matlab pattern detect hua hai, automatic trade call nahi. SMT divergence aur session-based Judas swing ke liye correlated market/session data ki alag confirmation darkaar hai.</div></div>',
+        f'<div class="ark-score-wrap">{ict_rows}<div class="ark-note" style="padding:10px">BUY/SELL ka matlab heuristic pattern detect hua hai, automatic trade call nahi. Killzone UTC approximation hai aur DST se shift ho sakta hai. SMT ko correlated market data aur Judas Swing ko session-specific confirmation chahiye.</div></div>',
         unsafe_allow_html=True,
     )
     signal_side = "WAIT"
