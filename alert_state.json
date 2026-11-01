@@ -1,1 +1,24 @@
-{}
+{
+  "XAUUSD|5m|Bullish IFVG|BUY": "2026-10-30 20:50:00+00:00",
+  "XAUUSD|15m|Bearish FVG|SELL": "2026-10-30 20:30:00+00:00",
+  "XAUUSD|1h|Liquidity Sweep / Turtle Soup|BUY": "2026-10-30 19:00:00+00:00",
+  "XAUUSD|4h|Bearish MSS / CHoCH|SELL": "2026-10-30 16:00:00+00:00",
+  "XAUUSD|4h|Bearish FVG|SELL": "2026-10-30 16:00:00+00:00",
+  "XAUUSD|4h|Bearish Order Block|SELL": "2026-10-30 16:00:00+00:00",
+  "BTCUSDT|1m|Bullish MSS / CHoCH|BUY": "2026-11-01 13:59:00+00:00",
+  "BTCUSDT|1m|Bullish FVG|BUY": "2026-11-01 13:59:00+00:00",
+  "BTCUSDT|1m|Bullish Order Block|BUY": "2026-11-01 13:59:00+00:00",
+  "BTCUSDT|4h|Bullish FVG|BUY": "2026-11-01 08:00:00+00:00",
+  "ETHUSDT|1m|Liquidity Sweep / Turtle Soup|SELL": "2026-11-01 13:59:00+00:00",
+  "ETHUSDT|1m|Bullish FVG|BUY": "2026-11-01 13:59:00+00:00",
+  "EUR/USD|15m|Bearish FVG|SELL": "2026-10-30 21:00:00+00:00",
+  "EUR/USD|1h|Bearish IFVG|SELL": "2026-10-30 20:00:00+00:00",
+  "EUR/USD|4h|Bearish FVG|SELL": "2026-10-30 16:00:00+00:00",
+  "GBP/USD|15m|Bearish MSS / CHoCH|SELL": "2026-10-30 21:00:00+00:00",
+  "GBP/USD|15m|Bearish FVG|SELL": "2026-10-30 21:00:00+00:00",
+  "GBP/USD|15m|Bearish Order Block|SELL": "2026-10-30 21:00:00+00:00",
+  "USD/JPY|5m|Bearish IFVG|SELL": "2026-10-30 20:50:00+00:00",
+  "USD/JPY|15m|Bullish MSS / CHoCH|BUY": "2026-10-30 20:30:00+00:00",
+  "USD/JPY|15m|Bullish Order Block|BUY": "2026-10-30 20:30:00+00:00",
+  "USD/JPY|15m|Bullish Mitigation Block|BUY": "2026-10-30 20:30:00+00:00"
+}
