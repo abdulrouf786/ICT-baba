@@ -556,6 +556,33 @@ try:
         f'<div class="ark-note" style="padding:10px">Har indicator ka apna direction hai; final trade signal ke liye neeche ICT confirmation aur risk checks bhi zaroori hain.</div></div>',
         unsafe_allow_html=True,
     )
+
+    # WhatsApp alert controls. Recipient must be the verified/opted-in destination number.
+    st.markdown('<div class="ark-section">📲 WhatsApp ICT alerts</div>', unsafe_allow_html=True)
+    wa_recipient = st.text_input(
+        "Your WhatsApp number (international format, e.g. 923001234567)",
+        value=st.session_state.get("wa_recipient", ""),
+        key="wa_recipient_input",
+        help="Country code + number, digits only. Do not include +, spaces or dashes.",
+    ).strip().replace("+", "").replace(" ", "").replace("-", "")
+    st.session_state["wa_recipient"] = wa_recipient
+    wa_col1, wa_col2 = st.columns(2)
+    with wa_col1:
+        if st.button("Send test WhatsApp message", use_container_width=True):
+            if not wa_recipient.isdigit() or len(wa_recipient) < 8:
+                st.error("Pehle valid WhatsApp number country code ke saath enter karein.")
+            else:
+                try:
+                    send_whatsapp_message(
+                        wa_recipient,
+                        "ICT Baba: WhatsApp connection test successful. Alerts ke liye internet on rakhein.",
+                    )
+                    st.success("Test message WhatsApp API ko send ho gaya. Apna WhatsApp check karein.")
+                except Exception as exc:
+                    st.error(f"WhatsApp test failed: {exc}")
+    with wa_col2:
+        st.caption("Confirmed ICT BUY/SELL setup par alert bhejne ki koshish app ke refresh par hogi. Streamlit app background mein hamesha run nahi karti.")
+
     # Pipflow-inspired mobile-first analysis dashboard.
     ema_bull = bool(last["close"] > last["EMA 20"] > last["EMA 50"])
     ema_bear = bool(last["close"] < last["EMA 20"] < last["EMA 50"])
@@ -800,32 +827,6 @@ try:
     else:
         signal_side = "WAIT"
 
-
-    # WhatsApp alert controls. Recipient must be the verified/opted-in destination number.
-    st.markdown('<div class="ark-section">📲 WhatsApp ICT alerts</div>', unsafe_allow_html=True)
-    wa_recipient = st.text_input(
-        "Your WhatsApp number (international format, e.g. 923001234567)",
-        value=st.session_state.get("wa_recipient", ""),
-        key="wa_recipient_input",
-        help="Country code + number, digits only. Do not include +, spaces or dashes.",
-    ).strip().replace("+", "").replace(" ", "").replace("-", "")
-    st.session_state["wa_recipient"] = wa_recipient
-    wa_col1, wa_col2 = st.columns(2)
-    with wa_col1:
-        if st.button("Send test WhatsApp message", use_container_width=True):
-            if not wa_recipient.isdigit() or len(wa_recipient) < 8:
-                st.error("Pehle valid WhatsApp number country code ke saath enter karein.")
-            else:
-                try:
-                    send_whatsapp_message(
-                        wa_recipient,
-                        "ICT Baba: WhatsApp connection test successful. Alerts ke liye internet on rakhein.",
-                    )
-                    st.success("Test message WhatsApp API ko send ho gaya. Apna WhatsApp check karein.")
-                except Exception as exc:
-                    st.error(f"WhatsApp test failed: {exc}")
-    with wa_col2:
-        st.caption("Confirmed ICT BUY/SELL setup par alert bhejne ki koshish app ke refresh par hogi. Streamlit app background mein hamesha run nahi karti.")
 
     # Send each confirmed closed-candle setup once per browser session.
     if signal_side in ("BUY", "SELL") and wa_recipient and wa_recipient.isdigit():
