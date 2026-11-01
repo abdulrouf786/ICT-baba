@@ -19,6 +19,21 @@ def send_whatsapp_message(recipient, message):
         raise RuntimeError(f"Meta WhatsApp API {response.status_code}: {response.text}")
     return response.json()
 
+def send_telegram_message(message):
+    """Send an ICT alert through the Telegram Bot API using Streamlit Secrets."""
+    token = st.secrets.get("TELEGRAM_BOT_TOKEN", "")
+    chat_id = st.secrets.get("TELEGRAM_CHAT_ID", "")
+    if not token or not chat_id:
+        raise RuntimeError("TELEGRAM_BOT_TOKEN ya TELEGRAM_CHAT_ID Streamlit Secrets mein missing hai.")
+    url = f"https://api.telegram.org/bot{token}/sendMessage"
+    response = requests.post(url, json={"chat_id": chat_id, "text": message}, timeout=20)
+    if not response.ok:
+        raise RuntimeError(f"Telegram API {response.status_code}: {response.text}")
+    payload = response.json()
+    if not payload.get("ok"):
+        raise RuntimeError(f"Telegram API error: {payload}")
+    return payload
+
 st.set_page_config(
     page_title="Abdul Rauf King - Multi Market AI",
     page_icon="🥇",
@@ -578,6 +593,19 @@ try:
                     st.error(f"WhatsApp send failed: {exc}")
     with wa_right:
         st.caption("Meta test recipient ko pehle opt-in/allow karna zaroori hai. 24-hour window ke bahar approved template lag sakta hai.")
+
+    st.markdown('<div class="ark-section">✈️ Telegram ICT Alerts</div>', unsafe_allow_html=True)
+    tg_left, tg_right = st.columns([1, 1])
+    with tg_left:
+        if st.button("📨 Send test Telegram message", use_container_width=True, key="tg_test_button"):
+            try:
+                send_telegram_message("✅ ICT Baba Telegram connected! Test notification successful.")
+                st.success("Telegram test message bhej diya. Apna Telegram bot chat check karein.")
+            except Exception as exc:
+                st.error(f"Telegram send failed: {exc}")
+    with tg_right:
+        st.caption("Telegram bot @ictscannser_bot ke saath connection test. Alerts app ke refresh/run hone par check honge.")
+
     # Full ICT + indicator signal. Use closed candles only to avoid intrabar repaint.
     closed = ict_df.iloc[:-1].copy() if len(ict_df) > 3 else ict_df.copy()
     signal_side = "WAIT"
@@ -644,6 +672,21 @@ try:
             signal_side = "WAIT"
     else:
         signal_side = "WAIT"
+
+    # Send confirmed closed-candle Telegram alerts once per browser session.
+    if signal_side in ("BUY", "SELL"):
+        candle_key = str(closed.iloc[-1]["openTime"])
+        tg_alert_key = f"{FEED_SYMBOL}|{api_interval}|{signal_side}|{candle_key}"
+        tg_sent_alerts = st.session_state.setdefault("tg_sent_alerts", [])
+        if tg_alert_key not in tg_sent_alerts:
+            tg_alert_text = (f"🚨 ICT BABA {signal_side} CONFIRMED\\nPair: {FEED_SYMBOL}\\nTimeframe: {api_interval}\\nEntry: {signal_entry:.5f}\\nSL: {signal_sl:.5f}\\nTP: {signal_tp1:.5f}\\nRR: {signal_rr}\\nReasons: {', '.join(signal_reasons)}")
+            try:
+                send_telegram_message(tg_alert_text)
+                tg_sent_alerts.append(tg_alert_key)
+                st.session_state["tg_sent_alerts"] = tg_sent_alerts[-100:]
+                st.success("Confirmed ICT signal Telegram par bhej diya.")
+            except Exception as exc:
+                st.warning(f"ICT signal mila, Telegram send nahi hua: {exc}")
 
     # Send confirmed closed-candle ICT alerts once per browser session.
     if signal_side in ("BUY", "SELL") and wa_recipient and wa_recipient.isdigit():
