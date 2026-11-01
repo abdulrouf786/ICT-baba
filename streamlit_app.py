@@ -901,45 +901,47 @@ try:
         st.info("Latest closed candle par abhi koi major ICT entry model detect nahi hua. WAIT — next candle ka intezar karein.")
 
 
-    # Scan every configured market pair on the currently selected timeframe.
-    st.markdown('<div class="ark-section">🌍 All-Pairs ICT Signal Scanner</div>', unsafe_allow_html=True)
-    st.caption(f"All configured pairs are checked on the selected timeframe: {api_interval}. Pair feed failures are shown separately.")
+    # Scan every configured market pair across all five timeframes.
+    st.markdown('<div class="ark-section">🌍 All-Pairs · All-Timeframes ICT Scanner</div>', unsafe_allow_html=True)
+    st.caption("All 6 configured pairs are checked on 1m, 5m, 15m, 1h and 4h (30 pair/timeframe combinations).")
     all_pair_rows = []
     all_pair_tg_sent = st.session_state.setdefault("tg_all_pair_sent", [])
     for pair_name, pair_cfg in ASSETS.items():
         pair_symbol = pair_cfg["feed"]
-        try:
-            pair_df = load_ohlc(pair_symbol, api_interval)
-            if len(pair_df) < 35:
-                all_pair_rows.append({"Pair": pair_symbol, "Timeframe": api_interval, "Signal": "WAIT", "ICT models": "Not enough candles"})
-                continue
-            pair_closed = pair_df.iloc[:-1].copy()
-            pair_setups = scan_ict_setups(pair_closed)
-            if pair_setups:
-                directions = sorted(set(side for _, side, _ in pair_setups))
-                signal_label = " / ".join(directions) if len(directions) > 1 else directions[0]
-                model_names = ", ".join(name for name, _, _ in pair_setups)
-                all_pair_rows.append({"Pair": pair_symbol, "Timeframe": api_interval, "Signal": signal_label, "ICT models": model_names})
-                candle_stamp = str(pair_closed.iloc[-1]["openTime"])
-                for model_name, model_side, model_reason in pair_setups:
-                    alert_key = f"{pair_symbol}|{api_interval}|{model_name}|{model_side}|{candle_stamp}"
-                    if alert_key not in all_pair_tg_sent:
-                        try:
-                            send_telegram_message(
-                                f"🌍 ICT BABA ALL-PAIR ALERT\nPair: {pair_symbol}\nTimeframe: {api_interval}\nModel: {model_name}\nDirection: {model_side}\nClose: {float(pair_closed.iloc[-1]['close']):.5f}\nReason: {model_reason}\nEducational setup; verify before trading."
-                            )
-                            all_pair_tg_sent.append(alert_key)
-                        except Exception as exc:
-                            st.warning(f"{pair_symbol} Telegram alert send nahi hua: {exc}")
-            else:
-                all_pair_rows.append({"Pair": pair_symbol, "Timeframe": api_interval, "Signal": "WAIT", "ICT models": "No setup on latest closed candle"})
-        except Exception as exc:
-            all_pair_rows.append({"Pair": pair_symbol, "Timeframe": api_interval, "Signal": "DATA ERROR", "ICT models": str(exc)[:100]})
-    st.session_state["tg_all_pair_sent"] = all_pair_tg_sent[-300:]
+        for timeframe_name, (tf_tv_interval, tf_api_interval) in timeframes.items():
+            try:
+                pair_df = load_ohlc(pair_symbol, tf_api_interval)
+                if len(pair_df) < 35:
+                    all_pair_rows.append({"Pair": pair_symbol, "Timeframe": tf_api_interval, "Signal": "WAIT", "ICT models": "Not enough candles"})
+                    continue
+                pair_closed = pair_df.iloc[:-1].copy()
+                pair_setups = scan_ict_setups(pair_closed)
+                if pair_setups:
+                    directions = sorted(set(side for _, side, _ in pair_setups))
+                    signal_label = " / ".join(directions)
+                    model_names = ", ".join(name for name, _, _ in pair_setups)
+                    all_pair_rows.append({"Pair": pair_symbol, "Timeframe": tf_api_interval, "Signal": signal_label, "ICT models": model_names})
+                    candle_stamp = str(pair_closed.iloc[-1]["openTime"])
+                    for model_name, model_side, model_reason in pair_setups:
+                        alert_key = f"{pair_symbol}|{tf_api_interval}|{model_name}|{model_side}|{candle_stamp}"
+                        if alert_key not in all_pair_tg_sent:
+                            try:
+                                send_telegram_message(
+                                    f"🌍 ICT BABA ALL-PAIR ALERT\\nPair: {pair_symbol}\\nTimeframe: {tf_api_interval}\\nModel: {model_name}\\nDirection: {model_side}\\nClose: {float(pair_closed.iloc[-1]['close']):.5f}\\nReason: {model_reason}\\nEducational setup; verify before trading."
+                                )
+                                all_pair_tg_sent.append(alert_key)
+                            except Exception as exc:
+                                st.warning(f"{pair_symbol} {tf_api_interval} Telegram alert nahi gaya: {exc}")
+                else:
+                    all_pair_rows.append({"Pair": pair_symbol, "Timeframe": tf_api_interval, "Signal": "WAIT", "ICT models": "No setup on latest closed candle"})
+            except Exception as exc:
+                all_pair_rows.append({"Pair": pair_symbol, "Timeframe": tf_api_interval, "Signal": "DATA ERROR", "ICT models": str(exc)[:100]})
+    st.session_state["tg_all_pair_sent"] = all_pair_tg_sent[-1000:]
     if all_pair_rows:
         st.dataframe(pd.DataFrame(all_pair_rows), use_container_width=True, hide_index=True)
         active_count = sum(row["Signal"] not in ("WAIT", "DATA ERROR") for row in all_pair_rows)
-        st.caption(f"Scan complete: {active_count} pair(s) currently have at least one detected ICT model. No signal means WAIT, not a missed guaranteed trade.")
+        error_count = sum(row["Signal"] == "DATA ERROR" for row in all_pair_rows)
+        st.caption(f"Scan complete: {active_count}/30 pair-timeframe combinations have a detected ICT model; {error_count} data errors. WAIT means no model on the latest closed candle.")
 
     if st.button("Refresh ICT data"):
         st.cache_data.clear()
