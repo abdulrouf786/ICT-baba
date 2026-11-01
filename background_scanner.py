@@ -11,8 +11,6 @@ ASSETS = {
     "BTCUSDT": "BTCUSDT",
     "ETHUSDT": "ETHUSDT",
     "EUR/USD": "YAHOO:EURUSD=X",
-    "GBP/USD": "YAHOO:GBPUSD=X",
-    "USD/JPY": "YAHOO:USDJPY=X",
 }
 TIMEFRAMES = ["1m", "5m", "15m", "1h", "4h"]
 STATE_FILE = Path("alert_state.json")
