@@ -10,7 +10,7 @@
   "BTCUSDT|1m|Bullish Order Block|BUY": "2026-11-01 13:59:00+00:00",
   "BTCUSDT|4h|Bullish FVG|BUY": "2026-11-01 08:00:00+00:00",
   "ETHUSDT|1m|Liquidity Sweep / Turtle Soup|SELL": "2026-11-01 13:59:00+00:00",
-  "ETHUSDT|1m|Bullish FVG|BUY": "2026-11-01 13:59:00+00:00",
+  "ETHUSDT|1m|Bullish FVG|BUY": "2026-11-01 14:59:00+00:00",
   "EUR/USD|15m|Bearish FVG|SELL": "2026-10-30 21:00:00+00:00",
   "EUR/USD|1h|Bearish IFVG|SELL": "2026-10-30 20:00:00+00:00",
   "EUR/USD|4h|Bearish FVG|SELL": "2026-10-30 16:00:00+00:00",
@@ -26,5 +26,6 @@
   "BTCUSDT|15m|Bullish Order Block|BUY": "2026-11-01 14:00:00+00:00",
   "BTCUSDT|15m|Bullish Mitigation Block|BUY": "2026-11-01 14:00:00+00:00",
   "ETHUSDT|1m|Bullish IFVG|BUY": "2026-11-01 14:24:00+00:00",
-  "ETHUSDT|15m|Bearish OTE (62%-79%)|SELL": "2026-11-01 14:00:00+00:00"
+  "ETHUSDT|15m|Bearish OTE (62%-79%)|SELL": "2026-11-01 14:00:00+00:00",
+  "BTCUSDT|15m|Bearish OTE (62%-79%)|SELL": "2026-11-01 14:45:00+00:00"
 }
