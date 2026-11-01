@@ -890,6 +890,11 @@ try:
         tg_setup_sent = st.session_state.setdefault("tg_setup_sent", [])
         setup_candle = str(closed.iloc[-1]["openTime"])
         for setup_name, setup_side, setup_reason in ict_setups:
+            # FVG/OB Telegram notifications are sent by the background
+            # scanner in two stages: retest pending, then retest confirmed.
+            if setup_name in ("Bullish FVG", "Bearish FVG",
+                              "Bullish Order Block", "Bearish Order Block"):
+                continue
             setup_key = f"{FEED_SYMBOL}|{api_interval}|{setup_name}|{setup_side}|{setup_candle}"
             if setup_key not in tg_setup_sent:
                 try:
@@ -928,6 +933,10 @@ try:
                     all_pair_rows.append({"Pair": pair_symbol, "Timeframe": tf_api_interval, "Signal": signal_label, "ICT models": model_names})
                     candle_stamp = str(pair_closed.iloc[-1]["openTime"])
                     for model_name, model_side, model_reason in pair_setups:
+                        # FVG/OB retest alerts come from the persistent background scanner.
+                        if model_name in ("Bullish FVG", "Bearish FVG",
+                                          "Bullish Order Block", "Bearish Order Block"):
+                            continue
                         alert_key = f"{pair_symbol}|{tf_api_interval}|{model_name}|{model_side}"
                         last_sent = float(all_pair_tg_sent.get(alert_key, 0))
                         if alert_now - last_sent >= 4 * 60 * 60:
