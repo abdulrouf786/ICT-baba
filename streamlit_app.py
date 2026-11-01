@@ -42,7 +42,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-# Refresh the dashboard and all 30 pair/timeframe scans every 60 seconds.
+# Refresh the dashboard and all 20 pair/timeframe scans every 60 seconds.
 st_autorefresh(interval=60_000, limit=None, key="ict_auto_refresh")
 st.caption("🔄 Auto refresh active · data and ICT scanner update every 60 seconds while this page is open.")
 
@@ -90,8 +90,6 @@ ASSETS = {
     "Bitcoin (BTCUSDT)": {"tv": "BINANCE:BTCUSDT", "feed": "BTCUSDT", "label": "Bitcoin"},
     "Ethereum (ETHUSDT)": {"tv": "BINANCE:ETHUSDT", "feed": "ETHUSDT", "label": "Ethereum"},
     "EUR/USD": {"tv": "FX:EURUSD", "feed": "YAHOO:EURUSD=X", "label": "Euro / US Dollar"},
-    "GBP/USD": {"tv": "FX:GBPUSD", "feed": "YAHOO:GBPUSD=X", "label": "British Pound / US Dollar"},
-    "USD/JPY": {"tv": "FX:USDJPY", "feed": "YAHOO:USDJPY=X", "label": "US Dollar / Japanese Yen"},
 }
 selected_asset = st.selectbox("Market pair", list(ASSETS.keys()), index=0)
 asset = ASSETS[selected_asset]
@@ -908,7 +906,7 @@ try:
 
     # Scan every configured market pair across all five timeframes.
     st.markdown('<div class="ark-section">🌍 All-Pairs · All-Timeframes ICT Scanner</div>', unsafe_allow_html=True)
-    st.caption("All 6 configured pairs are checked on 1m, 5m, 15m, 1h and 4h (30 pair/timeframe combinations).")
+    st.caption("All 4 configured pairs are checked on 1m, 5m, 15m, 1h and 4h (20 pair/timeframe combinations).")
     all_pair_rows = []
     all_pair_tg_sent = st.session_state.setdefault("tg_all_pair_sent", [])
     for pair_name, pair_cfg in ASSETS.items():
@@ -953,7 +951,7 @@ try:
         st.dataframe(pd.DataFrame(all_pair_rows), use_container_width=True, hide_index=True)
         active_count = sum(row["Signal"] not in ("WAIT", "DATA ERROR") for row in all_pair_rows)
         error_count = sum(row["Signal"] == "DATA ERROR" for row in all_pair_rows)
-        st.caption(f"Scan complete: {active_count}/30 pair-timeframe combinations have a detected ICT model; {error_count} data errors. WAIT means no model on the latest closed candle.")
+        st.caption(f"Scan complete: {active_count}/20 pair-timeframe combinations have a detected ICT model; {error_count} data errors. WAIT means no model on the latest closed candle.")
 
     if st.button("Refresh ICT data"):
         st.cache_data.clear()
