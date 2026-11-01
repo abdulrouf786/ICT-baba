@@ -20,5 +20,11 @@
   "USD/JPY|5m|Bearish IFVG|SELL": "2026-10-30 20:50:00+00:00",
   "USD/JPY|15m|Bullish MSS / CHoCH|BUY": "2026-10-30 20:30:00+00:00",
   "USD/JPY|15m|Bullish Order Block|BUY": "2026-10-30 20:30:00+00:00",
-  "USD/JPY|15m|Bullish Mitigation Block|BUY": "2026-10-30 20:30:00+00:00"
+  "USD/JPY|15m|Bullish Mitigation Block|BUY": "2026-10-30 20:30:00+00:00",
+  "BTCUSDT|1m|Bearish FVG|SELL": "2026-11-01 14:24:00+00:00",
+  "BTCUSDT|15m|Bullish MSS / CHoCH|BUY": "2026-11-01 14:00:00+00:00",
+  "BTCUSDT|15m|Bullish Order Block|BUY": "2026-11-01 14:00:00+00:00",
+  "BTCUSDT|15m|Bullish Mitigation Block|BUY": "2026-11-01 14:00:00+00:00",
+  "ETHUSDT|1m|Bullish IFVG|BUY": "2026-11-01 14:24:00+00:00",
+  "ETHUSDT|15m|Bearish OTE (62%-79%)|SELL": "2026-11-01 14:00:00+00:00"
 }
