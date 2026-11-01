@@ -130,6 +130,117 @@ def scan_ict_setups(df):
     return [(n, s, r) for (n, s), r in unique.items()]
 
 
+
+def detect_retest_zones(df):
+    """Find recently formed FVG and displacement Order Block zones."""
+    zones = []
+    d = df.reset_index(drop=True)
+    start = max(2, len(d) - 7)
+    for i in range(start, len(d)):
+        bar, two_back = d.iloc[i], d.iloc[i - 2]
+        formed_at = str(bar.openTime)
+        # Three-candle fair value gaps.
+        if float(bar.low) > float(two_back.high):
+            zones.append(("Bullish FVG", "BUY", float(two_back.high), float(bar.low),
+                          formed_at, "Bullish three-candle imbalance; wait for price to retrace into the FVG"))
+        if float(bar.high) < float(two_back.low):
+            zones.append(("Bearish FVG", "SELL", float(bar.high), float(two_back.low),
+                          formed_at, "Bearish three-candle imbalance; wait for price to retrace into the FVG"))
+        # Approximate OB: last opposite candle before a close breaking recent structure.
+        prior = d.iloc[max(0, i - 8):i]
+        if len(prior) >= 3:
+            if float(bar.close) > float(prior.high.max()):
+                candidates = prior[prior.close < prior.open]
+                if not candidates.empty:
+                    ob = candidates.iloc[-1]
+                    zones.append(("Bullish Order Block", "BUY", float(ob.low), float(ob.high),
+                                  formed_at, "Bullish displacement broke recent structure; wait for OB retest"))
+            if float(bar.close) < float(prior.low.min()):
+                candidates = prior[prior.close > prior.open]
+                if not candidates.empty:
+                    ob = candidates.iloc[-1]
+                    zones.append(("Bearish Order Block", "SELL", float(ob.low), float(ob.high),
+                                  formed_at, "Bearish displacement broke recent structure; wait for OB retest"))
+    # Keep only one zone per model/direction/formation candle.
+    unique = {}
+    for zone in zones:
+        unique[(zone[0], zone[1], zone[4])] = zone
+    return list(unique.values())
+
+
+def process_retest_alerts(pair, tf, symbol, df, state):
+    """Send one alert when a zone forms, then one when its retest confirms."""
+    pending = state.setdefault("pending_retests", {})
+    current = df.iloc[-1]
+    candle_time = str(current.openTime)
+    current_high, current_low, current_close = map(
+        float, (current.high, current.low, current.close)
+    )
+
+    for model, direction, zone_low, zone_high, formed_at, reason in detect_retest_zones(df):
+        key = f"{pair}|{tf}|{model}|{direction}|{formed_at}"
+        if key not in pending:
+            send_telegram(
+                "📡 ICT BABA SETUP FOUND — RETEST PENDING\n\n"
+                f"📊 Pair: {symbol}\n"
+                f"⏱ Timeframe: {tf}\n"
+                f"🎯 Model: {model}\n"
+                f"📈 Direction: {'🟢 BUY' if direction == 'BUY' else '🔴 SELL'}\n"
+                f"📍 Zone: {zone_low:.5f} – {zone_high:.5f}\n"
+                "⌛ Status: FVG/OB retest abhi baqi hai\n"
+                f"📝 Reason: {reason}\n\n"
+                "⚠️ Yeh entry confirmation nahi; retest ka intezar karein."
+            )
+            pending[key] = {
+                "pair": pair, "tf": tf, "model": model, "direction": direction,
+                "low": zone_low, "high": zone_high, "formed_at": formed_at,
+                "status": "pending",
+            }
+
+    # Check existing pending zones against the latest fully closed candle.
+    for key, zone in list(pending.items()):
+        if zone.get("pair") != pair or zone.get("tf") != tf or zone.get("status") != "pending":
+            continue
+        if candle_time <= zone.get("formed_at", ""):
+            continue
+        low, high = float(zone["low"]), float(zone["high"])
+        touched = current_low <= high and current_high >= low
+        direction = zone["direction"]
+        confirmed = touched and (
+            (direction == "BUY" and current_close > high) or
+            (direction == "SELL" and current_close < low)
+        )
+        invalidated = (
+            (direction == "BUY" and current_close < low) or
+            (direction == "SELL" and current_close > high)
+        )
+        if confirmed:
+            send_telegram(
+                "🚨 ICT BABA ENTRY RETEST CONFIRMED\n\n"
+                f"📊 Pair: {symbol}\n"
+                f"⏱ Timeframe: {tf}\n"
+                f"🎯 Model: {zone['model']}\n"
+                f"📈 Direction: {'🟢 BUY' if direction == 'BUY' else '🔴 SELL'}\n"
+                f"📍 Retested Zone: {low:.5f} – {high:.5f}\n"
+                f"💰 Confirmation Close: {current_close:.5f}\n"
+                "✅ Price retested the zone and closed back in the trade direction.\n\n"
+                "⚠️ Educational setup; verify risk and execution before trading."
+            )
+            zone["status"] = "confirmed"
+            zone["confirmed_at"] = candle_time
+        elif invalidated:
+            zone["status"] = "invalidated"
+            zone["invalidated_at"] = candle_time
+
+    # Keep state bounded: discard zones older than 7 days.
+    cutoff = pd.Timestamp.now(tz="UTC") - pd.Timedelta(days=7)
+    for key, zone in list(pending.items()):
+        try:
+            if pd.to_datetime(zone.get("formed_at"), utc=True) < cutoff:
+                del pending[key]
+        except Exception:
+            del pending[key]
+
 def send_telegram(text):
     token = os.environ["TELEGRAM_BOT_TOKEN"]
     chat_id = os.environ["TELEGRAM_CHAT_ID"]
@@ -156,7 +267,13 @@ def main():
                 df = df.iloc[:-1].copy().reset_index(drop=True)
                 candle_time = str(df.iloc[-1].openTime)
                 setups = scan_ict_setups(df)
+                process_retest_alerts(pair, tf, symbol, df, state)
                 for model, direction, reason in setups:
+                    # FVG and OB alerts are handled by the two-stage
+                    # RETEST PENDING -> ENTRY RETEST CONFIRMED flow above.
+                    if model in ("Bullish FVG", "Bearish FVG",
+                                 "Bullish Order Block", "Bearish Order Block"):
+                        continue
                     key = f"{pair}|{tf}|{model}|{direction}"
                     previous = state.get(key)
                     now_ts = time.time()
