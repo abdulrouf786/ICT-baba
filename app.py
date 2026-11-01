@@ -3,7 +3,31 @@ import requests
 import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
+
 import streamlit.components.v1 as components
+
+def send_whatsapp_message(recipient, message):
+    """Send a WhatsApp Cloud API text message using Streamlit Secrets."""
+    token = st.secrets.get("WHATSAPP_ACCESS_TOKEN", "")
+    phone_number_id = st.secrets.get("WHATSAPP_PHONE_NUMBER_ID", "")
+    if not token or not phone_number_id:
+        raise RuntimeError("WhatsApp Access Token ya Phone Number ID Secrets mein missing hai.")
+    url = f"https://graph.facebook.com/v23.0/{phone_number_id}/messages"
+    response = requests.post(
+        url,
+        headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json"},
+        json={
+            "messaging_product": "whatsapp",
+            "recipient_type": "individual",
+            "to": recipient,
+            "type": "text",
+            "text": {"preview_url": False, "body": message},
+        },
+        timeout=(5, 20),
+    )
+    if not response.ok:
+        raise RuntimeError(f"WhatsApp API error {response.status_code}: {response.text[:500]}")
+    return response.json()
 
 st.set_page_config(
     page_title="Abdul Rauf King - Multi Market AI",
@@ -775,6 +799,56 @@ try:
             signal_side = "WAIT"
     else:
         signal_side = "WAIT"
+
+
+    # WhatsApp alert controls. Recipient must be the verified/opted-in destination number.
+    st.markdown('<div class="ark-section">📲 WhatsApp ICT alerts</div>', unsafe_allow_html=True)
+    wa_recipient = st.text_input(
+        "Your WhatsApp number (international format, e.g. 923001234567)",
+        value=st.session_state.get("wa_recipient", ""),
+        key="wa_recipient_input",
+        help="Country code + number, digits only. Do not include +, spaces or dashes.",
+    ).strip().replace("+", "").replace(" ", "").replace("-", "")
+    st.session_state["wa_recipient"] = wa_recipient
+    wa_col1, wa_col2 = st.columns(2)
+    with wa_col1:
+        if st.button("Send test WhatsApp message", use_container_width=True):
+            if not wa_recipient.isdigit() or len(wa_recipient) < 8:
+                st.error("Pehle valid WhatsApp number country code ke saath enter karein.")
+            else:
+                try:
+                    send_whatsapp_message(
+                        wa_recipient,
+                        "ICT Baba: WhatsApp connection test successful. Alerts ke liye internet on rakhein.",
+                    )
+                    st.success("Test message WhatsApp API ko send ho gaya. Apna WhatsApp check karein.")
+                except Exception as exc:
+                    st.error(f"WhatsApp test failed: {exc}")
+    with wa_col2:
+        st.caption("Confirmed ICT BUY/SELL setup par alert bhejne ki koshish app ke refresh par hogi. Streamlit app background mein hamesha run nahi karti.")
+
+    # Send each confirmed closed-candle setup once per browser session.
+    if signal_side in ("BUY", "SELL") and wa_recipient and wa_recipient.isdigit():
+        candle_key = str(closed.iloc[-1]["openTime"])
+        alert_key = f"{FEED_SYMBOL}|{api_interval}|{signal_side}|{candle_key}"
+        sent_alerts = st.session_state.setdefault("wa_sent_alerts", [])
+        if alert_key not in sent_alerts:
+            alert_text = (
+                f"ICT BABA {signal_side} CONFIRMED\\n"
+                f"Pair: {FEED_SYMBOL}\\nTimeframe: {api_interval}\\n"
+                f"Setup: Liquidity Sweep + MSS + FVG\\n"
+                f"Entry: {signal_entry:.5f}\\nSL: {signal_sl:.5f}\\n"
+                f"TP: {signal_tp1:.5f}\\nRR: {signal_rr}\\n"
+                f"Reasons: {', '.join(signal_reasons)}\\n"
+                "Educational signal only; verify spread and broker prices."
+            )
+            try:
+                send_whatsapp_message(wa_recipient, alert_text)
+                sent_alerts.append(alert_key)
+                st.session_state["wa_sent_alerts"] = sent_alerts[-100:]
+                st.success("Confirmed ICT signal WhatsApp par bhej diya.")
+            except Exception as exc:
+                st.warning(f"Confirmed signal mila, lekin WhatsApp alert send nahi hua: {exc}")
 
     st.markdown('<div class="ark-section">🎯 Full trading signal</div>', unsafe_allow_html=True)
     if signal_side == "WAIT":
