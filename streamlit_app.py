@@ -891,7 +891,7 @@ try:
             if setup_key not in tg_setup_sent:
                 try:
                     send_telegram_message(
-                        f"📡 ICT BABA SETUP DETECTED\\nModel: {setup_name}\\nDirection: {setup_side}\\nPair: {FEED_SYMBOL}\\nTimeframe: {api_interval}\\nClose: {float(closed.iloc[-1]['close']):.5f}\\nDetails: {setup_reason}\\nNote: Educational pattern alert; confirm risk before trading."
+                        f"📡 ICT BABA SETUP DETECTED\nModel: {setup_name}\nDirection: {setup_side}\nPair: {FEED_SYMBOL}\nTimeframe: {api_interval}\nClose: {float(closed.iloc[-1]['close']):.5f}\nDetails: {setup_reason}\nNote: Educational pattern alert; confirm risk before trading."
                     )
                     tg_setup_sent.append(setup_key)
                 except Exception as exc:
@@ -926,7 +926,7 @@ try:
                     if alert_key not in all_pair_tg_sent:
                         try:
                             send_telegram_message(
-                                f"🌍 ICT BABA ALL-PAIR ALERT\\nPair: {pair_symbol}\\nTimeframe: {api_interval}\\nModel: {model_name}\\nDirection: {model_side}\\nClose: {float(pair_closed.iloc[-1]['close']):.5f}\\nReason: {model_reason}\\nEducational setup; verify before trading."
+                                f"🌍 ICT BABA ALL-PAIR ALERT\nPair: {pair_symbol}\nTimeframe: {api_interval}\nModel: {model_name}\nDirection: {model_side}\nClose: {float(pair_closed.iloc[-1]['close']):.5f}\nReason: {model_reason}\nEducational setup; verify before trading."
                             )
                             all_pair_tg_sent.append(alert_key)
                         except Exception as exc:
