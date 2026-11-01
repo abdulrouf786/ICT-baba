@@ -353,6 +353,114 @@ def add_ict_marks(fig, df, swing_len=5):
         fig.add_shape(type="rect", x0=x0, x1=x1, y0=y0, y1=y1,
                       fillcolor=color, line=dict(color=edge, width=1), layer="below")
 
+
+def scan_ict_setups(df):
+    """Educational, candle-based ICT setup scanner; all detections use closed candles."""
+    found = []
+    if len(df) < 30:
+        return found
+    d = df.reset_index(drop=True)
+    i = len(d) - 1
+    b = d.iloc[i]
+    p1 = d.iloc[i - 1]
+    p2 = d.iloc[i - 2]
+    prior = d.iloc[max(0, i - 20):i]
+    ph, pl = float(prior["high"].max()), float(prior["low"].min())
+    o, h, l, c = map(float, (b["open"], b["high"], b["low"], b["close"]))
+    atr = float(b["ATR 14"]) if "ATR 14" in d and pd.notna(b["ATR 14"]) else 0.0
+    if atr <= 0:
+        atr = max(h - l, 1e-9)
+
+    bull_sweep = l < pl and c > pl
+    bear_sweep = h > ph and c < ph
+    bull_fvg = float(b["low"]) > float(p2["high"])
+    bear_fvg = float(b["high"]) < float(p2["low"])
+    recent = d.iloc[max(0, i - 8):i]
+    bull_mss = c > float(recent["high"].max())
+    bear_mss = c < float(recent["low"].min())
+
+    if bull_sweep:
+        found.append(("Liquidity Sweep / Turtle Soup", "BUY", "SSL swept; candle closed back above prior 20-bar low"))
+    if bear_sweep:
+        found.append(("Liquidity Sweep / Turtle Soup", "SELL", "BSL swept; candle closed back below prior 20-bar high"))
+    if bull_mss:
+        found.append(("Bullish MSS / CHoCH", "BUY", "Closed candle broke recent 8-bar structure high"))
+    if bear_mss:
+        found.append(("Bearish MSS / CHoCH", "SELL", "Closed candle broke recent 8-bar structure low"))
+    if bull_fvg:
+        found.append(("Bullish FVG", "BUY", "Three-candle imbalance detected"))
+    if bear_fvg:
+        found.append(("Bearish FVG", "SELL", "Three-candle imbalance detected"))
+
+    # Order Block: last opposite candle before a displacement close through structure.
+    ob_bull = ob_bear = None
+    for k in range(i - 1, max(-1, i - 9), -1):
+        row = d.iloc[k]
+        if ob_bull is None and float(row["close"]) < float(row["open"]) and bull_mss:
+            ob_bull = (float(row["low"]), float(row["high"]))
+        if ob_bear is None and float(row["close"]) > float(row["open"]) and bear_mss:
+            ob_bear = (float(row["low"]), float(row["high"]))
+    if ob_bull:
+        found.append(("Bullish Order Block", "BUY", "Last bearish candle before bullish structure displacement"))
+    if ob_bear:
+        found.append(("Bearish Order Block", "SELL", "Last bullish candle before bearish structure displacement"))
+
+    # Breaker / mitigation approximations: price retests or invalidates a recent OB zone.
+    if ob_bull and l <= ob_bull[1] and c > ob_bull[1]:
+        found.append(("Bullish Mitigation Block", "BUY", "Price retested bullish OB zone and closed above it"))
+    if ob_bear and h >= ob_bear[0] and c < ob_bear[0]:
+        found.append(("Bearish Mitigation Block", "SELL", "Price retested bearish OB zone and closed below it"))
+    if ob_bull and c < ob_bull[0]:
+        found.append(("Bullish Breaker Block", "SELL", "Bullish OB failed; close broke below its low"))
+    if ob_bear and c > ob_bear[1]:
+        found.append(("Bearish Breaker Block", "BUY", "Bearish OB failed; close broke above its high"))
+
+    # Inverse FVG: current close crosses through the prior candle's imbalance zone.
+    if i >= 3:
+        old = d.iloc[i - 3]
+        if float(p1["low"]) > float(old["high"]) and c < float(old["high"]):
+            found.append(("Bearish IFVG", "SELL", "Price closed through a prior bullish FVG"))
+        if float(p1["high"]) < float(old["low"]) and c > float(old["low"]):
+            found.append(("Bullish IFVG", "BUY", "Price closed through a prior bearish FVG"))
+
+    # Unicorn: overlap of a displacement OB and a same-direction FVG.
+    if ob_bull and bull_fvg and max(ob_bull[0], float(p2["high"])) < min(ob_bull[1], float(b["low"])):
+        found.append(("Bullish Unicorn Model", "BUY", "Bullish OB overlaps bullish FVG"))
+    if ob_bear and bear_fvg and max(ob_bear[0], float(b["high"])) < min(ob_bear[1], float(p2["low"])):
+        found.append(("Bearish Unicorn Model", "SELL", "Bearish OB overlaps bearish FVG"))
+
+    # OTE: price enters 62%-79% retracement of the latest 20-bar impulse.
+    swing_hi, swing_lo = float(d.iloc[i-20:i]["high"].max()), float(d.iloc[i-20:i]["low"].min())
+    span = swing_hi - swing_lo
+    if span > 0:
+        bull_ote_low, bull_ote_high = swing_hi - 0.79 * span, swing_hi - 0.62 * span
+        bear_ote_low, bear_ote_high = swing_lo + 0.62 * span, swing_lo + 0.79 * span
+        if c > float(d.iloc[i-20]["close"]) and bull_ote_low <= c <= bull_ote_high:
+            found.append(("Bullish OTE (62%-79%)", "BUY", "Close is inside approximate bullish OTE retracement zone"))
+        if c < float(d.iloc[i-20]["close"]) and bear_ote_low <= c <= bear_ote_high:
+            found.append(("Bearish OTE (62%-79%)", "SELL", "Close is inside approximate bearish OTE retracement zone"))
+
+    # Time-based models use New York local time, including daylight-saving changes.
+    try:
+        from zoneinfo import ZoneInfo
+        ny_time = pd.Timestamp(b["openTime"]).to_pydatetime().astimezone(ZoneInfo("America/New_York"))
+        minute = ny_time.hour * 60 + ny_time.minute
+        in_silver_bullet = any(start <= minute < end for start, end in ((180, 240), (600, 660), (840, 900)))
+        if in_silver_bullet and ((bull_sweep and bull_mss and bull_fvg) or (bear_sweep and bear_mss and bear_fvg)):
+            side = "BUY" if bull_sweep and bull_mss and bull_fvg else "SELL"
+            found.append(("Silver Bullet (NY time window)", side, "Sweep + MSS + FVG inside 3-4am, 10-11am or 2-3pm New York window"))
+        # Judas Swing is only flagged as a session false-break approximation.
+        if 120 <= minute < 360 and (bull_sweep or bear_sweep):
+            found.append(("Judas Swing (session false-break)", "BUY" if bull_sweep else "SELL", "Liquidity false-break during approximate London session window"))
+    except Exception:
+        pass
+
+    # Keep one row per unique model/direction and avoid repeated duplicates.
+    unique = {}
+    for name, side, reason in found:
+        unique[(name, side)] = reason
+    return [(name, side, reason) for (name, side), reason in unique.items()]
+
 try:
     with st.spinner(f"{ASSET_LABEL} candles aur ICT levels load ho rahe hain..."):
         ict_df = load_ohlc(FEED_SYMBOL, api_interval)
@@ -765,6 +873,33 @@ try:
         "ICT labels are rule-based technical markers for study, not guaranteed trade entries. "
         "Pivot levels confirm only after the selected swing length; current candle may still be open."
     )
+
+    # Multi-model ICT entry scanner. Educational pattern rules, not discretionary ICT judgement.
+    st.markdown('<div class="ark-section">🧩 All Major ICT Entry Models</div>', unsafe_allow_html=True)
+    ict_setups = scan_ict_setups(closed)
+    if ict_setups:
+        setup_rows = []
+        for setup_name, setup_side, setup_reason in ict_setups:
+            setup_rows.append({"ICT Entry Model": setup_name, "Direction": setup_side, "What was detected": setup_reason})
+        st.dataframe(pd.DataFrame(setup_rows), use_container_width=True, hide_index=True)
+        st.caption("Models are scanned on the latest closed candle. These are rule-based approximations; session models and OB/OTE definitions can vary by trader.")
+        # One compact Telegram notification per candle and detected model.
+        tg_setup_sent = st.session_state.setdefault("tg_setup_sent", [])
+        setup_candle = str(closed.iloc[-1]["openTime"])
+        for setup_name, setup_side, setup_reason in ict_setups:
+            setup_key = f"{FEED_SYMBOL}|{api_interval}|{setup_name}|{setup_side}|{setup_candle}"
+            if setup_key not in tg_setup_sent:
+                try:
+                    send_telegram_message(
+                        f"📡 ICT BABA SETUP DETECTED\\nModel: {setup_name}\\nDirection: {setup_side}\\nPair: {FEED_SYMBOL}\\nTimeframe: {api_interval}\\nClose: {float(closed.iloc[-1]['close']):.5f}\\nDetails: {setup_reason}\\nNote: Educational pattern alert; confirm risk before trading."
+                    )
+                    tg_setup_sent.append(setup_key)
+                except Exception as exc:
+                    st.warning(f"Telegram ICT model alert send nahi hua: {exc}")
+        st.session_state["tg_setup_sent"] = tg_setup_sent[-200:]
+    else:
+        st.info("Latest closed candle par abhi koi major ICT entry model detect nahi hua. WAIT — next candle ka intezar karein.")
+
     if st.button("Refresh ICT data"):
         st.cache_data.clear()
         st.rerun()
