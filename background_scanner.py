@@ -247,7 +247,7 @@ def process_retest_alerts(pair, tf, symbol, df, state):
                 f"💰 Entry (confirmation close): {entry_price:.{decimals}f}\n"
                 f"🛑 Stop Loss: {stop_price:.{decimals}f}\n"
                 f"🎯 Take Profit: {target_price:.{decimals}f}\n"
-                "⚖️ Risk/Reward: 1:1.5\n"
+                "⚖️ Risk/Reward: 1:5\n"
                 "✅ Price retested the zone and closed back in the trade direction.\n\n"
                 "⚠️ Educational setup; verify execution costs and risk before trading."
             )
@@ -321,7 +321,7 @@ def main():
                     take_profit = entry + (5 * risk if direction == "BUY" else -5 * risk)
                     decimals = price_decimals(pair)
                     fmt = lambda value: f"{value:.{decimals}f}"
-                    target = entry + (1.5 * risk if direction == "BUY" else -1.5 * risk)
+                    target = entry + (5 * risk if direction == "BUY" else -5 * risk)
                     msg = (
                         "🌍 ICT BABA ICT CONDITION ALERT\n"
                         "\n"
