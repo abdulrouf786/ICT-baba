@@ -941,15 +941,27 @@ try:
                         last_sent = float(all_pair_tg_sent.get(alert_key, 0))
                         if alert_now - last_sent >= 4 * 60 * 60:
                             try:
+                                signal_bar = pair_closed.iloc[-1]
+                                entry_price = float(signal_bar["close"])
+                                stop_price = float(signal_bar["low"] if model_side == "BUY" else signal_bar["high"])
+                                risk = abs(entry_price - stop_price)
+                                if risk <= 0:
+                                    continue
+                                target_price = entry_price + (1.5 * risk if model_side == "BUY" else -1.5 * risk)
+                                price_decimals = 5 if pair_symbol == "YAHOO:EURUSD=X" else 2
+                                price_fmt = lambda value: f"{value:.{price_decimals}f}"
                                 send_telegram_message(
-                                    f"🌍 ICT BABA ALL-PAIR ALERT\n\n"
+                                    f"🌍 ICT BABA ICT CONDITION ALERT\n\n"
                                     f"📊 Pair: {pair_symbol}\n"
                                     f"⏱ Timeframe: {tf_api_interval}\n"
                                     f"🎯 Model: {model_name}\n"
                                     f"📈 Direction: {'🟢 BUY' if model_side == 'BUY' else '🔴 SELL'}\n"
-                                    f"💰 Close: {float(pair_closed.iloc[-1]['close']):.5f}\n"
+                                    f"💰 Entry Reference: {price_fmt(entry_price)}\n"
+                                    f"🛑 Stop Loss: {price_fmt(stop_price)}\n"
+                                    f"🎯 Take Profit: {price_fmt(target_price)}\n"
+                                    "⚖️ Risk/Reward: 1:1.5\n"
                                     f"📝 Reason: {model_reason}\n\n"
-                                    "⚠️ Educational setup; verify before trading."
+                                    "⚠️ ICT condition alert; verify setup and execution before trading."
                                 )
                                 all_pair_tg_sent[alert_key] = alert_now
                             except Exception as exc:
