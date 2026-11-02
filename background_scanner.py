@@ -261,6 +261,30 @@ def detect_retest_zones(df):
         unique[(zone[0], zone[1], zone[4])] = zone
     return list(unique.values())
 
+
+def get_signal_zone(df, model, direction):
+    """Best-effort price band for signal alerts; pattern detection is heuristic."""
+    d = df.reset_index(drop=True)
+    if len(d) < 3:
+        last = d.iloc[-1]
+        return float(last.low), float(last.high)
+    name = model.lower()
+    if "fvg" in name:
+        for i in range(len(d) - 1, max(1, len(d) - 8), -1):
+            current, two_back = d.iloc[i], d.iloc[i - 2]
+            if direction == "BUY" and float(current.low) > float(two_back.high):
+                return float(two_back.high), float(current.low)
+            if direction == "SELL" and float(current.high) < float(two_back.low):
+                return float(current.high), float(two_back.low)
+    window = d.iloc[max(0, len(d) - 12):-1]
+    candidates = window[window.close < window.open] if direction == "BUY" else window[window.close > window.open]
+    if not candidates.empty:
+        ob = candidates.iloc[-1]
+        return float(ob.low), float(ob.high)
+    last = d.iloc[-1]
+    return float(last.low), float(last.high)
+
+
 def price_decimals(pair):
     return 5 if pair == "EUR/USD" else (2 if pair in ("XAUUSD", "BTCUSDT", "ETHUSDT") else 3)
 
@@ -446,11 +470,13 @@ def main():
                         alert_header = "⚠️ ICT BABA — WEAK SIGNAL WARNING 🔴"
                         quality_note = "🚫 Weak confluence: warning only, avoid treating this as an entry signal."
 
+                    zone_low, zone_high = get_signal_zone(df, model, direction)
                     msg = (
                         f"{alert_header}\n\n"
                         f"📊 Pair: {symbol}\n"
                         f"⏱ Timeframe: {tf}\n"
                         f"🎯 Model: {model}\n"
+                        f"📍 OB/FVG/MB Zone Price: {fmt(zone_low)} – {fmt(zone_high)}\\n"
                         f"📈 Direction: {'🟢 BUY' if direction == 'BUY' else '🔴 SELL'}\n"
                         f"🧠 Signal Quality: {quality_label} ({quality_score}/5)\n"
                         f"🧭 1H Trend: {htf_1h}\n"
