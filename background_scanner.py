@@ -131,6 +131,25 @@ def scan_ict_setups(df):
 
 
 
+def signal_quality(setups, side):
+    """Score ICT confluence groups (heuristic, not predictive certainty)."""
+    names = [name.lower() for name, direction, _ in setups if direction == side]
+    groups = {
+        "liquidity": ("liquidity sweep", "turtle soup", "judas swing"),
+        "structure": ("mss", "choch", "structure"),
+        "imbalance": ("fvg", "ifvg"),
+        "block": ("order block", "mitigation", "breaker", "unicorn"),
+        "location": ("ote", "silver bullet"),
+    }
+    score = sum(1 for terms in groups.values()
+                if any(term in name for name in names for term in terms))
+    if score >= 4:
+        return score, "STRONG 🟢"
+    if score >= 2:
+        return score, "MODERATE 🟡"
+    return score, "WEAK 🔴"
+
+
 def detect_retest_zones(df):
     """Find recently formed FVG and displacement Order Block zones."""
     zones = []
@@ -322,6 +341,7 @@ def main():
                     decimals = price_decimals(pair)
                     fmt = lambda value: f"{value:.{decimals}f}"
                     target = entry + (5 * risk if direction == "BUY" else -5 * risk)
+                    quality_score, quality_label = signal_quality(setups, direction)
                     msg = (
                         "🌍 ICT BABA ICT CONDITION ALERT\n"
                         "\n"
@@ -329,10 +349,11 @@ def main():
                         f"⏱ Timeframe: {tf}\n"
                         f"🎯 Model: {model}\n"
                         f"📈 Direction: {'🟢 BUY' if direction == 'BUY' else '🔴 SELL'}\n"
+                        f"🧠 Signal Quality: {quality_label} ({quality_score}/5)\n"
                         f"💰 Entry Reference: {fmt(entry)}\n"
                         f"🛑 Stop Loss: {fmt(stop_loss)}\n"
                         f"🎯 Take Profit: {fmt(target)}\n"
-                        "⚖️ Risk/Reward: 1:1.5\n"
+                        "⚖️ Risk/Reward: 1:5\n"
                         f"📝 Reason: {reason}\n\n"
                         "⚠️ ICT condition alert; confirm the setup and execution manually."
                     )
