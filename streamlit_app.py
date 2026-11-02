@@ -378,6 +378,22 @@ def get_signal_quality(setups, side):
     return score, "WEAK 🔴"
 
 
+
+def higher_timeframe_bias(df):
+    """EMA20/EMA50 directional bias from completed higher-timeframe candles."""
+    if df is None or len(df) < 55:
+        return "NEUTRAL"
+    d = df.iloc[:-1] if len(df) > 1 else df
+    close = pd.to_numeric(d["close"], errors="coerce")
+    ema20 = close.ewm(span=20, adjust=False).mean().iloc[-1]
+    ema50 = close.ewm(span=50, adjust=False).mean().iloc[-1]
+    price = float(close.iloc[-1])
+    if price > ema20 > ema50:
+        return "BULLISH"
+    if price < ema20 < ema50:
+        return "BEARISH"
+    return "NEUTRAL"
+
 def get_ict_zone_prices(df, model_name, model_side):
     """Return the ICT zone, falling back to the signal candle range."""
     d = df.reset_index(drop=True)
@@ -506,6 +522,10 @@ def scan_ict_setups(df):
 try:
     with st.spinner(f"{ASSET_LABEL} candles aur ICT levels load ho rahe hain..."):
         ict_df = load_ohlc(FEED_SYMBOL, api_interval)
+        htf_1h_df = load_ohlc(FEED_SYMBOL, "1h")
+        htf_4h_df = load_ohlc(FEED_SYMBOL, "4h")
+    htf_1h_bias = higher_timeframe_bias(htf_1h_df)
+    htf_4h_bias = higher_timeframe_bias(htf_4h_df)
 
     # Calculate common technical indicators on the selected market feed.
     close = ict_df["close"]
@@ -687,6 +707,19 @@ try:
       <div class="ark-sub" style="margin-top:10px">{bias_detail}</div>
     </div>
     """, unsafe_allow_html=True)
+
+    st.markdown('<div class="ark-section">🧭 Multi-Timeframe Confirmation</div>', unsafe_allow_html=True)
+    desired_htf = "BULLISH" if bias == "BULLISH" else ("BEARISH" if bias == "BEARISH" else "NEUTRAL")
+    htf_match = sum(x == desired_htf for x in (htf_1h_bias, htf_4h_bias)) if desired_htf != "NEUTRAL" else 0
+    if desired_htf != "NEUTRAL" and htf_match == 2:
+        htf_status = "STRONG HTF ALIGNMENT 🟢"
+    elif desired_htf != "NEUTRAL" and htf_match == 1:
+        htf_status = "PARTIAL HTF ALIGNMENT 🟡"
+    elif desired_htf != "NEUTRAL" and any(x in ("BULLISH", "BEARISH") and x != desired_htf for x in (htf_1h_bias, htf_4h_bias)):
+        htf_status = "COUNTER-TREND / WEAK HTF 🔴"
+    else:
+        htf_status = "HTF NEUTRAL ⚪"
+    st.info(f"1H Trend: **{htf_1h_bias}**  |  4H Trend: **{htf_4h_bias}**  |  {htf_status}. HTF direction EMA20/EMA50 based hai.")
 
     st.markdown('<div class="ark-section">📊 Indicator dashboard</div>', unsafe_allow_html=True)
     st.markdown(f"""
