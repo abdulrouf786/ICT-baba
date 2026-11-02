@@ -384,9 +384,18 @@ def main():
                     target = entry + (5 * risk if direction == "BUY" else -5 * risk)
                     quality_score, quality_label = signal_quality(setups, direction)
                     htf_1h, htf_4h, htf_label = mtf_confirmation(pair, direction, htf_cache)
+                    if quality_score >= 4:
+                        alert_header = "🚨 ICT BABA — STRONG SIGNAL (PRIORITY) 🟢"
+                        quality_note = "✅ Strong confluence detected; still verify manually."
+                    elif quality_score >= 2:
+                        alert_header = "🌍 ICT BABA — MODERATE SIGNAL 🟡"
+                        quality_note = "⚠️ Moderate confluence; wait for extra confirmation."
+                    else:
+                        alert_header = "⚠️ ICT BABA — WEAK SIGNAL WARNING 🔴"
+                        quality_note = "🚫 Weak confluence: warning only, avoid treating this as an entry signal."
+
                     msg = (
-                        "🌍 ICT BABA ICT CONDITION ALERT\n"
-                        "\n"
+                        f"{alert_header}\n\n"
                         f"📊 Pair: {symbol}\n"
                         f"⏱ Timeframe: {tf}\n"
                         f"🎯 Model: {model}\n"
@@ -400,7 +409,8 @@ def main():
                         f"🎯 Take Profit: {fmt(target)}\n"
                         "⚖️ Risk/Reward: 1:5\n"
                         f"📝 Reason: {reason}\n\n"
-                        "⚠️ ICT condition alert; confirm the setup and execution manually."
+                        f"{quality_note}\n"
+                        "Educational alert only; validate price/action and risk before trading."
                     )
                     send_telegram(msg)
                     state[key] = {"sent_at": time.time(), "candle": candle_time}
