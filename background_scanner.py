@@ -289,7 +289,7 @@ def price_decimals(pair):
     return 5 if pair == "EUR/USD" else (2 if pair in ("XAUUSD", "BTCUSDT", "ETHUSDT") else 3)
 
 
-def process_retest_alerts(pair, tf, symbol, df, state):
+def process_retest_alerts(pair, tf, symbol, df, state, htf_cache):
     """Send a pending-zone alert, then a retest-confirmed alert with 1:5 RR."""
     pending = state.setdefault("pending_retests", {})
     current = df.iloc[-1]
@@ -301,6 +301,13 @@ def process_retest_alerts(pair, tf, symbol, df, state):
     for model, direction, zone_low, zone_high, formed_at, reason in detect_retest_zones(df):
         key = f"{pair}|{tf}|{model}|{direction}|{formed_at}"
         if key not in pending:
+            quality_score, quality_label = signal_quality(scan_ict_setups(df), direction)
+            htf_1h, htf_4h, htf_label = mtf_confirmation(pair, direction, htf_cache)
+            if htf_1h == htf_4h == ("BULLISH" if direction == "BUY" else "BEARISH"):
+                quality_score = min(5, quality_score + 1)
+            elif "COUNTER-TREND" in htf_label:
+                quality_score = max(0, quality_score - 1)
+            quality_label = "STRONG 🟢" if quality_score >= 4 else ("MODERATE 🟡" if quality_score >= 2 else "WEAK 🔴")
             entry_plan = (zone_low + zone_high) / 2
             stop_plan = zone_low if direction == "BUY" else zone_high
             risk_plan = abs(entry_plan - stop_plan)
@@ -413,7 +420,7 @@ def main():
                 df = df.iloc[:-1].copy().reset_index(drop=True)
                 candle_time = str(df.iloc[-1].openTime)
                 setups = scan_ict_setups(df)
-                process_retest_alerts(pair, tf, symbol, df, state)
+                process_retest_alerts(pair, tf, symbol, df, state, htf_cache)
                 for model, direction, reason in setups:
                     # FVG and OB alerts are handled by the two-stage
                     # RETEST PENDING -> ENTRY RETEST CONFIRMED flow above.
