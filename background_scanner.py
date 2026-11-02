@@ -131,6 +131,46 @@ def scan_ict_setups(df):
 
 
 
+
+def higher_timeframe_bias(df):
+    """EMA20/EMA50 closed-candle directional filter; simple advisory proxy."""
+    if df is None or len(df) < 55:
+        return "NEUTRAL"
+    d = df.iloc[:-1] if len(df) > 1 else df
+    close = pd.to_numeric(d["close"], errors="coerce")
+    ema20 = close.ewm(span=20, adjust=False).mean().iloc[-1]
+    ema50 = close.ewm(span=50, adjust=False).mean().iloc[-1]
+    last = float(close.iloc[-1])
+    if last > ema20 > ema50:
+        return "BULLISH"
+    if last < ema20 < ema50:
+        return "BEARISH"
+    return "NEUTRAL"
+
+
+def mtf_confirmation(pair, direction, cache):
+    """Return 1H/4H trend context for the direction of an ICT setup."""
+    for tf in ("1h", "4h"):
+        key = (pair, tf)
+        if key not in cache:
+            try:
+                cache[key] = higher_timeframe_bias(fetch_ohlc(ASSETS[pair], tf))
+            except Exception:
+                cache[key] = "UNAVAILABLE"
+    one_hour, four_hour = cache[(pair, "1h")], cache[(pair, "4h")]
+    desired = "BULLISH" if direction == "BUY" else "BEARISH"
+    aligned = sum(x == desired for x in (one_hour, four_hour))
+    opposing = sum(x not in (desired, "NEUTRAL", "UNAVAILABLE") for x in (one_hour, four_hour))
+    if aligned == 2:
+        label = "STRONG HTF ALIGNMENT 🟢"
+    elif aligned == 1 and opposing == 0:
+        label = "PARTIAL HTF ALIGNMENT 🟡"
+    elif opposing:
+        label = "COUNTER-TREND / WEAK HTF 🔴"
+    else:
+        label = "HTF NEUTRAL / UNAVAILABLE ⚪"
+    return one_hour, four_hour, label
+
 def signal_quality(setups, side):
     """Score ICT confluence groups (heuristic, not predictive certainty)."""
     names = [name.lower() for name, direction, _ in setups if direction == side]
@@ -301,6 +341,7 @@ def main():
     state = json.loads(STATE_FILE.read_text()) if STATE_FILE.exists() else {}
     sent = 0
     errors = []
+    htf_cache = {}
     for pair, symbol in ASSETS.items():
         for tf in TIMEFRAMES:
             try:
@@ -342,6 +383,7 @@ def main():
                     fmt = lambda value: f"{value:.{decimals}f}"
                     target = entry + (5 * risk if direction == "BUY" else -5 * risk)
                     quality_score, quality_label = signal_quality(setups, direction)
+                    htf_1h, htf_4h, htf_label = mtf_confirmation(pair, direction, htf_cache)
                     msg = (
                         "🌍 ICT BABA ICT CONDITION ALERT\n"
                         "\n"
