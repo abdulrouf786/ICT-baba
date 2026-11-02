@@ -476,7 +476,7 @@ def main():
                         f"📊 Pair: {symbol}\n"
                         f"⏱ Timeframe: {tf}\n"
                         f"🎯 Model: {model}\n"
-                        f"📍 OB/FVG/MB Zone Price: {fmt(zone_low)} – {fmt(zone_high)}\\n"
+                        f"📍 OB/FVG/MB Zone Price: {fmt(zone_low)} – {fmt(zone_high)}\n"
                         f"📈 Direction: {'🟢 BUY' if direction == 'BUY' else '🔴 SELL'}\n"
                         f"🧠 Signal Quality: {quality_label} ({quality_score}/5)\n"
                         f"🧭 1H Trend: {htf_1h}\n"
