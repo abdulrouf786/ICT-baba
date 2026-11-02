@@ -383,7 +383,22 @@ def main():
                     fmt = lambda value: f"{value:.{decimals}f}"
                     target = entry + (5 * risk if direction == "BUY" else -5 * risk)
                     quality_score, quality_label = signal_quality(setups, direction)
+                    raw_confluence_score = quality_score
                     htf_1h, htf_4h, htf_label = mtf_confirmation(pair, direction, htf_cache)
+
+                    # MTF-adjusted confluence score (heuristic, not a probability).
+                    if htf_1h == htf_4h == ("BULLISH" if direction == "BUY" else "BEARISH"):
+                        quality_score = min(5, quality_score + 1)
+                    elif "COUNTER-TREND" in htf_label:
+                        quality_score = max(0, quality_score - 1)
+
+                    if quality_score >= 4:
+                        quality_label = "STRONG 🟢"
+                    elif quality_score >= 2:
+                        quality_label = "MODERATE 🟡"
+                    else:
+                        quality_label = "WEAK 🔴"
+
                     if quality_score >= 4:
                         alert_header = "🚨 ICT BABA — STRONG SIGNAL (PRIORITY) 🟢"
                         quality_note = "✅ Strong confluence detected; still verify manually."
