@@ -191,41 +191,75 @@ def signal_quality(setups, side):
 
 
 def detect_retest_zones(df):
-    """Find recently formed FVG and displacement Order Block zones."""
+    """Detect recent FVG, displacement OB, and approximate OB retest/mitigation zones."""
     zones = []
     d = df.reset_index(drop=True)
     start = max(2, len(d) - 7)
+
     for i in range(start, len(d)):
         bar, two_back = d.iloc[i], d.iloc[i - 2]
         formed_at = str(bar.openTime)
-        # Three-candle fair value gaps.
-        if float(bar.low) > float(two_back.high):
-            zones.append(("Bullish FVG", "BUY", float(two_back.high), float(bar.low),
-                          formed_at, "Bullish three-candle imbalance; wait for price to retrace into the FVG"))
-        if float(bar.high) < float(two_back.low):
-            zones.append(("Bearish FVG", "SELL", float(bar.high), float(two_back.low),
-                          formed_at, "Bearish three-candle imbalance; wait for price to retrace into the FVG"))
-        # Approximate OB: last opposite candle before a close breaking recent structure.
+        bar_high, bar_low, bar_close = float(bar.high), float(bar.low), float(bar.close)
+
+        # Three-candle FVG: exact imbalance boundaries.
+        if bar_low > float(two_back.high):
+            zones.append(("Bullish FVG", "BUY", float(two_back.high), bar_low,
+                          formed_at, "Bullish three-candle imbalance; wait for retrace into this price band"))
+        if bar_high < float(two_back.low):
+            zones.append(("Bearish FVG", "SELL", bar_high, float(two_back.low),
+                          formed_at, "Bearish three-candle imbalance; wait for retrace into this price band"))
+
+        # Displacement OB: last opposite candle before structure break.
         prior = d.iloc[max(0, i - 8):i]
         if len(prior) >= 3:
-            if float(bar.close) > float(prior.high.max()):
+            if bar_close > float(prior.high.max()):
                 candidates = prior[prior.close < prior.open]
                 if not candidates.empty:
                     ob = candidates.iloc[-1]
                     zones.append(("Bullish Order Block", "BUY", float(ob.low), float(ob.high),
-                                  formed_at, "Bullish displacement broke recent structure; wait for OB retest"))
-            if float(bar.close) < float(prior.low.min()):
+                                  formed_at, "Bullish displacement; last bearish candle is the OB zone"))
+            if bar_close < float(prior.low.min()):
                 candidates = prior[prior.close > prior.open]
                 if not candidates.empty:
                     ob = candidates.iloc[-1]
                     zones.append(("Bearish Order Block", "SELL", float(ob.low), float(ob.high),
-                                  formed_at, "Bearish displacement broke recent structure; wait for OB retest"))
-    # Keep only one zone per model/direction/formation candle.
+                                  formed_at, "Bearish displacement; last bullish candle is the OB zone"))
+
+        # Approximate mitigation block: price taps a recent opposite candle/OB
+        # and closes back beyond the relevant OB edge.
+        lookback = d.iloc[max(0, i - 10):i]
+        if len(lookback) >= 4:
+            bullish_displacements = []
+            bearish_displacements = []
+            for j in range(max(1, i - 8), i):
+                disp = d.iloc[j]
+                before = d.iloc[max(0, j - 5):j]
+                if len(before) < 2:
+                    continue
+                if float(disp.close) > float(before.high.max()):
+                    opposites = before[before.close < before.open]
+                    if not opposites.empty:
+                        ob = opposites.iloc[-1]
+                        bullish_displacements.append((float(ob.low), float(ob.high)))
+                if float(disp.close) < float(before.low.min()):
+                    opposites = before[before.close > before.open]
+                    if not opposites.empty:
+                        ob = opposites.iloc[-1]
+                        bearish_displacements.append((float(ob.low), float(ob.high)))
+
+            for ob_low, ob_high in bullish_displacements[-1:]:
+                if bar_low <= ob_high and bar_close > ob_high:
+                    zones.append(("Bullish Mitigation Block", "BUY", ob_low, ob_high,
+                                  formed_at, "Price tapped bullish OB and closed above its upper edge"))
+            for ob_low, ob_high in bearish_displacements[-1:]:
+                if bar_high >= ob_low and bar_close < ob_low:
+                    zones.append(("Bearish Mitigation Block", "SELL", ob_low, ob_high,
+                                  formed_at, "Price tapped bearish OB and closed below its lower edge"))
+
     unique = {}
     for zone in zones:
         unique[(zone[0], zone[1], zone[4])] = zone
     return list(unique.values())
-
 
 def price_decimals(pair):
     return 5 if pair == "EUR/USD" else (2 if pair in ("XAUUSD", "BTCUSDT", "ETHUSDT") else 3)
