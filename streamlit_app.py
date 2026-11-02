@@ -357,6 +357,27 @@ def add_ict_marks(fig, df, swing_len=5):
                       fillcolor=color, line=dict(color=edge, width=1), layer="below")
 
 
+def get_signal_quality(setups, side):
+    """Heuristic ICT confluence score; educational filter, not AI/profit guarantee."""
+    names = [name.lower() for name, direction, _ in setups if direction == side]
+    score = 0
+    groups = {
+        "liquidity": ("liquidity sweep", "turtle soup", "judas swing"),
+        "structure": ("mss", "choch", "structure"),
+        "imbalance": ("fvg", "ifvg"),
+        "block": ("order block", "mitigation", "breaker", "unicorn"),
+        "location": ("ote", "silver bullet"),
+    }
+    for terms in groups.values():
+        if any(term in name for name in names for term in terms):
+            score += 1
+    if score >= 4:
+        return score, "STRONG 🟢"
+    if score >= 2:
+        return score, "MODERATE 🟡"
+    return score, "WEAK 🔴"
+
+
 def get_ict_zone_prices(df, model_name, model_side):
     """Return the ICT zone, falling back to the signal candle range."""
     d = df.reset_index(drop=True)
@@ -948,12 +969,15 @@ try:
                     directions = sorted(set(side for _, side, _ in pair_setups))
                     signal_label = " / ".join(directions)
                     model_names = ", ".join(name for name, _, _ in pair_setups)
+                    quality_score, quality_label = get_signal_quality(pair_setups, directions[0] if len(directions) == 1 else "BUY")
+                    if len(directions) > 1:
+                        quality_label = "MIXED ⚠️"
                     zone_decimals = 5 if pair_symbol == "YAHOO:EURUSD=X" else 2
                     zone_labels = []
                     for zone_model, zone_side, _ in pair_setups:
                         z_low, z_high = get_ict_zone_prices(pair_closed, zone_model, zone_side)
                         zone_labels.append(f"{zone_model}: {z_low:.{zone_decimals}f} – {z_high:.{zone_decimals}f}")
-                    all_pair_rows.append({"Pair": pair_symbol, "Timeframe": tf_api_interval, "Signal": signal_label, "ICT models": model_names, "Zone Prices": " | ".join(zone_labels)})
+                    all_pair_rows.append({"Pair": pair_symbol, "Timeframe": tf_api_interval, "Signal": signal_label, "Quality": f"{quality_label} ({quality_score}/5)", "ICT models": model_names, "Zone Prices": " | ".join(zone_labels)})
                     candle_stamp = str(pair_closed.iloc[-1]["openTime"])
                     for model_name, model_side, model_reason in pair_setups:
                         # FVG/OB retest alerts come from the persistent background scanner.
@@ -980,6 +1004,7 @@ try:
                                     f"⏱ Timeframe: {tf_api_interval}\n"
                                     f"🎯 Model: {model_name}\n"
                                     f"📈 Direction: {'🟢 BUY' if model_side == 'BUY' else '🔴 SELL'}\n"
+                                    f"🧠 Signal Quality: {get_signal_quality(pair_setups, model_side)[1]} ({get_signal_quality(pair_setups, model_side)[0]}/5)\n"
                                     f"📍 Zone Price: {price_fmt(zone_low)} – {price_fmt(zone_high)}\n"
                                     f"💰 Entry Reference: {price_fmt(entry_price)}\n"
                                     f"🛑 Stop Loss: {price_fmt(stop_price)}\n"
