@@ -397,6 +397,7 @@ def process_retest_alerts(pair, tf, symbol, df, state, htf_cache):
             )
             zone["status"] = "confirmed"
             zone["confirmed_at"] = candle_time
+            register_trade_outcome(state, f"retest|{key}", pair, tf, symbol, zone["model"], direction, entry_price, stop_price, target_price)
         elif invalidated:
             zone["status"] = "invalidated"
             zone["invalidated_at"] = candle_time
@@ -409,6 +410,59 @@ def process_retest_alerts(pair, tf, symbol, df, state, htf_cache):
                 del pending[key]
         except Exception:
             del pending[key]
+
+def register_trade_outcome(state, trade_id, pair, tf, symbol, model, direction, entry, stop_loss, take_profit):
+    """Save a trade for future TP/SL monitoring."""
+    trades = state.setdefault("active_trades", {})
+    if trade_id in trades:
+        return
+    trades[trade_id] = {
+        "pair": pair, "tf": tf, "symbol": symbol, "model": model,
+        "direction": direction, "entry": float(entry),
+        "sl": float(stop_loss), "tp": float(take_profit),
+        "status": "active", "created_at": str(pd.Timestamp.now(tz="UTC")),
+    }
+
+
+def process_trade_outcomes(pair, tf, symbol, df, state):
+    """Send one separate Telegram alert when an active setup reaches TP or SL."""
+    trades = state.setdefault("active_trades", {})
+    candle = df.iloc[-1]
+    high, low = float(candle.high), float(candle.low)
+    candle_time = str(candle.openTime)
+    for trade_id, trade in list(trades.items()):
+        if trade.get("status") != "active" or trade.get("pair") != pair or trade.get("tf") != tf:
+            continue
+        side = trade.get("direction")
+        tp, sl = float(trade["tp"]), float(trade["sl"])
+        tp_hit = high >= tp if side == "BUY" else low <= tp
+        sl_hit = low <= sl if side == "BUY" else high >= sl
+        if not tp_hit and not sl_hit:
+            continue
+        if tp_hit and sl_hit:
+            outcome, status = "⚠️ TP & SL both touched in same candle (hit order unknown)", "ambiguous"
+        elif tp_hit:
+            outcome, status = "🎯 TAKE PROFIT HIT ✅", "tp_hit"
+        else:
+            outcome, status = "🛑 STOP LOSS HIT ❌", "sl_hit"
+        decimals = price_decimals(pair)
+        send_telegram(
+            "📣 ICT BABA — TRADE RESULT UPDATE\n\n"
+            f"📊 Pair: {trade.get('symbol', symbol)}\n"
+            f"⏱ Timeframe: {tf}\n"
+            f"🎯 Model: {trade.get('model', 'ICT Setup')}\n"
+            f"📈 Direction: {'🟢 BUY' if side == 'BUY' else '🔴 SELL'}\n"
+            f"💰 Entry: {float(trade['entry']):.{decimals}f}\n"
+            f"🛑 SL: {sl:.{decimals}f}\n"
+            f"🎯 TP: {tp:.{decimals}f}\n"
+            f"📍 Candle High/Low: {high:.{decimals}f} / {low:.{decimals}f}\n"
+            f"{outcome}\n"
+            f"🕒 Candle: {candle_time}\n\n"
+            "Educational tracking only; actual fills may differ."
+        )
+        trade["status"] = status
+        trade["closed_at"] = candle_time
+
 
 def send_telegram(text):
     token = os.environ["TELEGRAM_BOT_TOKEN"]
@@ -438,6 +492,7 @@ def main():
                 candle_time = str(df.iloc[-1].openTime)
                 setups = scan_ict_setups(df)
                 process_retest_alerts(pair, tf, symbol, df, state, htf_cache)
+                process_trade_outcomes(pair, tf, symbol, df, state)
                 for model, direction, reason in setups:
                     # FVG and OB alerts are handled by the two-stage
                     # RETEST PENDING -> ENTRY RETEST CONFIRMED flow above.
@@ -519,6 +574,7 @@ def main():
                         "Educational alert only; validate price/action and risk before trading."
                     )
                     send_telegram(msg)
+                    register_trade_outcome(state, f"signal|{key}|{candle_time}", pair, tf, symbol, model, direction, entry, stop_loss, take_profit)
                     state[key] = {"sent_at": time.time(), "candle": candle_time}
                     sent += 1
                 time.sleep(0.15)
