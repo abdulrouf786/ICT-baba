@@ -968,8 +968,8 @@ try:
                               "Bullish Order Block", "Bearish Order Block"):
                 continue
             setup_quality_score, setup_quality_label = get_signal_quality(ict_setups, setup_side)
-            # Telegram receives STRONG confluence only (4/5 or 5/5).
-            if setup_quality_score < 4:
+            # Telegram receives STRONG and MODERATE confluence; WEAK is blocked.
+            if setup_quality_score < 2:
                 continue
             setup_key = f"{FEED_SYMBOL}|{api_interval}|{setup_name}|{setup_side}|{setup_candle}"
             if setup_key not in tg_setup_sent:
@@ -1022,8 +1022,8 @@ try:
                                           "Bullish Order Block", "Bearish Order Block"):
                             continue
                         model_quality_score, model_quality_label = get_signal_quality(pair_setups, model_side)
-                        # HARD FILTER: weak and moderate setups never reach Telegram.
-                        if model_quality_score < 4:
+                        # HARD FILTER: only weak setups are blocked from Telegram.
+                        if model_quality_score < 2:
                             continue
                         alert_key = f"{pair_symbol}|{tf_api_interval}|{model_name}|{model_side}"
                         last_sent = float(all_pair_tg_sent.get(alert_key, 0))
