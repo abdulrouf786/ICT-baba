@@ -308,6 +308,9 @@ def process_retest_alerts(pair, tf, symbol, df, state, htf_cache):
             elif "COUNTER-TREND" in htf_label:
                 quality_score = max(0, quality_score - 1)
             quality_label = "STRONG 🟢" if quality_score >= 4 else ("MODERATE 🟡" if quality_score >= 2 else "WEAK 🔴")
+            # Telegram only receives STRONG ICT confluence (4/5 or 5/5).
+            if quality_score < 4:
+                continue
             entry_plan = (zone_low + zone_high) / 2
             stop_plan = zone_low if direction == "BUY" else zone_high
             risk_plan = abs(entry_plan - stop_plan)
@@ -336,6 +339,11 @@ def process_retest_alerts(pair, tf, symbol, df, state, htf_cache):
                 "pair": pair, "tf": tf, "model": model, "direction": direction,
                 "low": zone_low, "high": zone_high, "formed_at": formed_at,
                 "status": "pending",
+                "quality_score": quality_score,
+                "quality_label": quality_label,
+                "htf_1h": htf_1h,
+                "htf_4h": htf_4h,
+                "htf_label": htf_label,
             }
 
     # Check existing pending zones against the latest fully closed candle.
@@ -356,6 +364,11 @@ def process_retest_alerts(pair, tf, symbol, df, state, htf_cache):
             (direction == "SELL" and current_close > high)
         )
         if confirmed:
+            # Older pending entries without a saved STRONG score are blocked too.
+            if int(zone.get("quality_score", 0)) < 4:
+                zone["status"] = "filtered_weak"
+                zone["filtered_at"] = candle_time
+                continue
             entry_price = current_close
             stop_price = low if direction == "BUY" else high
             risk = abs(entry_price - stop_price)
@@ -470,6 +483,10 @@ def main():
                         quality_label = "MODERATE 🟡"
                     else:
                         quality_label = "WEAK 🔴"
+
+                    # HARD FILTER: never send WEAK or MODERATE Telegram alerts.
+                    if quality_score < 4:
+                        continue
 
                     if quality_score >= 4:
                         alert_header = "🚨 ICT BABA — STRONG SIGNAL (PRIORITY) 🟢"
