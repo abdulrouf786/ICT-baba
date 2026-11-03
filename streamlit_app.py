@@ -967,11 +967,15 @@ try:
             if setup_name in ("Bullish FVG", "Bearish FVG",
                               "Bullish Order Block", "Bearish Order Block"):
                 continue
+            setup_quality_score, setup_quality_label = get_signal_quality(ict_setups, setup_side)
+            # Telegram receives STRONG confluence only (4/5 or 5/5).
+            if setup_quality_score < 4:
+                continue
             setup_key = f"{FEED_SYMBOL}|{api_interval}|{setup_name}|{setup_side}|{setup_candle}"
             if setup_key not in tg_setup_sent:
                 try:
                     send_telegram_message(
-                        f"📡 ICT BABA SETUP DETECTED\nModel: {setup_name}\nDirection: {setup_side}\nPair: {FEED_SYMBOL}\nTimeframe: {api_interval}\nClose: {float(closed.iloc[-1]['close']):.5f}\nDetails: {setup_reason}\nNote: Educational pattern alert; confirm risk before trading."
+                        f"📡 ICT BABA STRONG SETUP DETECTED\nModel: {setup_name}\nDirection: {setup_side}\nPair: {FEED_SYMBOL}\nTimeframe: {api_interval}\nSignal Quality: {setup_quality_label} ({setup_quality_score}/5)\nClose: {float(closed.iloc[-1]['close']):.5f}\nDetails: {setup_reason}\nNote: Strong ICT confluence only; verify before trading."
                     )
                     tg_setup_sent.append(setup_key)
                 except Exception as exc:
@@ -1017,6 +1021,10 @@ try:
                         if model_name in ("Bullish FVG", "Bearish FVG",
                                           "Bullish Order Block", "Bearish Order Block"):
                             continue
+                        model_quality_score, model_quality_label = get_signal_quality(pair_setups, model_side)
+                        # HARD FILTER: weak and moderate setups never reach Telegram.
+                        if model_quality_score < 4:
+                            continue
                         alert_key = f"{pair_symbol}|{tf_api_interval}|{model_name}|{model_side}"
                         last_sent = float(all_pair_tg_sent.get(alert_key, 0))
                         if alert_now - last_sent >= 4 * 60 * 60:
@@ -1037,7 +1045,7 @@ try:
                                     f"⏱ Timeframe: {tf_api_interval}\n"
                                     f"🎯 Model: {model_name}\n"
                                     f"📈 Direction: {'🟢 BUY' if model_side == 'BUY' else '🔴 SELL'}\n"
-                                    f"🧠 Signal Quality: {get_signal_quality(pair_setups, model_side)[1]} ({get_signal_quality(pair_setups, model_side)[0]}/5)\n"
+                                    f"🧠 Signal Quality: {model_quality_label} ({model_quality_score}/5)\n"
                                     f"📍 Zone Price: {price_fmt(zone_low)} – {price_fmt(zone_high)}\n"
                                     f"💰 Entry Reference: {price_fmt(entry_price)}\n"
                                     f"🛑 Stop Loss: {price_fmt(stop_price)}\n"
