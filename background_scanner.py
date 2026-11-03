@@ -308,7 +308,7 @@ def process_retest_alerts(pair, tf, symbol, df, state, htf_cache):
             elif "COUNTER-TREND" in htf_label:
                 quality_score = max(0, quality_score - 1)
             quality_label = "STRONG 🟢" if quality_score >= 4 else ("MODERATE 🟡" if quality_score >= 2 else "WEAK 🔴")
-            # Telegram only receives STRONG ICT confluence (4/5 or 5/5).
+            # Telegram receives STRONG and MODERATE ICT confluence; WEAK is blocked.
             if quality_score < 4:
                 continue
             entry_plan = (zone_low + zone_high) / 2
@@ -364,8 +364,8 @@ def process_retest_alerts(pair, tf, symbol, df, state, htf_cache):
             (direction == "SELL" and current_close > high)
         )
         if confirmed:
-            # Older pending entries without a saved STRONG score are blocked too.
-            if int(zone.get("quality_score", 0)) < 4:
+            # Older pending entries without saved MODERATE-or-STRONG score are blocked too.
+            if int(zone.get("quality_score", 0)) < 2:
                 zone["status"] = "filtered_weak"
                 zone["filtered_at"] = candle_time
                 continue
@@ -484,7 +484,7 @@ def main():
                     else:
                         quality_label = "WEAK 🔴"
 
-                    # HARD FILTER: never send WEAK or MODERATE Telegram alerts.
+                    # HARD FILTER: send STRONG and MODERATE; never send WEAK Telegram alerts.
                     if quality_score < 4:
                         continue
 
