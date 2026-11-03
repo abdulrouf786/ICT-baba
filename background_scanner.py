@@ -397,7 +397,7 @@ def process_retest_alerts(pair, tf, symbol, df, state, htf_cache):
             )
             zone["status"] = "confirmed"
             zone["confirmed_at"] = candle_time
-            register_trade_outcome(state, f"retest|{key}", pair, tf, symbol, zone["model"], direction, entry_price, stop_price, target_price)
+            register_trade_outcome(state, f"retest|{key}", pair, tf, symbol, zone["model"], direction, entry_price, stop_price, target_price, candle_time)
         elif invalidated:
             zone["status"] = "invalidated"
             zone["invalidated_at"] = candle_time
@@ -411,7 +411,7 @@ def process_retest_alerts(pair, tf, symbol, df, state, htf_cache):
         except Exception:
             del pending[key]
 
-def register_trade_outcome(state, trade_id, pair, tf, symbol, model, direction, entry, stop_loss, take_profit):
+def register_trade_outcome(state, trade_id, pair, tf, symbol, model, direction, entry, stop_loss, take_profit, entry_candle=None):
     """Save a trade for future TP/SL monitoring."""
     trades = state.setdefault("active_trades", {})
     if trade_id in trades:
@@ -420,7 +420,7 @@ def register_trade_outcome(state, trade_id, pair, tf, symbol, model, direction, 
         "pair": pair, "tf": tf, "symbol": symbol, "model": model,
         "direction": direction, "entry": float(entry),
         "sl": float(stop_loss), "tp": float(take_profit),
-        "status": "active", "created_at": str(pd.Timestamp.now(tz="UTC")),
+        "status": "active", "created_at": str(pd.Timestamp.now(tz="UTC")),\n        "entry_candle": str(entry_candle or ""),
     }
 
 
