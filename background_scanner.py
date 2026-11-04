@@ -7,10 +7,10 @@ import pandas as pd
 import requests
 
 ASSETS = {
-    "XAUUSD": "XAUUSD",
-    "BTCUSDT": "BTCUSDT",
-    "ETHUSDT": "ETHUSDT",
-    "EUR/USD": "YAHOO:EURUSD=X",
+    "XAUUSD": "XAUUSD",       # Broker/spot Gold feed (not Binance PAXG)
+    "BTCUSDT": "BTCUSDT",     # Binance Spot
+    "ETHUSDT": "ETHUSDT",     # Binance Spot
+    "PAXGUSDT": "PAXGUSDT",   # Binance gold-backed token, not broker XAUUSD
 }
 TIMEFRAMES = ["1m", "5m", "15m", "1h", "4h"]
 STATE_FILE = Path("alert_state.json")
@@ -71,7 +71,7 @@ def fetch_ohlc(symbol, interval):
         ])
     if df.empty:
         raise ValueError("No OHLC candles")
-    if symbol in ("BTCUSDT", "ETHUSDT"):
+    if symbol in ("BTCUSDT", "ETHUSDT", "PAXGUSDT"):
         df["openTime"] = pd.to_datetime(df["openTime"], unit="ms", utc=True)
     else:
         df["openTime"] = pd.to_datetime(df["openTime"], utc=True)
@@ -130,6 +130,86 @@ def scan_ict_setups(df):
     return [(n, s, r) for (n, s), r in unique.items()]
 
 
+
+
+def scan_indicator_retest_signal(df, pivot_len=3, setup_window=30):
+    """
+    Python implementation of the GitHub Pine indicator's core setup:
+    confirmed swing liquidity sweep + MSS + three-candle FVG + later FVG retest.
+    Evaluates only the last (already closed) candle supplied by main().
+    """
+    d = df.reset_index(drop=True)
+    if len(d) < max(30, pivot_len * 2 + 5):
+        return None
+
+    swing_high = swing_low = None
+    bull_sweep_idx = bear_sweep_idx = None
+    bull_sweep_extreme = bear_sweep_extreme = None
+    bull_mss_idx = bear_mss_idx = None
+    latest_bull_fvg = latest_bear_fvg = None
+
+    for i in range(len(d)):
+        # A pivot at p is only confirmed after pivot_len bars to its right.
+        p = i - pivot_len
+        if p >= pivot_len:
+            left = d.iloc[p-pivot_len:p]
+            right = d.iloc[p+1:i+1]
+            ph = float(d.iloc[p].high)
+            pl = float(d.iloc[p].low)
+            if ph > float(left.high.max()) and ph >= float(right.high.max()):
+                swing_high = ph
+            if pl < float(left.low.min()) and pl <= float(right.low.min()):
+                swing_low = pl
+
+        row = d.iloc[i]
+        high, low, close = float(row.high), float(row.low), float(row.close)
+        prev_close = float(d.iloc[i-1].close) if i else close
+
+        if swing_low is not None and low < swing_low and close > swing_low:
+            bull_sweep_idx, bull_sweep_extreme = i, low
+        if swing_high is not None and high > swing_high and close < swing_high:
+            bear_sweep_idx, bear_sweep_extreme = i, high
+
+        if swing_high is not None and close > swing_high and prev_close <= swing_high:
+            bull_mss_idx = i
+        if swing_low is not None and close < swing_low and prev_close >= swing_low:
+            bear_mss_idx = i
+
+        if i >= 2:
+            two_back = d.iloc[i-2]
+            if low > float(two_back.high):
+                latest_bull_fvg = (float(two_back.high), low, i)
+            if high < float(two_back.low):
+                latest_bear_fvg = (high, float(two_back.low), i)
+
+    i = len(d) - 1
+    row = d.iloc[i]
+    high, low, close = float(row.high), float(row.low), float(row.close)
+    bull_recent = (bull_sweep_idx is not None and bull_mss_idx is not None
+                   and i - bull_sweep_idx <= setup_window
+                   and i - bull_mss_idx <= setup_window)
+    bear_recent = (bear_sweep_idx is not None and bear_mss_idx is not None
+                   and i - bear_sweep_idx <= setup_window
+                   and i - bear_mss_idx <= setup_window)
+
+    if latest_bull_fvg:
+        zone_low, zone_high, formed_idx = latest_bull_fvg
+        touched = i > formed_idx and low <= zone_high and high >= zone_low
+        if bull_recent and touched and close > zone_low:
+            sl = min(bull_sweep_extreme if bull_sweep_extreme is not None else low, low)
+            return {"side": "BUY", "zone_low": zone_low, "zone_high": zone_high,
+                    "sl": sl, "model": "ICT Indicator: Bullish Sweep + MSS + FVG Retest",
+                    "formed_idx": formed_idx, "reason": "SSL sweep, bullish MSS and bullish FVG retest confirmed"}
+
+    if latest_bear_fvg:
+        zone_low, zone_high, formed_idx = latest_bear_fvg
+        touched = i > formed_idx and high >= zone_low and low <= zone_high
+        if bear_recent and touched and close < zone_high:
+            sl = max(bear_sweep_extreme if bear_sweep_extreme is not None else high, high)
+            return {"side": "SELL", "zone_low": zone_low, "zone_high": zone_high,
+                    "sl": sl, "model": "ICT Indicator: Bearish Sweep + MSS + FVG Retest",
+                    "formed_idx": formed_idx, "reason": "BSL sweep, bearish MSS and bearish FVG retest confirmed"}
+    return None
 
 
 def higher_timeframe_bias(df):
@@ -286,7 +366,7 @@ def get_signal_zone(df, model, direction):
 
 
 def price_decimals(pair):
-    return 5 if pair == "EUR/USD" else (2 if pair in ("XAUUSD", "BTCUSDT", "ETHUSDT") else 3)
+    return 2 if pair in ("XAUUSD", "BTCUSDT", "ETHUSDT", "PAXGUSDT") else 3
 
 
 def process_retest_alerts(pair, tf, symbol, df, state, htf_cache):
@@ -491,6 +571,45 @@ def main():
                 df = df.iloc[:-1].copy().reset_index(drop=True)
                 candle_time = str(df.iloc[-1].openTime)
                 setups = scan_ict_setups(df)
+                # Run the GitHub-hosted ICT indicator rules on the same closed candles.
+                indicator_signal = scan_indicator_retest_signal(df)
+                if indicator_signal:
+                    signal_key = (
+                        f"indicator|{pair}|{tf}|{indicator_signal['side']}|"
+                        f"{str(df.iloc[indicator_signal['formed_idx']].openTime)}"
+                    )
+                    if signal_key not in state:
+                        side = indicator_signal["side"]
+                        entry = float(df.iloc[-1].close)
+                        stop_loss = float(indicator_signal["sl"])
+                        risk = abs(entry - stop_loss)
+                        if risk > 0:
+                            take_profit = entry + (2.0 * risk if side == "BUY" else -2.0 * risk)
+                            decimals = price_decimals(pair)
+                            fmt = lambda value: f"{value:.{decimals}f}"
+                            candle_time = str(df.iloc[-1].openTime)
+                            send_telegram(
+                                "🚨 ICT BABA — INDICATOR RETEST CONFIRMED\n\n"
+                                f"📊 Pair: {symbol}\n"
+                                f"⏱ Timeframe: {tf}\n"
+                                f"🎯 Model: {indicator_signal['model']}\n"
+                                f"📈 Direction: {'🟢 BUY' if side == 'BUY' else '🔴 SELL'}\n"
+                                f"📍 FVG Retest Zone: {fmt(indicator_signal['zone_low'])} – {fmt(indicator_signal['zone_high'])}\n"
+                                f"💰 Entry: {fmt(entry)}\n"
+                                f"🛑 Stop Loss: {fmt(stop_loss)}\n"
+                                f"🎯 Take Profit: {fmt(take_profit)}\n"
+                                "⚖️ Risk/Reward: 1:2\n"
+                                f"🕒 Signal candle (UTC): {candle_time}\n"
+                                f"📝 {indicator_signal['reason']}\n\n"
+                                "⚠️ Rule-based educational alert; verify risk before trading."
+                            )
+                            register_trade_outcome(
+                                state, signal_key, pair, tf, symbol,
+                                indicator_signal["model"], side, entry,
+                                stop_loss, take_profit, candle_time
+                            )
+                            state[signal_key] = {"sent_at": time.time(), "candle": candle_time}
+                            sent += 1
                 process_retest_alerts(pair, tf, symbol, df, state, htf_cache)
                 process_trade_outcomes(pair, tf, symbol, df, state)
                 for model, direction, reason in setups:
