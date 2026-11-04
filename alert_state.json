@@ -11552,7 +11552,8 @@
       "low": 78044.11,
       "high": 78878.01,
       "formed_at": "2026-11-02 12:00:00+00:00",
-      "status": "pending"
+      "status": "invalidated",
+      "invalidated_at": "2026-11-04 12:00:00+00:00"
     },
     "ETHUSDT|1m|Bullish Mitigation Block|BUY|2026-11-02 16:44:00+00:00": {
       "pair": "ETHUSDT",
@@ -13741,7 +13742,8 @@
       "low": 78044.11,
       "high": 78878.01,
       "formed_at": "2026-11-02 16:00:00+00:00",
-      "status": "pending"
+      "status": "invalidated",
+      "invalidated_at": "2026-11-04 12:00:00+00:00"
     },
     "ETHUSDT|1m|Bearish FVG|SELL|2026-11-02 20:27:00+00:00": {
       "pair": "ETHUSDT",
@@ -16911,12 +16913,13 @@
       "low": 4040.139,
       "high": 4040.48,
       "formed_at": "2026-11-04 14:20:00+00:00",
-      "status": "pending",
+      "status": "invalidated",
       "quality_score": 2,
       "quality_label": "MODERATE \ud83d\udfe1",
       "htf_1h": "BULLISH",
       "htf_4h": "NEUTRAL",
-      "htf_label": "COUNTER-TREND / WEAK HTF \ud83d\udd34"
+      "htf_label": "COUNTER-TREND / WEAK HTF \ud83d\udd34",
+      "invalidated_at": "2026-11-04 17:15:00+00:00"
     },
     "XAUUSD|5m|Bearish Order Block|SELL|2026-11-04 14:20:00+00:00": {
       "pair": "XAUUSD",
@@ -16926,12 +16929,13 @@
       "low": 4043.402,
       "high": 4046.919,
       "formed_at": "2026-11-04 14:20:00+00:00",
-      "status": "pending",
+      "status": "invalidated",
       "quality_score": 2,
       "quality_label": "MODERATE \ud83d\udfe1",
       "htf_1h": "BULLISH",
       "htf_4h": "NEUTRAL",
-      "htf_label": "COUNTER-TREND / WEAK HTF \ud83d\udd34"
+      "htf_label": "COUNTER-TREND / WEAK HTF \ud83d\udd34",
+      "invalidated_at": "2026-11-04 17:15:00+00:00"
     },
     "XAUUSD|5m|Bearish FVG|SELL|2026-11-04 14:25:00+00:00": {
       "pair": "XAUUSD",
@@ -16941,12 +16945,13 @@
       "low": 4037.712,
       "high": 4038.447,
       "formed_at": "2026-11-04 14:25:00+00:00",
-      "status": "pending",
+      "status": "invalidated",
       "quality_score": 2,
       "quality_label": "MODERATE \ud83d\udfe1",
       "htf_1h": "BULLISH",
       "htf_4h": "NEUTRAL",
-      "htf_label": "COUNTER-TREND / WEAK HTF \ud83d\udd34"
+      "htf_label": "COUNTER-TREND / WEAK HTF \ud83d\udd34",
+      "invalidated_at": "2026-11-04 17:15:00+00:00"
     },
     "XAUUSD|5m|Bearish Order Block|SELL|2026-11-04 14:25:00+00:00": {
       "pair": "XAUUSD",
@@ -16956,12 +16961,13 @@
       "low": 4043.402,
       "high": 4046.919,
       "formed_at": "2026-11-04 14:25:00+00:00",
-      "status": "pending",
+      "status": "invalidated",
       "quality_score": 2,
       "quality_label": "MODERATE \ud83d\udfe1",
       "htf_1h": "BULLISH",
       "htf_4h": "NEUTRAL",
-      "htf_label": "COUNTER-TREND / WEAK HTF \ud83d\udd34"
+      "htf_label": "COUNTER-TREND / WEAK HTF \ud83d\udd34",
+      "invalidated_at": "2026-11-04 17:15:00+00:00"
     },
     "XAUUSD|4h|Bullish Mitigation Block|BUY|2026-11-03 12:00:00+00:00": {
       "pair": "XAUUSD",
@@ -17136,12 +17142,13 @@
       "low": 77544.01,
       "high": 78140.01,
       "formed_at": "2026-11-04 08:00:00+00:00",
-      "status": "pending",
+      "status": "confirmed",
       "quality_score": 3,
       "quality_label": "MODERATE \ud83d\udfe1",
       "htf_1h": "BULLISH",
       "htf_4h": "NEUTRAL",
-      "htf_label": "PARTIAL HTF ALIGNMENT \ud83d\udfe1"
+      "htf_label": "PARTIAL HTF ALIGNMENT \ud83d\udfe1",
+      "confirmed_at": "2026-11-04 12:00:00+00:00"
     },
     "BTCUSDT|4h|Bullish Order Block|BUY|2026-11-04 08:00:00+00:00": {
       "pair": "BTCUSDT",
@@ -17271,12 +17278,13 @@
       "low": 4037.82,
       "high": 4038.56,
       "formed_at": "2026-11-04 14:20:00+00:00",
-      "status": "pending",
+      "status": "invalidated",
       "quality_score": 2,
       "quality_label": "MODERATE \ud83d\udfe1",
       "htf_1h": "BULLISH",
       "htf_4h": "NEUTRAL",
-      "htf_label": "COUNTER-TREND / WEAK HTF \ud83d\udd34"
+      "htf_label": "COUNTER-TREND / WEAK HTF \ud83d\udd34",
+      "invalidated_at": "2026-11-04 17:15:00+00:00"
     },
     "PAXGUSDT|5m|Bearish FVG|SELL|2026-11-04 14:25:00+00:00": {
       "pair": "PAXGUSDT",
@@ -17286,12 +17294,13 @@
       "low": 4035.64,
       "high": 4038.08,
       "formed_at": "2026-11-04 14:25:00+00:00",
-      "status": "pending",
+      "status": "invalidated",
       "quality_score": 2,
       "quality_label": "MODERATE \ud83d\udfe1",
       "htf_1h": "BULLISH",
       "htf_4h": "NEUTRAL",
-      "htf_label": "COUNTER-TREND / WEAK HTF \ud83d\udd34"
+      "htf_label": "COUNTER-TREND / WEAK HTF \ud83d\udd34",
+      "invalidated_at": "2026-11-04 17:15:00+00:00"
     },
     "PAXGUSDT|5m|Bearish Order Block|SELL|2026-11-04 14:25:00+00:00": {
       "pair": "PAXGUSDT",
@@ -17301,12 +17310,13 @@
       "low": 4038.56,
       "high": 4040.79,
       "formed_at": "2026-11-04 14:25:00+00:00",
-      "status": "pending",
+      "status": "invalidated",
       "quality_score": 2,
       "quality_label": "MODERATE \ud83d\udfe1",
       "htf_1h": "BULLISH",
       "htf_4h": "NEUTRAL",
-      "htf_label": "COUNTER-TREND / WEAK HTF \ud83d\udd34"
+      "htf_label": "COUNTER-TREND / WEAK HTF \ud83d\udd34",
+      "invalidated_at": "2026-11-04 17:15:00+00:00"
     },
     "PAXGUSDT|4h|Bullish Mitigation Block|BUY|2026-11-03 12:00:00+00:00": {
       "pair": "PAXGUSDT",
@@ -17658,6 +17668,128 @@
       "htf_1h": "BULLISH",
       "htf_4h": "NEUTRAL",
       "htf_label": "PARTIAL HTF ALIGNMENT \ud83d\udfe1"
+    },
+    "XAUUSD|1h|Bullish FVG|BUY|2026-11-04 10:00:00+00:00": {
+      "pair": "XAUUSD",
+      "tf": "1h",
+      "model": "Bullish FVG",
+      "direction": "BUY",
+      "low": 4039.135,
+      "high": 4039.416,
+      "formed_at": "2026-11-04 10:00:00+00:00",
+      "status": "confirmed",
+      "quality_score": 2,
+      "quality_label": "MODERATE \ud83d\udfe1",
+      "htf_1h": "BULLISH",
+      "htf_4h": "NEUTRAL",
+      "htf_label": "PARTIAL HTF ALIGNMENT \ud83d\udfe1",
+      "confirmed_at": "2026-11-04 16:00:00+00:00"
+    },
+    "XAUUSD|1h|Bullish Mitigation Block|BUY|2026-11-04 15:00:00+00:00": {
+      "pair": "XAUUSD",
+      "tf": "1h",
+      "model": "Bullish Mitigation Block",
+      "direction": "BUY",
+      "low": 4014.846,
+      "high": 4029.293,
+      "formed_at": "2026-11-04 15:00:00+00:00",
+      "status": "pending",
+      "quality_score": 2,
+      "quality_label": "MODERATE \ud83d\udfe1",
+      "htf_1h": "BULLISH",
+      "htf_4h": "NEUTRAL",
+      "htf_label": "PARTIAL HTF ALIGNMENT \ud83d\udfe1"
+    },
+    "XAUUSD|1h|Bullish Order Block|BUY|2026-11-04 16:00:00+00:00": {
+      "pair": "XAUUSD",
+      "tf": "1h",
+      "model": "Bullish Order Block",
+      "direction": "BUY",
+      "low": 4032.412,
+      "high": 4051.871,
+      "formed_at": "2026-11-04 16:00:00+00:00",
+      "status": "pending",
+      "quality_score": 2,
+      "quality_label": "MODERATE \ud83d\udfe1",
+      "htf_1h": "BULLISH",
+      "htf_4h": "NEUTRAL",
+      "htf_label": "PARTIAL HTF ALIGNMENT \ud83d\udfe1"
+    },
+    "BTCUSDT|4h|Bullish Order Block|BUY|2026-11-04 12:00:00+00:00": {
+      "pair": "BTCUSDT",
+      "tf": "4h",
+      "model": "Bullish Order Block",
+      "direction": "BUY",
+      "low": 75736.38,
+      "high": 77544.01,
+      "formed_at": "2026-11-04 12:00:00+00:00",
+      "status": "pending",
+      "quality_score": 2,
+      "quality_label": "MODERATE \ud83d\udfe1",
+      "htf_1h": "BULLISH",
+      "htf_4h": "NEUTRAL",
+      "htf_label": "PARTIAL HTF ALIGNMENT \ud83d\udfe1"
+    },
+    "ETHUSDT|4h|Bullish Order Block|BUY|2026-11-04 12:00:00+00:00": {
+      "pair": "ETHUSDT",
+      "tf": "4h",
+      "model": "Bullish Order Block",
+      "direction": "BUY",
+      "low": 2226.44,
+      "high": 2281.15,
+      "formed_at": "2026-11-04 12:00:00+00:00",
+      "status": "pending",
+      "quality_score": 2,
+      "quality_label": "MODERATE \ud83d\udfe1",
+      "htf_1h": "BULLISH",
+      "htf_4h": "NEUTRAL",
+      "htf_label": "PARTIAL HTF ALIGNMENT \ud83d\udfe1"
+    },
+    "PAXGUSDT|1h|Bullish FVG|BUY|2026-11-04 10:00:00+00:00": {
+      "pair": "PAXGUSDT",
+      "tf": "1h",
+      "model": "Bullish FVG",
+      "direction": "BUY",
+      "low": 4038.14,
+      "high": 4039.57,
+      "formed_at": "2026-11-04 10:00:00+00:00",
+      "status": "confirmed",
+      "quality_score": 2,
+      "quality_label": "MODERATE \ud83d\udfe1",
+      "htf_1h": "BULLISH",
+      "htf_4h": "NEUTRAL",
+      "htf_label": "PARTIAL HTF ALIGNMENT \ud83d\udfe1",
+      "confirmed_at": "2026-11-04 16:00:00+00:00"
+    },
+    "PAXGUSDT|1h|Bullish Mitigation Block|BUY|2026-11-04 13:00:00+00:00": {
+      "pair": "PAXGUSDT",
+      "tf": "1h",
+      "model": "Bullish Mitigation Block",
+      "direction": "BUY",
+      "low": 4016.95,
+      "high": 4029.96,
+      "formed_at": "2026-11-04 13:00:00+00:00",
+      "status": "pending",
+      "quality_score": 2,
+      "quality_label": "MODERATE \ud83d\udfe1",
+      "htf_1h": "BULLISH",
+      "htf_4h": "NEUTRAL",
+      "htf_label": "PARTIAL HTF ALIGNMENT \ud83d\udfe1"
+    },
+    "PAXGUSDT|1h|Bullish Order Block|BUY|2026-11-04 16:00:00+00:00": {
+      "pair": "PAXGUSDT",
+      "tf": "1h",
+      "model": "Bullish Order Block",
+      "direction": "BUY",
+      "low": 4031.94,
+      "high": 4049.62,
+      "formed_at": "2026-11-04 16:00:00+00:00",
+      "status": "pending",
+      "quality_score": 2,
+      "quality_label": "MODERATE \ud83d\udfe1",
+      "htf_1h": "BULLISH",
+      "htf_4h": "NEUTRAL",
+      "htf_label": "PARTIAL HTF ALIGNMENT \ud83d\udfe1"
     }
   },
   "BTCUSDT|1m|Bearish MSS / CHoCH|SELL": {
@@ -17969,12 +18101,12 @@
     "candle": "2026-11-02 13:35:00+00:00"
   },
   "XAUUSD|1h|Bullish MSS / CHoCH|BUY": {
-    "sent_at": 1793630873.6279862,
-    "candle": "2026-11-02 13:00:00+00:00"
+    "sent_at": 1793813002.830058,
+    "candle": "2026-11-04 16:00:00+00:00"
   },
   "XAUUSD|1h|Bullish Mitigation Block|BUY": {
-    "sent_at": 1793630873.9979517,
-    "candle": "2026-11-02 13:00:00+00:00"
+    "sent_at": 1793813003.2403045,
+    "candle": "2026-11-04 16:00:00+00:00"
   },
   "BTCUSDT|5m|Bullish IFVG|BUY": {
     "sent_at": 1793634423.983204,
@@ -18062,9 +18194,10 @@
       "entry": 4038.711,
       "sl": 4045.179,
       "tp": 4025.774999999999,
-      "status": "active",
+      "status": "sl_hit",
       "created_at": "2026-11-04 13:09:09.648350+00:00",
-      "entry_candle": "2026-11-04 13:08:00+00:00"
+      "entry_candle": "2026-11-04 13:08:00+00:00",
+      "closed_at": "2026-11-04 17:22:00+00:00"
     },
     "indicator|XAUUSD|5m|BUY|2026-11-04 12:25:00+00:00": {
       "pair": "XAUUSD",
@@ -18144,9 +18277,10 @@
       "entry": 4035.59,
       "sl": 4042.29,
       "tp": 4022.1900000000005,
-      "status": "active",
+      "status": "sl_hit",
       "created_at": "2026-11-04 13:09:40.902436+00:00",
-      "entry_candle": "2026-11-04 13:08:00+00:00"
+      "entry_candle": "2026-11-04 13:08:00+00:00",
+      "closed_at": "2026-11-04 17:22:00+00:00"
     },
     "indicator|PAXGUSDT|5m|SELL|2026-11-04 12:40:00+00:00": {
       "pair": "PAXGUSDT",
@@ -18157,9 +18291,10 @@
       "entry": 4038.4,
       "sl": 4048.89,
       "tp": 4017.4200000000005,
-      "status": "active",
+      "status": "sl_hit",
       "created_at": "2026-11-04 13:09:44.724059+00:00",
-      "entry_candle": "2026-11-04 13:00:00+00:00"
+      "entry_candle": "2026-11-04 13:00:00+00:00",
+      "closed_at": "2026-11-04 17:15:00+00:00"
     },
     "indicator|PAXGUSDT|15m|BUY|2026-11-04 09:15:00+00:00": {
       "pair": "PAXGUSDT",
@@ -18184,9 +18319,10 @@
       "entry": 4037.713,
       "sl": 4045.179,
       "tp": 4022.7810000000004,
-      "status": "active",
+      "status": "sl_hit",
       "created_at": "2026-11-04 13:21:55.084591+00:00",
-      "entry_candle": "2026-11-04 13:20:00+00:00"
+      "entry_candle": "2026-11-04 13:20:00+00:00",
+      "closed_at": "2026-11-04 17:22:00+00:00"
     },
     "indicator|ETHUSDT|1m|SELL|2026-11-04 13:16:00+00:00": {
       "pair": "ETHUSDT",
@@ -18253,9 +18389,10 @@
       "entry": 4033.6,
       "sl": 4042.29,
       "tp": 4016.22,
-      "status": "active",
+      "status": "sl_hit",
       "created_at": "2026-11-04 13:24:14.423110+00:00",
-      "entry_candle": "2026-11-04 13:23:00+00:00"
+      "entry_candle": "2026-11-04 13:23:00+00:00",
+      "closed_at": "2026-11-04 17:22:00+00:00"
     },
     "signal|XAUUSD|5m|Bearish MSS / CHoCH|SELL|2026-11-04 14:25:00+00:00": {
       "pair": "XAUUSD",
@@ -18266,9 +18403,10 @@
       "entry": 4033.906,
       "sl": 4037.712,
       "tp": 4014.8759999999997,
-      "status": "active",
+      "status": "sl_hit",
       "created_at": "2026-11-04 14:32:15.019412+00:00",
-      "entry_candle": ""
+      "entry_candle": "",
+      "closed_at": "2026-11-04 17:15:00+00:00"
     },
     "signal|XAUUSD|4h|Bullish MSS / CHoCH|BUY|2026-11-04 08:00:00+00:00": {
       "pair": "XAUUSD",
@@ -18349,9 +18487,10 @@
       "entry": 4032.56,
       "sl": 4035.64,
       "tp": 4017.1600000000003,
-      "status": "active",
+      "status": "sl_hit",
       "created_at": "2026-11-04 14:33:01.809432+00:00",
-      "entry_candle": ""
+      "entry_candle": "",
+      "closed_at": "2026-11-04 17:15:00+00:00"
     },
     "signal|PAXGUSDT|4h|Bullish MSS / CHoCH|BUY|2026-11-04 08:00:00+00:00": {
       "pair": "PAXGUSDT",
@@ -18607,6 +18746,111 @@
       "status": "active",
       "created_at": "2026-11-04 15:27:51.454322+00:00",
       "entry_candle": ""
+    },
+    "retest|XAUUSD|1h|Bullish FVG|BUY|2026-11-04 10:00:00+00:00": {
+      "pair": "XAUUSD",
+      "tf": "1h",
+      "symbol": "XAUUSD",
+      "model": "Bullish FVG",
+      "direction": "BUY",
+      "entry": 4066.336,
+      "sl": 4039.135,
+      "tp": 4202.340999999998,
+      "status": "sl_hit",
+      "created_at": "2026-11-04 17:23:21.587695+00:00",
+      "entry_candle": "2026-11-04 16:00:00+00:00",
+      "closed_at": "2026-11-04 16:00:00+00:00"
+    },
+    "signal|XAUUSD|1h|Bullish MSS / CHoCH|BUY|2026-11-04 16:00:00+00:00": {
+      "pair": "XAUUSD",
+      "tf": "1h",
+      "symbol": "XAUUSD",
+      "model": "Bullish MSS / CHoCH",
+      "direction": "BUY",
+      "entry": 4066.336,
+      "sl": 4039.095,
+      "tp": 4202.540999999999,
+      "status": "active",
+      "created_at": "2026-11-04 17:23:22.830007+00:00",
+      "entry_candle": ""
+    },
+    "signal|XAUUSD|1h|Bullish Mitigation Block|BUY|2026-11-04 16:00:00+00:00": {
+      "pair": "XAUUSD",
+      "tf": "1h",
+      "symbol": "XAUUSD",
+      "model": "Bullish Mitigation Block",
+      "direction": "BUY",
+      "entry": 4066.336,
+      "sl": 4039.095,
+      "tp": 4202.540999999999,
+      "status": "active",
+      "created_at": "2026-11-04 17:23:23.240255+00:00",
+      "entry_candle": ""
+    },
+    "indicator|BTCUSDT|4h|BUY|2026-11-04 08:00:00+00:00": {
+      "pair": "BTCUSDT",
+      "tf": "4h",
+      "symbol": "BTCUSDT",
+      "model": "ICT Indicator: Bullish Sweep + MSS + FVG Retest",
+      "direction": "BUY",
+      "entry": 80296.01,
+      "sl": 75736.38,
+      "tp": 89415.26999999997,
+      "status": "active",
+      "created_at": "2026-11-04 17:23:34.126952+00:00",
+      "entry_candle": "2026-11-04 12:00:00+00:00"
+    },
+    "retest|BTCUSDT|4h|Bullish FVG|BUY|2026-11-04 08:00:00+00:00": {
+      "pair": "BTCUSDT",
+      "tf": "4h",
+      "symbol": "BTCUSDT",
+      "model": "Bullish FVG",
+      "direction": "BUY",
+      "entry": 80296.01,
+      "sl": 77544.01,
+      "tp": 94056.01,
+      "status": "active",
+      "created_at": "2026-11-04 17:23:34.911712+00:00",
+      "entry_candle": "2026-11-04 12:00:00+00:00"
+    },
+    "retest|PAXGUSDT|1h|Bullish FVG|BUY|2026-11-04 10:00:00+00:00": {
+      "pair": "PAXGUSDT",
+      "tf": "1h",
+      "symbol": "PAXGUSDT",
+      "model": "Bullish FVG",
+      "direction": "BUY",
+      "entry": 4064.72,
+      "sl": 4038.14,
+      "tp": 4197.619999999999,
+      "status": "active",
+      "created_at": "2026-11-04 17:23:56.295936+00:00",
+      "entry_candle": "2026-11-04 16:00:00+00:00"
+    },
+    "signal|PAXGUSDT|1h|Bullish MSS / CHoCH|BUY|2026-11-04 16:00:00+00:00": {
+      "pair": "PAXGUSDT",
+      "tf": "1h",
+      "symbol": "PAXGUSDT",
+      "model": "Bullish MSS / CHoCH",
+      "direction": "BUY",
+      "entry": 4064.72,
+      "sl": 4039.36,
+      "tp": 4191.519999999999,
+      "status": "active",
+      "created_at": "2026-11-04 17:23:57.160095+00:00",
+      "entry_candle": ""
+    },
+    "signal|PAXGUSDT|1h|Bullish Mitigation Block|BUY|2026-11-04 16:00:00+00:00": {
+      "pair": "PAXGUSDT",
+      "tf": "1h",
+      "symbol": "PAXGUSDT",
+      "model": "Bullish Mitigation Block",
+      "direction": "BUY",
+      "entry": 4064.72,
+      "sl": 4039.36,
+      "tp": 4191.519999999999,
+      "status": "active",
+      "created_at": "2026-11-04 17:23:57.532295+00:00",
+      "entry_candle": ""
     }
   },
   "indicator|XAUUSD|1m|SELL|2026-11-04 13:07:00+00:00": {
@@ -18692,5 +18936,17 @@
   "ETHUSDT|1h|Bullish IFVG|BUY": {
     "sent_at": 1793806071.4543662,
     "candle": "2026-11-04 14:00:00+00:00"
+  },
+  "indicator|BTCUSDT|4h|BUY|2026-11-04 08:00:00+00:00": {
+    "sent_at": 1793813014.127001,
+    "candle": "2026-11-04 12:00:00+00:00"
+  },
+  "PAXGUSDT|1h|Bullish MSS / CHoCH|BUY": {
+    "sent_at": 1793813037.1601424,
+    "candle": "2026-11-04 16:00:00+00:00"
+  },
+  "PAXGUSDT|1h|Bullish Mitigation Block|BUY": {
+    "sent_at": 1793813037.5323434,
+    "candle": "2026-11-04 16:00:00+00:00"
   }
 }
