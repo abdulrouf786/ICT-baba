@@ -6,15 +6,44 @@ from datetime import datetime, timezone
 import requests
 import pandas as pd
 
+# Crypto candles come directly from Binance public market-data API (no API key).
+# XAUUSD is kept separate and uses Twelve Data when configured, with Yahoo fallback.
 SYMBOLS = {
-    "XAUUSD": {"yahoo": "XAUUSD=X", "twelve": "XAU/USD"},
-    "EURUSD": {"yahoo": "EURUSD=X", "twelve": "EUR/USD"},
-    "GBPUSD": {"yahoo": "GBPUSD=X", "twelve": "GBP/USD"},
+    "XAUUSD": {"provider": "twelve_yahoo", "twelve": "XAU/USD", "yahoo": "XAUUSD=X"},
+    "BTCUSDT": {"provider": "binance", "binance": "BTCUSDT"},
+    "ETHUSDT": {"provider": "binance", "binance": "ETHUSDT"},
+    "PAXGUSDT": {"provider": "binance", "binance": "PAXGUSDT"},
 }
 TIMEFRAMES = ["1m", "5m", "15m", "1h", "4h"]
-HEADERS = {"User-Agent": "Mozilla/5.0 ICT-Baba-GitHub-Data/1.0"}
+HEADERS = {"User-Agent": "Mozilla/5.0 ICT-Baba-GitHub-Data/1.1"}
 OUT = "data/market_data.json"
-RAW_BASE = "https://raw.githubusercontent.com/abdulrouf786/ICT-baba/main/data"
+
+
+def fetch_binance(symbol, tf):
+    pair = SYMBOLS[symbol]["binance"]
+    response = requests.get(
+        "https://api.binance.com/api/v3/klines",
+        params={"symbol": pair, "interval": tf, "limit": 500},
+        headers=HEADERS,
+        timeout=25,
+    )
+    response.raise_for_status()
+    payload = response.json()
+    if not isinstance(payload, list):
+        raise RuntimeError(str(payload))
+    rows = []
+    for candle in payload:
+        rows.append({
+            "time": datetime.fromtimestamp(candle[0] / 1000, timezone.utc).isoformat(),
+            "open": float(candle[1]),
+            "high": float(candle[2]),
+            "low": float(candle[3]),
+            "close": float(candle[4]),
+            "volume": float(candle[5]),
+        })
+    if not rows:
+        raise RuntimeError(f"Binance returned no candles for {pair}")
+    return rows, "Binance Spot API", f"{pair} spot market OHLC; this is not broker XAUUSD pricing."
 
 
 def fetch_yahoo(symbol, tf):
@@ -22,8 +51,10 @@ def fetch_yahoo(symbol, tf):
     source_interval = "60m" if tf == "4h" else tf
     period = "7d" if tf == "1m" else ("60d" if tf in ("5m", "15m") else "2y")
     url = f"https://query1.finance.yahoo.com/v8/finance/chart/{ticker}"
-    response = requests.get(url, params={"range": period, "interval": source_interval},
-                            headers=HEADERS, timeout=25)
+    response = requests.get(
+        url, params={"range": period, "interval": source_interval},
+        headers=HEADERS, timeout=25
+    )
     response.raise_for_status()
     payload = response.json()
     result = (payload.get("chart") or {}).get("result")
@@ -75,7 +106,7 @@ def fetch_twelve(symbol, tf, api_key):
             "low": float(row["low"]), "close": float(row["close"]),
             "volume": float(row.get("volume") or 0),
         })
-    return rows, "Twelve Data", "Provider symbol feed; verify spot pricing and plan limits."
+    return rows, "Twelve Data", "Provider XAU/USD feed; verify spot pricing and plan limits."
 
 
 def main():
@@ -86,25 +117,30 @@ def main():
         "refresh_target_minutes": 5,
         "symbols": {},
         "notes": [
+            "Crypto OHLC candles are fetched from Binance public Spot API without an API key.",
+            "BTCUSDT, ETHUSDT and PAXGUSDT are Binance trading pairs; PAXGUSDT is not broker XAUUSD.",
+            "XAUUSD uses Twelve Data when TWELVE_DATA_API_KEY is configured, with Yahoo fallback.",
             "This is a GitHub-hosted data snapshot, not a continuously running server.",
             "GitHub Actions schedules can be delayed; a 5-minute schedule is not guaranteed.",
-            "Market data is supplied by Yahoo Finance or Twelve Data; GitHub is not the market-data origin.",
-            "Yahoo XAUUSD=X availability and quality can change. Always compare with your broker.",
             "Never use unverified data for automatic live order execution."
         ]
     }
     failures = []
-    for symbol in SYMBOLS:
+    for symbol, config in SYMBOLS.items():
         result["symbols"][symbol] = {}
         for tf in TIMEFRAMES:
             try:
-                if api_key:
-                    try:
-                        candles, source, note = fetch_twelve(symbol, tf, api_key)
-                    except Exception:
-                        candles, source, note = fetch_yahoo(symbol, tf)
+                if config["provider"] == "binance":
+                    candles, source, note = fetch_binance(symbol, tf)
                 else:
-                    candles, source, note = fetch_yahoo(symbol, tf)
+                    if api_key:
+                        try:
+                            candles, source, note = fetch_twelve(symbol, tf, api_key)
+                        except Exception as twelve_error:
+                            print(f"Twelve Data failed {symbol} {tf}: {twelve_error}")
+                            candles, source, note = fetch_yahoo(symbol, tf)
+                    else:
+                        candles, source, note = fetch_yahoo(symbol, tf)
                 if not candles:
                     raise RuntimeError("No valid OHLC candles")
                 result["symbols"][symbol][tf] = {
@@ -114,7 +150,9 @@ def main():
                 print(f"OK {symbol} {tf}: {len(candles)} candles from {source}")
             except Exception as exc:
                 failures.append(f"{symbol} {tf}: {type(exc).__name__}: {exc}")
-                result["symbols"][symbol][tf] = {"source": None, "count": 0, "candles": [], "error": str(exc)}
+                result["symbols"][symbol][tf] = {
+                    "source": None, "count": 0, "candles": [], "error": str(exc)
+                }
             time.sleep(0.25)
     os.makedirs("data", exist_ok=True)
     with open(OUT, "w", encoding="utf-8") as f:
