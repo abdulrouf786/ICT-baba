@@ -600,7 +600,8 @@ def main():
                                 f"🛑 Stop Loss: {fmt(stop_loss)}\n"
                                 f"🎯 Take Profit: {fmt(take_profit)}\n"
                                 "⚖️ Risk/Reward: 1:2\n"
-                                f"🕒 Signal candle (UTC): {candle_time}\n"
+                                f"🕒 ICT Signal Candle (PKT): {pd.to_datetime(candle_time, utc=True).tz_convert('Asia/Karachi').strftime('%d %b %Y, %I:%M:%S %p PKT')}\n"
+                                f"✅ Entry Setup Detected (PKT): {pd.Timestamp.now(tz='Asia/Karachi').strftime('%d %b %Y, %I:%M:%S %p PKT')}\n"
                                 f"📝 {indicator_signal['reason']}\n\n"
                                 "⚠️ Rule-based educational alert; verify risk before trading."
                             )
