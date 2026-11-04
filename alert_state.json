@@ -5221,7 +5221,8 @@
       "low": 78528.01,
       "high": 78546.35,
       "formed_at": "2026-11-02 04:40:00+00:00",
-      "status": "pending"
+      "status": "filtered_weak",
+      "filtered_at": "2026-11-04 13:00:00+00:00"
     },
     "BTCUSDT|5m|Bearish Order Block|SELL|2026-11-02 04:40:00+00:00": {
       "pair": "BTCUSDT",
@@ -6270,7 +6271,8 @@
       "low": 78271.63,
       "high": 78296.0,
       "formed_at": "2026-11-02 06:20:00+00:00",
-      "status": "pending"
+      "status": "invalidated",
+      "invalidated_at": "2026-11-04 13:00:00+00:00"
     },
     "BTCUSDT|5m|Bearish Order Block|SELL|2026-11-02 06:20:00+00:00": {
       "pair": "BTCUSDT",
@@ -6280,7 +6282,8 @@
       "low": 78335.56,
       "high": 78400.0,
       "formed_at": "2026-11-02 06:20:00+00:00",
-      "status": "pending"
+      "status": "filtered_weak",
+      "filtered_at": "2026-11-04 13:00:00+00:00"
     },
     "BTCUSDT|5m|Bearish FVG|SELL|2026-11-02 06:25:00+00:00": {
       "pair": "BTCUSDT",
@@ -6290,7 +6293,8 @@
       "low": 78221.31,
       "high": 78248.85,
       "formed_at": "2026-11-02 06:25:00+00:00",
-      "status": "pending"
+      "status": "invalidated",
+      "invalidated_at": "2026-11-04 13:00:00+00:00"
     },
     "BTCUSDT|5m|Bearish Order Block|SELL|2026-11-02 06:25:00+00:00": {
       "pair": "BTCUSDT",
@@ -6300,7 +6304,8 @@
       "low": 78335.56,
       "high": 78400.0,
       "formed_at": "2026-11-02 06:25:00+00:00",
-      "status": "pending"
+      "status": "filtered_weak",
+      "filtered_at": "2026-11-04 13:00:00+00:00"
     },
     "BTCUSDT|5m|Bearish Order Block|SELL|2026-11-02 06:35:00+00:00": {
       "pair": "BTCUSDT",
@@ -7329,7 +7334,8 @@
       "low": 78280.01,
       "high": 78292.0,
       "formed_at": "2026-11-02 08:55:00+00:00",
-      "status": "pending"
+      "status": "invalidated",
+      "invalidated_at": "2026-11-04 13:00:00+00:00"
     },
     "BTCUSDT|5m|Bearish FVG|SELL|2026-11-02 09:20:00+00:00": {
       "pair": "BTCUSDT",
@@ -7339,7 +7345,8 @@
       "low": 78243.99,
       "high": 78258.24,
       "formed_at": "2026-11-02 09:20:00+00:00",
-      "status": "pending"
+      "status": "invalidated",
+      "invalidated_at": "2026-11-04 13:00:00+00:00"
     },
     "BTCUSDT|5m|Bearish Order Block|SELL|2026-11-02 09:20:00+00:00": {
       "pair": "BTCUSDT",
@@ -7359,7 +7366,8 @@
       "low": 78218.5,
       "high": 78233.01,
       "formed_at": "2026-11-02 09:25:00+00:00",
-      "status": "pending"
+      "status": "invalidated",
+      "invalidated_at": "2026-11-04 13:00:00+00:00"
     },
     "BTCUSDT|5m|Bearish Order Block|SELL|2026-11-02 09:25:00+00:00": {
       "pair": "BTCUSDT",
@@ -17270,5 +17278,159 @@
     "sent_at": 1793673468.7528646,
     "candle": "2026-11-03 02:15:00+00:00"
   },
-  "active_trades": {}
+  "active_trades": {
+    "indicator|XAUUSD|1m|SELL|2026-11-04 13:07:00+00:00": {
+      "pair": "XAUUSD",
+      "tf": "1m",
+      "symbol": "XAUUSD",
+      "model": "ICT Indicator: Bearish Sweep + MSS + FVG Retest",
+      "direction": "SELL",
+      "entry": 4038.711,
+      "sl": 4045.179,
+      "tp": 4025.774999999999,
+      "status": "active",
+      "created_at": "2026-11-04 13:09:09.648350+00:00",
+      "entry_candle": "2026-11-04 13:08:00+00:00"
+    },
+    "indicator|XAUUSD|5m|BUY|2026-11-04 12:25:00+00:00": {
+      "pair": "XAUUSD",
+      "tf": "5m",
+      "symbol": "XAUUSD",
+      "model": "ICT Indicator: Bullish Sweep + MSS + FVG Retest",
+      "direction": "BUY",
+      "entry": 4041.224,
+      "sl": 4036.624,
+      "tp": 4050.424000000001,
+      "status": "active",
+      "created_at": "2026-11-04 13:09:12.322337+00:00",
+      "entry_candle": "2026-11-04 13:00:00+00:00"
+    },
+    "indicator|XAUUSD|15m|BUY|2026-11-04 09:15:00+00:00": {
+      "pair": "XAUUSD",
+      "tf": "15m",
+      "symbol": "XAUUSD",
+      "model": "ICT Indicator: Bullish Sweep + MSS + FVG Retest",
+      "direction": "BUY",
+      "entry": 4043.744,
+      "sl": 4035.544,
+      "tp": 4060.1440000000007,
+      "status": "active",
+      "created_at": "2026-11-04 13:09:13.867548+00:00",
+      "entry_candle": "2026-11-04 12:45:00+00:00"
+    },
+    "indicator|BTCUSDT|1m|SELL|2026-11-04 13:05:00+00:00": {
+      "pair": "BTCUSDT",
+      "tf": "1m",
+      "symbol": "BTCUSDT",
+      "model": "ICT Indicator: Bearish Sweep + MSS + FVG Retest",
+      "direction": "SELL",
+      "entry": 78384.25,
+      "sl": 78432.01,
+      "tp": 78288.73000000001,
+      "status": "active",
+      "created_at": "2026-11-04 13:09:18.449675+00:00",
+      "entry_candle": "2026-11-04 13:08:00+00:00"
+    },
+    "indicator|BTCUSDT|15m|SELL|2026-11-04 12:15:00+00:00": {
+      "pair": "BTCUSDT",
+      "tf": "15m",
+      "symbol": "BTCUSDT",
+      "model": "ICT Indicator: Bearish Sweep + MSS + FVG Retest",
+      "direction": "SELL",
+      "entry": 78298.0,
+      "sl": 78718.0,
+      "tp": 77458.0,
+      "status": "active",
+      "created_at": "2026-11-04 13:09:24.007003+00:00",
+      "entry_candle": "2026-11-04 12:45:00+00:00"
+    },
+    "indicator|BTCUSDT|1h|BUY|2026-11-04 08:00:00+00:00": {
+      "pair": "BTCUSDT",
+      "tf": "1h",
+      "symbol": "BTCUSDT",
+      "model": "ICT Indicator: Bullish Sweep + MSS + FVG Retest",
+      "direction": "BUY",
+      "entry": 78298.0,
+      "sl": 75736.38,
+      "tp": 83421.23999999999,
+      "status": "active",
+      "created_at": "2026-11-04 13:09:26.215639+00:00",
+      "entry_candle": "2026-11-04 12:00:00+00:00"
+    },
+    "indicator|PAXGUSDT|1m|SELL|2026-11-04 13:07:00+00:00": {
+      "pair": "PAXGUSDT",
+      "tf": "1m",
+      "symbol": "PAXGUSDT",
+      "model": "ICT Indicator: Bearish Sweep + MSS + FVG Retest",
+      "direction": "SELL",
+      "entry": 4035.59,
+      "sl": 4042.29,
+      "tp": 4022.1900000000005,
+      "status": "active",
+      "created_at": "2026-11-04 13:09:40.902436+00:00",
+      "entry_candle": "2026-11-04 13:08:00+00:00"
+    },
+    "indicator|PAXGUSDT|5m|SELL|2026-11-04 12:40:00+00:00": {
+      "pair": "PAXGUSDT",
+      "tf": "5m",
+      "symbol": "PAXGUSDT",
+      "model": "ICT Indicator: Bearish Sweep + MSS + FVG Retest",
+      "direction": "SELL",
+      "entry": 4038.4,
+      "sl": 4048.89,
+      "tp": 4017.4200000000005,
+      "status": "active",
+      "created_at": "2026-11-04 13:09:44.724059+00:00",
+      "entry_candle": "2026-11-04 13:00:00+00:00"
+    },
+    "indicator|PAXGUSDT|15m|BUY|2026-11-04 09:15:00+00:00": {
+      "pair": "PAXGUSDT",
+      "tf": "15m",
+      "symbol": "PAXGUSDT",
+      "model": "ICT Indicator: Bullish Sweep + MSS + FVG Retest",
+      "direction": "BUY",
+      "entry": 4041.05,
+      "sl": 4032.93,
+      "tp": 4057.290000000001,
+      "status": "active",
+      "created_at": "2026-11-04 13:09:48.285362+00:00",
+      "entry_candle": "2026-11-04 12:45:00+00:00"
+    }
+  },
+  "indicator|XAUUSD|1m|SELL|2026-11-04 13:07:00+00:00": {
+    "sent_at": 1793797749.648403,
+    "candle": "2026-11-04 13:08:00+00:00"
+  },
+  "indicator|XAUUSD|5m|BUY|2026-11-04 12:25:00+00:00": {
+    "sent_at": 1793797752.322379,
+    "candle": "2026-11-04 13:00:00+00:00"
+  },
+  "indicator|XAUUSD|15m|BUY|2026-11-04 09:15:00+00:00": {
+    "sent_at": 1793797753.8675897,
+    "candle": "2026-11-04 12:45:00+00:00"
+  },
+  "indicator|BTCUSDT|1m|SELL|2026-11-04 13:05:00+00:00": {
+    "sent_at": 1793797758.4497273,
+    "candle": "2026-11-04 13:08:00+00:00"
+  },
+  "indicator|BTCUSDT|15m|SELL|2026-11-04 12:15:00+00:00": {
+    "sent_at": 1793797764.0070457,
+    "candle": "2026-11-04 12:45:00+00:00"
+  },
+  "indicator|BTCUSDT|1h|BUY|2026-11-04 08:00:00+00:00": {
+    "sent_at": 1793797766.215715,
+    "candle": "2026-11-04 12:00:00+00:00"
+  },
+  "indicator|PAXGUSDT|1m|SELL|2026-11-04 13:07:00+00:00": {
+    "sent_at": 1793797780.9024806,
+    "candle": "2026-11-04 13:08:00+00:00"
+  },
+  "indicator|PAXGUSDT|5m|SELL|2026-11-04 12:40:00+00:00": {
+    "sent_at": 1793797784.7241018,
+    "candle": "2026-11-04 13:00:00+00:00"
+  },
+  "indicator|PAXGUSDT|15m|BUY|2026-11-04 09:15:00+00:00": {
+    "sent_at": 1793797788.285402,
+    "candle": "2026-11-04 12:45:00+00:00"
+  }
 }
