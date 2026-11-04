@@ -17790,6 +17790,52 @@
       "htf_1h": "BULLISH",
       "htf_4h": "NEUTRAL",
       "htf_label": "PARTIAL HTF ALIGNMENT \ud83d\udfe1"
+    },
+    "ETHUSDT|5m|Bullish Order Block|BUY|2026-11-04 18:00:00+00:00": {
+      "pair": "ETHUSDT",
+      "tf": "5m",
+      "model": "Bullish Order Block",
+      "direction": "BUY",
+      "low": 2424.15,
+      "high": 2427.44,
+      "formed_at": "2026-11-04 18:00:00+00:00",
+      "status": "pending",
+      "quality_score": 2,
+      "quality_label": "MODERATE \ud83d\udfe1",
+      "htf_1h": "BULLISH",
+      "htf_4h": "NEUTRAL",
+      "htf_label": "PARTIAL HTF ALIGNMENT \ud83d\udfe1"
+    },
+    "ETHUSDT|5m|Bullish FVG|BUY|2026-11-04 18:05:00+00:00": {
+      "pair": "ETHUSDT",
+      "tf": "5m",
+      "model": "Bullish FVG",
+      "direction": "BUY",
+      "low": 2427.44,
+      "high": 2431.0,
+      "formed_at": "2026-11-04 18:05:00+00:00",
+      "status": "confirmed",
+      "quality_score": 2,
+      "quality_label": "MODERATE \ud83d\udfe1",
+      "htf_1h": "BULLISH",
+      "htf_4h": "NEUTRAL",
+      "htf_label": "PARTIAL HTF ALIGNMENT \ud83d\udfe1",
+      "confirmed_at": "2026-11-04 18:10:00+00:00"
+    },
+    "ETHUSDT|5m|Bullish Order Block|BUY|2026-11-04 18:10:00+00:00": {
+      "pair": "ETHUSDT",
+      "tf": "5m",
+      "model": "Bullish Order Block",
+      "direction": "BUY",
+      "low": 2431.0,
+      "high": 2433.88,
+      "formed_at": "2026-11-04 18:10:00+00:00",
+      "status": "pending",
+      "quality_score": 2,
+      "quality_label": "MODERATE \ud83d\udfe1",
+      "htf_1h": "BULLISH",
+      "htf_4h": "NEUTRAL",
+      "htf_label": "PARTIAL HTF ALIGNMENT \ud83d\udfe1"
     }
   },
   "BTCUSDT|1m|Bearish MSS / CHoCH|SELL": {
@@ -17821,12 +17867,12 @@
     "candle": "2026-11-02 05:40:00+00:00"
   },
   "ETHUSDT|5m|Bullish MSS / CHoCH|BUY": {
-    "sent_at": 1793621858.257565,
-    "candle": "2026-11-02 12:10:00+00:00"
+    "sent_at": 1793816185.6760046,
+    "candle": "2026-11-04 18:10:00+00:00"
   },
   "ETHUSDT|5m|Bullish Mitigation Block|BUY": {
-    "sent_at": 1793598493.5478716,
-    "candle": "2026-11-02 05:40:00+00:00"
+    "sent_at": 1793816186.0475814,
+    "candle": "2026-11-04 18:10:00+00:00"
   },
   "BTCUSDT|5m|Bullish OTE (62%-79%)|BUY": {
     "sent_at": 1793555763.7513912,
@@ -18850,6 +18896,45 @@
       "tp": 4191.519999999999,
       "status": "active",
       "created_at": "2026-11-04 17:23:57.532295+00:00",
+      "entry_candle": ""
+    },
+    "retest|ETHUSDT|5m|Bullish FVG|BUY|2026-11-04 18:05:00+00:00": {
+      "pair": "ETHUSDT",
+      "tf": "5m",
+      "symbol": "ETHUSDT",
+      "model": "Bullish FVG",
+      "direction": "BUY",
+      "entry": 2435.84,
+      "sl": 2427.44,
+      "tp": 2477.8400000000006,
+      "status": "active",
+      "created_at": "2026-11-04 18:16:25.071329+00:00",
+      "entry_candle": "2026-11-04 18:10:00+00:00"
+    },
+    "signal|ETHUSDT|5m|Bullish MSS / CHoCH|BUY|2026-11-04 18:10:00+00:00": {
+      "pair": "ETHUSDT",
+      "tf": "5m",
+      "symbol": "ETHUSDT",
+      "model": "Bullish MSS / CHoCH",
+      "direction": "BUY",
+      "entry": 2435.84,
+      "sl": 2429.39,
+      "tp": 2468.0900000000015,
+      "status": "active",
+      "created_at": "2026-11-04 18:16:25.675977+00:00",
+      "entry_candle": ""
+    },
+    "signal|ETHUSDT|5m|Bullish Mitigation Block|BUY|2026-11-04 18:10:00+00:00": {
+      "pair": "ETHUSDT",
+      "tf": "5m",
+      "symbol": "ETHUSDT",
+      "model": "Bullish Mitigation Block",
+      "direction": "BUY",
+      "entry": 2435.84,
+      "sl": 2429.39,
+      "tp": 2468.0900000000015,
+      "status": "active",
+      "created_at": "2026-11-04 18:16:26.047539+00:00",
       "entry_candle": ""
     }
   },
