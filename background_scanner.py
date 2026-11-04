@@ -410,8 +410,9 @@ def process_retest_alerts(pair, tf, symbol, df, state, htf_cache):
                 f"💰 Planned Entry (zone midpoint): {entry_plan:.{decimals}f}\n"
                 f"🛑 Planned SL: {stop_plan:.{decimals}f}\n"
                 f"🎯 Planned TP: {target_plan:.{decimals}f}\n"
-                "⚖️ Risk/Reward: 1:5\n"
-                "⌛ Status: FVG/OB/MB retest abhi baqi hai\n"
+                "⚖️ Risk/Reward: 1:5\\n"
+                f"🕒 Setup Detected (PKT): {pd.Timestamp.now(tz='Asia/Karachi').strftime('%d %b %Y, %I:%M:%S %p PKT')}\\n"
+                f"⌛ Status: {model} RETEST ABHI BAKI HAI\\n"
                 f"📝 Reason: {reason}\n\n"
                 "⚠️ Yeh planned zone hai, confirmed entry nahi."
             )
@@ -471,8 +472,9 @@ def process_retest_alerts(pair, tf, symbol, df, state, htf_cache):
                 f"💰 Entry (confirmation close): {entry_price:.{decimals}f}\n"
                 f"🛑 Stop Loss: {stop_price:.{decimals}f}\n"
                 f"🎯 Take Profit: {target_price:.{decimals}f}\n"
-                "⚖️ Risk/Reward: 1:5\n"
-                "✅ Price retested the zone and closed back in the trade direction.\n\n"
+                "⚖️ Risk/Reward: 1:5\\n"
+                f"🕒 Entry Confirmed (PKT): {pd.Timestamp.now(tz='Asia/Karachi').strftime('%d %b %Y, %I:%M:%S %p PKT')}\\n"
+                "✅ Price retested the zone and closed back in the trade direction.\\n\\n"
                 "⚠️ Educational setup; verify execution costs and risk before trading."
             )
             zone["status"] = "confirmed"
