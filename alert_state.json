@@ -6215,7 +6215,8 @@
       "low": 78196.01,
       "high": 78198.0,
       "formed_at": "2026-11-02 06:53:00+00:00",
-      "status": "pending"
+      "status": "invalidated",
+      "invalidated_at": "2026-11-04 12:20:00+00:00"
     },
     "BTCUSDT|1m|Bearish FVG|SELL|2026-11-02 06:54:00+00:00": {
       "pair": "BTCUSDT",
@@ -6225,7 +6226,8 @@
       "low": 78165.74,
       "high": 78196.0,
       "formed_at": "2026-11-02 06:54:00+00:00",
-      "status": "pending"
+      "status": "invalidated",
+      "invalidated_at": "2026-11-04 12:20:00+00:00"
     },
     "BTCUSDT|1m|Bearish Order Block|SELL|2026-11-02 06:54:00+00:00": {
       "pair": "BTCUSDT",
@@ -6235,7 +6237,8 @@
       "low": 78198.0,
       "high": 78216.7,
       "formed_at": "2026-11-02 06:54:00+00:00",
-      "status": "pending"
+      "status": "invalidated",
+      "invalidated_at": "2026-11-04 12:20:00+00:00"
     },
     "BTCUSDT|1m|Bearish FVG|SELL|2026-11-02 06:55:00+00:00": {
       "pair": "BTCUSDT",
@@ -6256,7 +6259,8 @@
       "low": 78198.0,
       "high": 78216.7,
       "formed_at": "2026-11-02 06:55:00+00:00",
-      "status": "pending"
+      "status": "invalidated",
+      "invalidated_at": "2026-11-04 12:20:00+00:00"
     },
     "BTCUSDT|5m|Bearish FVG|SELL|2026-11-02 06:20:00+00:00": {
       "pair": "BTCUSDT",
@@ -6756,7 +6760,8 @@
       "low": 78164.0,
       "high": 78187.55,
       "formed_at": "2026-11-02 08:14:00+00:00",
-      "status": "pending"
+      "status": "invalidated",
+      "invalidated_at": "2026-11-04 12:20:00+00:00"
     },
     "BTCUSDT|5m|Bearish Order Block|SELL|2026-11-02 07:40:00+00:00": {
       "pair": "BTCUSDT",
@@ -7258,7 +7263,8 @@
       "low": 78212.0,
       "high": 78237.03,
       "formed_at": "2026-11-02 09:25:00+00:00",
-      "status": "pending"
+      "status": "invalidated",
+      "invalidated_at": "2026-11-04 12:20:00+00:00"
     },
     "BTCUSDT|1m|Bearish FVG|SELL|2026-11-02 09:26:00+00:00": {
       "pair": "BTCUSDT",
@@ -7268,7 +7274,8 @@
       "low": 78179.43,
       "high": 78212.0,
       "formed_at": "2026-11-02 09:26:00+00:00",
-      "status": "pending"
+      "status": "invalidated",
+      "invalidated_at": "2026-11-04 12:20:00+00:00"
     },
     "BTCUSDT|1m|Bearish Order Block|SELL|2026-11-02 09:26:00+00:00": {
       "pair": "BTCUSDT",
@@ -7278,7 +7285,8 @@
       "low": 78212.0,
       "high": 78237.03,
       "formed_at": "2026-11-02 09:26:00+00:00",
-      "status": "pending"
+      "status": "invalidated",
+      "invalidated_at": "2026-11-04 12:20:00+00:00"
     },
     "BTCUSDT|1m|Bearish Order Block|SELL|2026-11-02 09:28:00+00:00": {
       "pair": "BTCUSDT",
@@ -7288,7 +7296,8 @@
       "low": 78176.47,
       "high": 78183.72,
       "formed_at": "2026-11-02 09:28:00+00:00",
-      "status": "pending"
+      "status": "invalidated",
+      "invalidated_at": "2026-11-04 12:20:00+00:00"
     },
     "BTCUSDT|1m|Bearish FVG|SELL|2026-11-02 09:29:00+00:00": {
       "pair": "BTCUSDT",
@@ -7298,7 +7307,8 @@
       "low": 78153.45,
       "high": 78176.47,
       "formed_at": "2026-11-02 09:29:00+00:00",
-      "status": "pending"
+      "status": "invalidated",
+      "invalidated_at": "2026-11-04 12:20:00+00:00"
     },
     "BTCUSDT|1m|Bearish Order Block|SELL|2026-11-02 09:29:00+00:00": {
       "pair": "BTCUSDT",
@@ -7308,7 +7318,8 @@
       "low": 78176.47,
       "high": 78183.72,
       "formed_at": "2026-11-02 09:29:00+00:00",
-      "status": "pending"
+      "status": "invalidated",
+      "invalidated_at": "2026-11-04 12:20:00+00:00"
     },
     "BTCUSDT|5m|Bearish FVG|SELL|2026-11-02 08:55:00+00:00": {
       "pair": "BTCUSDT",
@@ -8684,7 +8695,8 @@
       "low": 78025.78,
       "high": 78044.72,
       "formed_at": "2026-11-02 10:55:00+00:00",
-      "status": "pending"
+      "status": "invalidated",
+      "invalidated_at": "2026-11-04 12:20:00+00:00"
     },
     "BTCUSDT|1m|Bearish FVG|SELL|2026-11-02 10:56:00+00:00": {
       "pair": "BTCUSDT",
@@ -8705,7 +8717,8 @@
       "low": 78025.78,
       "high": 78044.72,
       "formed_at": "2026-11-02 10:56:00+00:00",
-      "status": "pending"
+      "status": "invalidated",
+      "invalidated_at": "2026-11-04 12:20:00+00:00"
     },
     "BTCUSDT|1m|Bearish FVG|SELL|2026-11-02 10:57:00+00:00": {
       "pair": "BTCUSDT",
@@ -11436,7 +11449,8 @@
       "low": 77560.0,
       "high": 77588.02,
       "formed_at": "2026-11-02 16:46:00+00:00",
-      "status": "pending"
+      "status": "invalidated",
+      "invalidated_at": "2026-11-04 12:20:00+00:00"
     },
     "BTCUSDT|1m|Bearish FVG|SELL|2026-11-02 16:48:00+00:00": {
       "pair": "BTCUSDT",
@@ -13536,7 +13550,8 @@
       "low": 77158.0,
       "high": 77220.0,
       "formed_at": "2026-11-02 20:28:00+00:00",
-      "status": "pending"
+      "status": "invalidated",
+      "invalidated_at": "2026-11-04 12:20:00+00:00"
     },
     "BTCUSDT|1m|Bearish FVG|SELL|2026-11-02 20:29:00+00:00": {
       "pair": "BTCUSDT",
@@ -13557,7 +13572,8 @@
       "low": 77158.0,
       "high": 77220.0,
       "formed_at": "2026-11-02 20:29:00+00:00",
-      "status": "pending"
+      "status": "invalidated",
+      "invalidated_at": "2026-11-04 12:20:00+00:00"
     },
     "BTCUSDT|1m|Bearish FVG|SELL|2026-11-02 20:30:00+00:00": {
       "pair": "BTCUSDT",
@@ -13578,7 +13594,8 @@
       "low": 77158.0,
       "high": 77220.0,
       "formed_at": "2026-11-02 20:30:00+00:00",
-      "status": "pending"
+      "status": "invalidated",
+      "invalidated_at": "2026-11-04 12:20:00+00:00"
     },
     "BTCUSDT|1m|Bearish FVG|SELL|2026-11-02 20:31:00+00:00": {
       "pair": "BTCUSDT",
@@ -13599,7 +13616,8 @@
       "low": 77158.0,
       "high": 77220.0,
       "formed_at": "2026-11-02 20:31:00+00:00",
-      "status": "pending"
+      "status": "invalidated",
+      "invalidated_at": "2026-11-04 12:20:00+00:00"
     },
     "BTCUSDT|1m|Bearish FVG|SELL|2026-11-02 20:32:00+00:00": {
       "pair": "BTCUSDT",
