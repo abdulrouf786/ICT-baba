@@ -7356,7 +7356,8 @@
       "low": 78246.85,
       "high": 78357.23,
       "formed_at": "2026-11-02 09:20:00+00:00",
-      "status": "pending"
+      "status": "invalidated",
+      "invalidated_at": "2026-11-04 13:15:00+00:00"
     },
     "BTCUSDT|5m|Bearish FVG|SELL|2026-11-02 09:25:00+00:00": {
       "pair": "BTCUSDT",
@@ -7377,7 +7378,8 @@
       "low": 78246.85,
       "high": 78357.23,
       "formed_at": "2026-11-02 09:25:00+00:00",
-      "status": "pending"
+      "status": "invalidated",
+      "invalidated_at": "2026-11-04 13:15:00+00:00"
     },
     "BTCUSDT|15m|Bullish Order Block|BUY|2026-11-02 08:30:00+00:00": {
       "pair": "BTCUSDT",
@@ -17301,9 +17303,10 @@
       "entry": 4041.224,
       "sl": 4036.624,
       "tp": 4050.424000000001,
-      "status": "active",
+      "status": "sl_hit",
       "created_at": "2026-11-04 13:09:12.322337+00:00",
-      "entry_candle": "2026-11-04 13:00:00+00:00"
+      "entry_candle": "2026-11-04 13:00:00+00:00",
+      "closed_at": "2026-11-04 13:15:00+00:00"
     },
     "indicator|XAUUSD|15m|BUY|2026-11-04 09:15:00+00:00": {
       "pair": "XAUUSD",
@@ -17395,6 +17398,59 @@
       "status": "active",
       "created_at": "2026-11-04 13:09:48.285362+00:00",
       "entry_candle": "2026-11-04 12:45:00+00:00"
+    },
+    "indicator|XAUUSD|1m|SELL|2026-11-04 13:16:00+00:00": {
+      "pair": "XAUUSD",
+      "tf": "1m",
+      "symbol": "XAUUSD",
+      "model": "ICT Indicator: Bearish Sweep + MSS + FVG Retest",
+      "direction": "SELL",
+      "entry": 4037.713,
+      "sl": 4045.179,
+      "tp": 4022.7810000000004,
+      "status": "active",
+      "created_at": "2026-11-04 13:21:55.084591+00:00",
+      "entry_candle": "2026-11-04 13:20:00+00:00"
+    },
+    "indicator|ETHUSDT|1m|SELL|2026-11-04 13:16:00+00:00": {
+      "pair": "ETHUSDT",
+      "tf": "1m",
+      "symbol": "ETHUSDT",
+      "model": "ICT Indicator: Bearish Sweep + MSS + FVG Retest",
+      "direction": "SELL",
+      "entry": 2316.75,
+      "sl": 2320.38,
+      "tp": 2309.49,
+      "status": "active",
+      "created_at": "2026-11-04 13:22:14.148226+00:00",
+      "entry_candle": "2026-11-04 13:21:00+00:00"
+    },
+    "indicator|ETHUSDT|5m|BUY|2026-11-04 13:05:00+00:00": {
+      "pair": "ETHUSDT",
+      "tf": "5m",
+      "symbol": "ETHUSDT",
+      "model": "ICT Indicator: Bullish Sweep + MSS + FVG Retest",
+      "direction": "BUY",
+      "entry": 2318.34,
+      "sl": 2310.41,
+      "tp": 2334.2000000000007,
+      "status": "active",
+      "created_at": "2026-11-04 13:22:18.308859+00:00",
+      "entry_candle": "2026-11-04 13:15:00+00:00"
+    },
+    "indicator|PAXGUSDT|1m|BUY|2026-11-04 13:20:00+00:00": {
+      "pair": "PAXGUSDT",
+      "tf": "1m",
+      "symbol": "PAXGUSDT",
+      "model": "ICT Indicator: Bullish Sweep + MSS + FVG Retest",
+      "direction": "BUY",
+      "entry": 4034.14,
+      "sl": 4033.16,
+      "tp": 4036.1,
+      "status": "sl_hit",
+      "created_at": "2026-11-04 13:22:25.828635+00:00",
+      "entry_candle": "2026-11-04 13:21:00+00:00",
+      "closed_at": "2026-11-04 13:21:00+00:00"
     }
   },
   "indicator|XAUUSD|1m|SELL|2026-11-04 13:07:00+00:00": {
@@ -17432,5 +17488,21 @@
   "indicator|PAXGUSDT|15m|BUY|2026-11-04 09:15:00+00:00": {
     "sent_at": 1793797788.285402,
     "candle": "2026-11-04 12:45:00+00:00"
+  },
+  "indicator|XAUUSD|1m|SELL|2026-11-04 13:16:00+00:00": {
+    "sent_at": 1793798515.0846355,
+    "candle": "2026-11-04 13:20:00+00:00"
+  },
+  "indicator|ETHUSDT|1m|SELL|2026-11-04 13:16:00+00:00": {
+    "sent_at": 1793798534.1482785,
+    "candle": "2026-11-04 13:21:00+00:00"
+  },
+  "indicator|ETHUSDT|5m|BUY|2026-11-04 13:05:00+00:00": {
+    "sent_at": 1793798538.3089173,
+    "candle": "2026-11-04 13:15:00+00:00"
+  },
+  "indicator|PAXGUSDT|1m|BUY|2026-11-04 13:20:00+00:00": {
+    "sent_at": 1793798545.8286796,
+    "candle": "2026-11-04 13:21:00+00:00"
   }
 }
