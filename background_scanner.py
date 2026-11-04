@@ -540,7 +540,8 @@ def process_trade_outcomes(pair, tf, symbol, df, state):
             f"🎯 TP: {tp:.{decimals}f}\n"
             f"📍 Candle High/Low: {high:.{decimals}f} / {low:.{decimals}f}\n"
             f"{outcome}\n"
-            f"🕒 Candle: {candle_time}\n\n"
+            f"🕯️ Result Candle (PKT): {pd.to_datetime(candle_time, utc=True).tz_convert('Asia/Karachi').strftime('%d %b %Y, %I:%M:%S %p PKT')}\n"
+            f"📣 TP/SL Result Detected (PKT): {pd.Timestamp.now(tz='Asia/Karachi').strftime('%d %b %Y, %I:%M:%S %p PKT')}\n\n"
             "Educational tracking only; actual fills may differ."
         )
         trade["status"] = status
