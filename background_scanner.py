@@ -500,7 +500,8 @@ def register_trade_outcome(state, trade_id, pair, tf, symbol, model, direction, 
         "pair": pair, "tf": tf, "symbol": symbol, "model": model,
         "direction": direction, "entry": float(entry),
         "sl": float(stop_loss), "tp": float(take_profit),
-        "status": "active", "created_at": str(pd.Timestamp.now(tz="UTC")),\n        "entry_candle": str(entry_candle or ""),
+        "status": "active", "created_at": str(pd.Timestamp.now(tz="UTC")),
+        "entry_candle": str(entry_candle or ""),
     }
 
 
