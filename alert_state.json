@@ -17799,12 +17799,13 @@
       "low": 2424.15,
       "high": 2427.44,
       "formed_at": "2026-11-04 18:00:00+00:00",
-      "status": "pending",
+      "status": "invalidated",
       "quality_score": 2,
       "quality_label": "MODERATE \ud83d\udfe1",
       "htf_1h": "BULLISH",
       "htf_4h": "NEUTRAL",
-      "htf_label": "PARTIAL HTF ALIGNMENT \ud83d\udfe1"
+      "htf_label": "PARTIAL HTF ALIGNMENT \ud83d\udfe1",
+      "invalidated_at": "2026-11-04 19:15:00+00:00"
     },
     "ETHUSDT|5m|Bullish FVG|BUY|2026-11-04 18:05:00+00:00": {
       "pair": "ETHUSDT",
@@ -17830,12 +17831,13 @@
       "low": 2431.0,
       "high": 2433.88,
       "formed_at": "2026-11-04 18:10:00+00:00",
-      "status": "pending",
+      "status": "invalidated",
       "quality_score": 2,
       "quality_label": "MODERATE \ud83d\udfe1",
       "htf_1h": "BULLISH",
       "htf_4h": "NEUTRAL",
-      "htf_label": "PARTIAL HTF ALIGNMENT \ud83d\udfe1"
+      "htf_label": "PARTIAL HTF ALIGNMENT \ud83d\udfe1",
+      "invalidated_at": "2026-11-04 19:15:00+00:00"
     }
   },
   "BTCUSDT|1m|Bearish MSS / CHoCH|SELL": {
@@ -17983,8 +17985,8 @@
     "candle": "2026-11-04 14:00:00+00:00"
   },
   "BTCUSDT|4h|Bullish MSS / CHoCH|BUY": {
-    "sent_at": 1793802759.2209456,
-    "candle": "2026-11-04 08:00:00+00:00"
+    "sent_at": 1793820223.433699,
+    "candle": "2026-11-04 12:00:00+00:00"
   },
   "BTCUSDT|4h|Bullish Mitigation Block|BUY": {
     "sent_at": 1793594796.3307838,
@@ -18035,8 +18037,8 @@
     "candle": "2026-11-02 20:33:00+00:00"
   },
   "ETHUSDT|4h|Bullish MSS / CHoCH|BUY": {
-    "sent_at": 1793802775.581286,
-    "candle": "2026-11-04 08:00:00+00:00"
+    "sent_at": 1793820231.9890919,
+    "candle": "2026-11-04 12:00:00+00:00"
   },
   "ETHUSDT|4h|Bullish Mitigation Block|BUY": {
     "sent_at": 1793594809.6394417,
@@ -18907,9 +18909,10 @@
       "entry": 2435.84,
       "sl": 2427.44,
       "tp": 2477.8400000000006,
-      "status": "active",
+      "status": "sl_hit",
       "created_at": "2026-11-04 18:16:25.071329+00:00",
-      "entry_candle": "2026-11-04 18:10:00+00:00"
+      "entry_candle": "2026-11-04 18:10:00+00:00",
+      "closed_at": "2026-11-04 19:15:00+00:00"
     },
     "signal|ETHUSDT|5m|Bullish MSS / CHoCH|BUY|2026-11-04 18:10:00+00:00": {
       "pair": "ETHUSDT",
@@ -18920,9 +18923,10 @@
       "entry": 2435.84,
       "sl": 2429.39,
       "tp": 2468.0900000000015,
-      "status": "active",
+      "status": "sl_hit",
       "created_at": "2026-11-04 18:16:25.675977+00:00",
-      "entry_candle": ""
+      "entry_candle": "",
+      "closed_at": "2026-11-04 19:15:00+00:00"
     },
     "signal|ETHUSDT|5m|Bullish Mitigation Block|BUY|2026-11-04 18:10:00+00:00": {
       "pair": "ETHUSDT",
@@ -18933,8 +18937,35 @@
       "entry": 2435.84,
       "sl": 2429.39,
       "tp": 2468.0900000000015,
-      "status": "active",
+      "status": "sl_hit",
       "created_at": "2026-11-04 18:16:26.047539+00:00",
+      "entry_candle": "",
+      "closed_at": "2026-11-04 19:15:00+00:00"
+    },
+    "signal|BTCUSDT|4h|Bullish MSS / CHoCH|BUY|2026-11-04 12:00:00+00:00": {
+      "pair": "BTCUSDT",
+      "tf": "4h",
+      "symbol": "BTCUSDT",
+      "model": "Bullish MSS / CHoCH",
+      "direction": "BUY",
+      "entry": 80296.01,
+      "sl": 78001.77,
+      "tp": 91767.20999999995,
+      "status": "active",
+      "created_at": "2026-11-04 19:23:43.433650+00:00",
+      "entry_candle": ""
+    },
+    "signal|ETHUSDT|4h|Bullish MSS / CHoCH|BUY|2026-11-04 12:00:00+00:00": {
+      "pair": "ETHUSDT",
+      "tf": "4h",
+      "symbol": "ETHUSDT",
+      "model": "Bullish MSS / CHoCH",
+      "direction": "BUY",
+      "entry": 2425.99,
+      "sl": 2310.0,
+      "tp": 3005.9399999999987,
+      "status": "active",
+      "created_at": "2026-11-04 19:23:51.989040+00:00",
       "entry_candle": ""
     }
   },
