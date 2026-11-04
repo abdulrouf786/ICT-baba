@@ -9,7 +9,7 @@ import pandas as pd
 # Crypto candles come directly from Binance public market-data API (no API key).
 # XAUUSD is kept separate and uses Twelve Data when configured, with Yahoo fallback.
 SYMBOLS = {
-    "XAUUSD": {"provider": "twelve_yahoo", "twelve": "XAU/USD", "yahoo": "XAUUSD=X"},
+    "XAUUSD": {"provider": "twelve_yahoo", "twelve": "XAU/USD", "yahoo": "GC=F"},
     "BTCUSDT": {"provider": "binance", "binance": "BTCUSDT"},
     "ETHUSDT": {"provider": "binance", "binance": "ETHUSDT"},
     "PAXGUSDT": {"provider": "binance", "binance": "PAXGUSDT"},
@@ -22,7 +22,7 @@ OUT = "data/market_data.json"
 def fetch_binance(symbol, tf):
     pair = SYMBOLS[symbol]["binance"]
     response = requests.get(
-        "https://api.binance.com/api/v3/klines",
+        "https://api.binance.vision/api/v3/klines",
         params={"symbol": pair, "interval": tf, "limit": 500},
         headers=HEADERS,
         timeout=25,
@@ -85,7 +85,7 @@ def fetch_yahoo(symbol, tf):
             }).dropna(subset=["open", "high", "low", "close"])
             rows = [{"time": idx.isoformat(), **{k: float(v) for k, v in row.items()}}
                     for idx, row in frame.iterrows()]
-    return rows[-500:], "Yahoo Finance", "Unofficial Yahoo feed; verify against your broker."
+    return rows[-500:], "Yahoo Finance Gold Futures (GC=F)", "Gold futures proxy, NOT broker spot XAUUSD; verify against broker."
 
 
 def fetch_twelve(symbol, tf, api_key):
@@ -117,9 +117,9 @@ def main():
         "refresh_target_minutes": 5,
         "symbols": {},
         "notes": [
-            "Crypto OHLC candles are fetched from Binance public Spot API without an API key.",
+            "Crypto OHLC candles are fetched from Binance public market-data mirror (api.binance.vision), no API key required.",
             "BTCUSDT, ETHUSDT and PAXGUSDT are Binance trading pairs; PAXGUSDT is not broker XAUUSD.",
-            "XAUUSD uses Twelve Data when TWELVE_DATA_API_KEY is configured, with Yahoo fallback.",
+            "XAUUSD uses Twelve Data for spot when configured; fallback GC=F is gold futures, NOT spot XAUUSD.",
             "This is a GitHub-hosted data snapshot, not a continuously running server.",
             "GitHub Actions schedules can be delayed; a 5-minute schedule is not guaranteed.",
             "Never use unverified data for automatic live order execution."
