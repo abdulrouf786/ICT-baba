@@ -389,7 +389,7 @@ def process_retest_alerts(pair, tf, symbol, df, state, htf_cache):
                 quality_score = max(0, quality_score - 1)
             quality_label = "STRONG 🟢" if quality_score >= 4 else ("MODERATE 🟡" if quality_score >= 2 else "WEAK 🔴")
             # Telegram receives STRONG and MODERATE ICT confluence; WEAK is blocked.
-            if quality_score < 4:
+            if quality_score < 2:
                 continue
             entry_plan = (zone_low + zone_high) / 2
             stop_plan = zone_low if direction == "BUY" else zone_high
@@ -577,6 +577,29 @@ def main():
                 setups = scan_ict_setups(df)
                 # Run the GitHub-hosted ICT indicator rules on the same closed candles.
                 indicator_signal = scan_indicator_retest_signal(df)
+                indicator_quality_score = 0
+                indicator_quality_label = "WEAK 🔴"
+                indicator_htf_1h = indicator_htf_4h = "UNAVAILABLE"
+                indicator_htf_label = "HTF NEUTRAL / UNAVAILABLE ⚪"
+                if indicator_signal:
+                    indicator_quality_score, _ = signal_quality(setups, indicator_signal["side"])
+                    indicator_htf_1h, indicator_htf_4h, indicator_htf_label = mtf_confirmation(
+                        pair, indicator_signal["side"], htf_cache
+                    )
+                    desired_bias = "BULLISH" if indicator_signal["side"] == "BUY" else "BEARISH"
+                    if indicator_htf_1h == indicator_htf_4h == desired_bias:
+                        indicator_quality_score = min(5, indicator_quality_score + 1)
+                    elif "COUNTER-TREND" in indicator_htf_label:
+                        indicator_quality_score = max(0, indicator_quality_score - 1)
+                    if indicator_quality_score >= 4:
+                        indicator_quality_label = "STRONG 🟢"
+                    elif indicator_quality_score >= 2:
+                        indicator_quality_label = "MODERATE 🟡"
+                    else:
+                        indicator_quality_label = "WEAK 🔴"
+                    # Filter out only WEAK indicator retest alerts.
+                    if indicator_quality_score < 2:
+                        indicator_signal = None
                 if indicator_signal:
                     signal_key = (
                         f"indicator|{pair}|{tf}|{indicator_signal['side']}|"
@@ -597,6 +620,9 @@ def main():
                                 f"📊 Pair: {symbol}\n"
                                 f"⏱ Timeframe: {tf}\n"
                                 f"🎯 Model: {indicator_signal['model']}\n"
+                                f"🧠 Signal Quality: {indicator_quality_label} ({indicator_quality_score}/5)\n"
+                                f"🧭 1H Trend: {indicator_htf_1h} | 4H Trend: {indicator_htf_4h}\n"
+                                f"🔎 MTF Confirmation: {indicator_htf_label}\n"
                                 f"📈 Direction: {'🟢 BUY' if side == 'BUY' else '🔴 SELL'}\n"
                                 f"📍 FVG Retest Zone: {fmt(indicator_signal['zone_low'])} – {fmt(indicator_signal['zone_high'])}\n"
                                 f"💰 Entry: {fmt(entry)}\n"
@@ -663,8 +689,8 @@ def main():
                     else:
                         quality_label = "WEAK 🔴"
 
-                    # HARD FILTER: send STRONG and MODERATE; never send WEAK Telegram alerts.
-                    if quality_score < 4:
+                    # HARD FILTER: send STRONG and MODERATE (score >= 2); block WEAK.
+                    if quality_score < 2:
                         continue
 
                     if quality_score >= 4:
