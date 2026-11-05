@@ -358,8 +358,10 @@ def add_ict_marks(fig, df, swing_len=5):
 
 
 def get_signal_quality(setups, side):
-    """Heuristic ICT confluence score; educational filter, not AI/profit guarantee."""
+    """Heuristic confluence score; failed-breakout model is rated moderate only when detected."""
     names = [name.lower() for name, direction, _ in setups if direction == side]
+    if any("failed breakout + confirmation" in name for name in names):
+        return 3, "MODERATE 🟡"
     score = 0
     groups = {
         "liquidity": ("liquidity sweep", "turtle soup", "judas swing"),
@@ -412,12 +414,45 @@ def get_ict_zone_prices(df, model_name, model_side):
             return float(ob["low"]), float(ob["high"])
     return low, high
 
+def scan_failed_breakout_setups(df):
+    """Conservative failed-breakout model; uses only completed candles."""
+    found = []
+    if df is None or len(df) < 35:
+        return found
+    d = df.reset_index(drop=True)
+    bar = d.iloc[-1]
+    prior = d.iloc[-21:-1]
+    if len(prior) < 20:
+        return found
+    o, h, l, close = [float(bar[k]) for k in ("open", "high", "low", "close")]
+    range_high = float(prior["high"].max())
+    range_low = float(prior["low"].min())
+    atr = float(bar["ATR 14"]) if "ATR 14" in d and pd.notna(bar["ATR 14"]) else float((prior["high"] - prior["low"]).mean())
+    candle_range = max(h - l, 1e-9)
+    upper_wick = h - max(o, close)
+    lower_wick = min(o, close) - l
+    # Require a meaningful stop-run, close back inside the range, rejection wick,
+    # and close location confirmation. No trade on a breakout that holds outside.
+    if (h > range_high + 0.05 * atr and close < range_high and close < o
+            and upper_wick >= 0.30 * candle_range and close <= l + 0.45 * candle_range):
+        found.append(("Failed Breakout + Confirmation", "SELL",
+                      "BSL breakout failed; candle closed back inside range with bearish rejection"))
+    if (l < range_low - 0.05 * atr and close > range_low and close > o
+            and lower_wick >= 0.30 * candle_range and close >= h - 0.45 * candle_range):
+        found.append(("Failed Breakout + Confirmation", "BUY",
+                      "SSL breakout failed; candle closed back inside range with bullish rejection"))
+    return found
+
 def scan_ict_setups(df):
     """Educational, candle-based ICT setup scanner; all detections use closed candles."""
     found = []
     if len(df) < 30:
         return found
     d = df.reset_index(drop=True)
+    # The new failed-breakout model is the primary entry condition.
+    failed_breakout_setups = scan_failed_breakout_setups(d)
+    if failed_breakout_setups:
+        return failed_breakout_setups
     i = len(d) - 1
     b = d.iloc[i]
     p1 = d.iloc[i - 1]
