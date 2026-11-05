@@ -186,16 +186,18 @@ def scan_indicator_retest_signal(df, pivot_len=3, setup_window=30):
     row = d.iloc[i]
     high, low, close = float(row.high), float(row.low), float(row.close)
     bull_recent = (bull_sweep_idx is not None and bull_mss_idx is not None
+                   and bull_mss_idx > bull_sweep_idx
                    and i - bull_sweep_idx <= setup_window
                    and i - bull_mss_idx <= setup_window)
     bear_recent = (bear_sweep_idx is not None and bear_mss_idx is not None
+                   and bear_mss_idx > bear_sweep_idx
                    and i - bear_sweep_idx <= setup_window
                    and i - bear_mss_idx <= setup_window)
 
     if latest_bull_fvg:
         zone_low, zone_high, formed_idx = latest_bull_fvg
         touched = i > formed_idx and low <= zone_high and high >= zone_low
-        if bull_recent and touched and close > zone_low:
+        if bull_recent and formed_idx > bull_mss_idx and touched and close > zone_high:
             sl = min(bull_sweep_extreme if bull_sweep_extreme is not None else low, low)
             return {"side": "BUY", "zone_low": zone_low, "zone_high": zone_high,
                     "sl": sl, "model": "ICT Indicator: Bullish Sweep + MSS + FVG Retest",
@@ -204,7 +206,7 @@ def scan_indicator_retest_signal(df, pivot_len=3, setup_window=30):
     if latest_bear_fvg:
         zone_low, zone_high, formed_idx = latest_bear_fvg
         touched = i > formed_idx and high >= zone_low and low <= zone_high
-        if bear_recent and touched and close < zone_high:
+        if bear_recent and formed_idx > bear_mss_idx and touched and close < zone_low:
             sl = max(bear_sweep_extreme if bear_sweep_extreme is not None else high, high)
             return {"side": "SELL", "zone_low": zone_low, "zone_high": zone_high,
                     "sl": sl, "model": "ICT Indicator: Bearish Sweep + MSS + FVG Retest",
@@ -370,7 +372,7 @@ def price_decimals(pair):
 
 
 def process_retest_alerts(pair, tf, symbol, df, state, htf_cache):
-    """Send a pending-zone alert, then a retest-confirmed alert with 1:5 RR."""
+    """Send pending/confirmed alerts only after stricter HTF + confluence filters."""
     pending = state.setdefault("pending_retests", {})
     current = df.iloc[-1]
     candle_time = str(current.openTime)
@@ -388,8 +390,11 @@ def process_retest_alerts(pair, tf, symbol, df, state, htf_cache):
             elif "COUNTER-TREND" in htf_label:
                 quality_score = max(0, quality_score - 1)
             quality_label = "STRONG 🟢" if quality_score >= 4 else ("MODERATE 🟡" if quality_score >= 2 else "WEAK 🔴")
-            # Telegram receives STRONG and MODERATE ICT confluence; WEAK is blocked.
-            if quality_score < 2:
+            # Anti-trap filter: 1H must align, 4H cannot oppose, and score must be >=3.
+            desired_bias = "BULLISH" if direction == "BUY" else "BEARISH"
+            if htf_1h != desired_bias or htf_4h not in (desired_bias, "NEUTRAL"):
+                continue
+            if quality_score < 3:
                 continue
             entry_plan = (zone_low + zone_high) / 2
             stop_plan = zone_low if direction == "BUY" else zone_high
@@ -446,8 +451,14 @@ def process_retest_alerts(pair, tf, symbol, df, state, htf_cache):
         )
         if confirmed:
             # Older pending entries without saved MODERATE-or-STRONG score are blocked too.
-            if int(zone.get("quality_score", 0)) < 2:
+            if int(zone.get("quality_score", 0)) < 3:
                 zone["status"] = "filtered_weak"
+                zone["filtered_at"] = candle_time
+                continue
+            desired_bias = "BULLISH" if direction == "BUY" else "BEARISH"
+            current_1h, current_4h, _ = mtf_confirmation(pair, direction, htf_cache)
+            if current_1h != desired_bias or current_4h not in (desired_bias, "NEUTRAL"):
+                zone["status"] = "filtered_trend"
                 zone["filtered_at"] = candle_time
                 continue
             entry_price = current_close
@@ -597,9 +608,15 @@ def main():
                         indicator_quality_label = "MODERATE 🟡"
                     else:
                         indicator_quality_label = "WEAK 🔴"
-                    # Filter out only WEAK indicator retest alerts.
-                    if indicator_quality_score < 2:
+                    # Indicator retest signal itself is sweep -> MSS -> FVG -> strong rejection.
+                    # Require 1H alignment; 4H may align or be neutral, never oppose.
+                    desired_bias = "BULLISH" if indicator_signal["side"] == "BUY" else "BEARISH"
+                    if indicator_htf_1h != desired_bias or indicator_htf_4h not in (desired_bias, "NEUTRAL"):
                         indicator_signal = None
+                    else:
+                        # Base 3 points for complete sweep/MSS/FVG retest; +1 for 4H alignment.
+                        indicator_quality_score = 3 + (1 if indicator_htf_4h == desired_bias else 0)
+                        indicator_quality_label = "STRONG 🟢" if indicator_quality_score >= 4 else "MODERATE 🟡"
                 if indicator_signal:
                     signal_key = (
                         f"indicator|{pair}|{tf}|{indicator_signal['side']}|"
@@ -689,14 +706,17 @@ def main():
                     else:
                         quality_label = "WEAK 🔴"
 
-                    # HARD FILTER: send STRONG and MODERATE (score >= 2); block WEAK.
-                    if quality_score < 2:
+                    # STRICT ANTI-TRAP FILTER: 1H direction must match, 4H cannot oppose.
+                    desired_bias = "BULLISH" if direction == "BUY" else "BEARISH"
+                    if htf_1h != desired_bias or htf_4h not in (desired_bias, "NEUTRAL"):
+                        continue
+                    if quality_score < 3:
                         continue
 
                     if quality_score >= 4:
                         alert_header = "🚨 ICT BABA — STRONG SIGNAL (PRIORITY) 🟢"
                         quality_note = "✅ Strong confluence detected; still verify manually."
-                    elif quality_score >= 2:
+                    elif quality_score >= 3:
                         alert_header = "🌍 ICT BABA — MODERATE SIGNAL 🟡"
                         quality_note = "⚠️ Moderate confluence; wait for extra confirmation."
                     else:
