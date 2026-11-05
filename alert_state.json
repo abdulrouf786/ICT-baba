@@ -20177,12 +20177,13 @@
       "low": 4120.98,
       "high": 4122.51,
       "formed_at": "2026-11-05 05:27:00+00:00",
-      "status": "pending",
+      "status": "filtered_weak",
       "quality_score": 2,
       "quality_label": "MODERATE \ud83d\udfe1",
       "htf_1h": "BULLISH",
       "htf_4h": "BULLISH",
-      "htf_label": "COUNTER-TREND / WEAK HTF \ud83d\udd34"
+      "htf_label": "COUNTER-TREND / WEAK HTF \ud83d\udd34",
+      "filtered_at": "2026-11-05 09:41:00+00:00"
     },
     "PAXGUSDT|1m|Bearish Order Block|SELL|2026-11-05 05:27:00+00:00": {
       "pair": "PAXGUSDT",
@@ -20192,12 +20193,13 @@
       "low": 4120.97,
       "high": 4122.0,
       "formed_at": "2026-11-05 05:27:00+00:00",
-      "status": "pending",
+      "status": "filtered_weak",
       "quality_score": 2,
       "quality_label": "MODERATE \ud83d\udfe1",
       "htf_1h": "BULLISH",
       "htf_4h": "BULLISH",
-      "htf_label": "COUNTER-TREND / WEAK HTF \ud83d\udd34"
+      "htf_label": "COUNTER-TREND / WEAK HTF \ud83d\udd34",
+      "filtered_at": "2026-11-05 09:41:00+00:00"
     },
     "PAXGUSDT|1m|Bearish FVG|SELL|2026-11-05 05:28:00+00:00": {
       "pair": "PAXGUSDT",
@@ -22959,6 +22961,19 @@
       "status": "active",
       "created_at": "2026-11-05 08:32:57.996593+00:00",
       "entry_candle": "2026-11-05 08:31:00+00:00"
+    },
+    "indicator|BTCUSDT|1h|BUY|2026-11-04 23:00:00+00:00": {
+      "pair": "BTCUSDT",
+      "tf": "1h",
+      "symbol": "BTCUSDT",
+      "model": "ICT Indicator: Bullish Sweep + MSS + FVG Retest",
+      "direction": "BUY",
+      "entry": 80494.04,
+      "sl": 75736.38,
+      "tp": 90009.35999999997,
+      "status": "active",
+      "created_at": "2026-11-05 09:42:31.624184+00:00",
+      "entry_candle": "2026-11-05 08:00:00+00:00"
     }
   },
   "indicator|XAUUSD|1m|SELL|2026-11-04 13:07:00+00:00": {
@@ -23108,5 +23123,9 @@
   "XAUUSD|5m|Bullish Mitigation Block|BUY": {
     "sent_at": 1793866502.6799445,
     "candle": "2026-11-05 08:05:00+00:00"
+  },
+  "indicator|BTCUSDT|1h|BUY|2026-11-04 23:00:00+00:00": {
+    "sent_at": 1793871751.6242304,
+    "candle": "2026-11-05 08:00:00+00:00"
   }
 }
