@@ -15262,7 +15262,8 @@
       "low": 2253.26,
       "high": 2253.71,
       "formed_at": "2026-11-02 23:50:00+00:00",
-      "status": "pending"
+      "status": "invalidated",
+      "invalidated_at": "2026-11-05 17:40:00+00:00"
     },
     "ETHUSDT|1m|Bearish Mitigation Block|SELL|2026-11-02 23:52:00+00:00": {
       "pair": "ETHUSDT",
@@ -15294,7 +15295,8 @@
       "low": 2252.66,
       "high": 2253.72,
       "formed_at": "2026-11-02 23:54:00+00:00",
-      "status": "pending"
+      "status": "invalidated",
+      "invalidated_at": "2026-11-05 17:40:00+00:00"
     },
     "ETHUSDT|1m|Bullish Mitigation Block|BUY|2026-11-02 23:54:00+00:00": {
       "pair": "ETHUSDT",
@@ -15304,7 +15306,8 @@
       "low": 2252.51,
       "high": 2253.14,
       "formed_at": "2026-11-02 23:54:00+00:00",
-      "status": "pending"
+      "status": "invalidated",
+      "invalidated_at": "2026-11-05 17:40:00+00:00"
     },
     "ETHUSDT|1m|Bullish FVG|BUY|2026-11-02 23:55:00+00:00": {
       "pair": "ETHUSDT",
@@ -15862,7 +15865,8 @@
       "low": 2258.25,
       "high": 2258.93,
       "formed_at": "2026-11-03 00:30:00+00:00",
-      "status": "pending"
+      "status": "invalidated",
+      "invalidated_at": "2026-11-05 17:40:00+00:00"
     },
     "ETHUSDT|1m|Bullish FVG|BUY|2026-11-03 00:31:00+00:00": {
       "pair": "ETHUSDT",
@@ -15883,7 +15887,8 @@
       "low": 2258.25,
       "high": 2258.93,
       "formed_at": "2026-11-03 00:32:00+00:00",
-      "status": "pending"
+      "status": "invalidated",
+      "invalidated_at": "2026-11-05 17:40:00+00:00"
     },
     "ETHUSDT|1m|Bullish Mitigation Block|BUY|2026-11-03 00:35:00+00:00": {
       "pair": "ETHUSDT",
@@ -15893,7 +15898,8 @@
       "low": 2258.25,
       "high": 2258.93,
       "formed_at": "2026-11-03 00:35:00+00:00",
-      "status": "pending"
+      "status": "invalidated",
+      "invalidated_at": "2026-11-05 17:40:00+00:00"
     },
     "ETHUSDT|1m|Bullish FVG|BUY|2026-11-03 00:36:00+00:00": {
       "pair": "ETHUSDT",
@@ -16281,7 +16287,8 @@
       "low": 2256.58,
       "high": 2257.29,
       "formed_at": "2026-11-03 01:45:00+00:00",
-      "status": "pending"
+      "status": "invalidated",
+      "invalidated_at": "2026-11-05 17:40:00+00:00"
     },
     "ETHUSDT|1m|Bullish Order Block|BUY|2026-11-03 01:48:00+00:00": {
       "pair": "ETHUSDT",
@@ -16302,7 +16309,8 @@
       "low": 2258.68,
       "high": 2259.75,
       "formed_at": "2026-11-03 01:49:00+00:00",
-      "status": "pending"
+      "status": "invalidated",
+      "invalidated_at": "2026-11-05 17:40:00+00:00"
     },
     "ETHUSDT|5m|Bullish Order Block|BUY|2026-11-03 01:25:00+00:00": {
       "pair": "ETHUSDT",
@@ -16356,7 +16364,8 @@
       "low": 2256.21,
       "high": 2262.25,
       "formed_at": "2026-11-03 01:15:00+00:00",
-      "status": "pending"
+      "status": "invalidated",
+      "invalidated_at": "2026-11-05 17:15:00+00:00"
     },
     "EUR/USD|1m|Bearish FVG|SELL|2026-11-03 01:44:00+00:00": {
       "pair": "EUR/USD",
@@ -16678,7 +16687,8 @@
       "low": 2256.31,
       "high": 2259.05,
       "formed_at": "2026-11-03 02:33:00+00:00",
-      "status": "pending"
+      "status": "invalidated",
+      "invalidated_at": "2026-11-05 17:40:00+00:00"
     },
     "ETHUSDT|1m|Bullish Mitigation Block|BUY|2026-11-03 02:33:00+00:00": {
       "pair": "ETHUSDT",
@@ -16688,7 +16698,8 @@
       "low": 2258.43,
       "high": 2259.28,
       "formed_at": "2026-11-03 02:33:00+00:00",
-      "status": "pending"
+      "status": "invalidated",
+      "invalidated_at": "2026-11-05 17:40:00+00:00"
     },
     "ETHUSDT|1m|Bullish FVG|BUY|2026-11-03 02:34:00+00:00": {
       "pair": "ETHUSDT",
@@ -16698,7 +16709,8 @@
       "low": 2258.87,
       "high": 2260.2,
       "formed_at": "2026-11-03 02:34:00+00:00",
-      "status": "pending"
+      "status": "invalidated",
+      "invalidated_at": "2026-11-05 17:40:00+00:00"
     },
     "ETHUSDT|1m|Bullish Order Block|BUY|2026-11-03 02:34:00+00:00": {
       "pair": "ETHUSDT",
@@ -16708,7 +16720,8 @@
       "low": 2256.31,
       "high": 2259.05,
       "formed_at": "2026-11-03 02:34:00+00:00",
-      "status": "pending"
+      "status": "invalidated",
+      "invalidated_at": "2026-11-05 17:40:00+00:00"
     },
     "ETHUSDT|1m|Bullish Order Block|BUY|2026-11-03 02:36:00+00:00": {
       "pair": "ETHUSDT",
@@ -16718,7 +16731,8 @@
       "low": 2261.57,
       "high": 2262.28,
       "formed_at": "2026-11-03 02:36:00+00:00",
-      "status": "pending"
+      "status": "invalidated",
+      "invalidated_at": "2026-11-05 17:40:00+00:00"
     },
     "ETHUSDT|1m|Bullish FVG|BUY|2026-11-03 02:37:00+00:00": {
       "pair": "ETHUSDT",
@@ -16728,7 +16742,8 @@
       "low": 2262.28,
       "high": 2262.35,
       "formed_at": "2026-11-03 02:37:00+00:00",
-      "status": "pending"
+      "status": "invalidated",
+      "invalidated_at": "2026-11-05 17:40:00+00:00"
     },
     "ETHUSDT|5m|Bearish FVG|SELL|2026-11-03 02:00:00+00:00": {
       "pair": "ETHUSDT",
@@ -16771,7 +16786,8 @@
       "low": 2253.37,
       "high": 2257.15,
       "formed_at": "2026-11-03 02:30:00+00:00",
-      "status": "pending"
+      "status": "invalidated",
+      "invalidated_at": "2026-11-05 17:35:00+00:00"
     },
     "EUR/USD|1m|Bearish FVG|SELL|2026-11-03 02:30:00+00:00": {
       "pair": "EUR/USD",
@@ -19677,12 +19693,13 @@
       "low": 4067.43,
       "high": 4081.38,
       "formed_at": "2026-11-05 01:00:00+00:00",
-      "status": "pending",
+      "status": "filtered_weak",
       "quality_score": 2,
       "quality_label": "MODERATE \ud83d\udfe1",
       "htf_1h": "BULLISH",
       "htf_4h": "BULLISH",
-      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
+      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2",
+      "filtered_at": "2026-11-05 16:00:00+00:00"
     },
     "PAXGUSDT|1h|Bullish Order Block|BUY|2026-11-05 01:00:00+00:00": {
       "pair": "PAXGUSDT",
@@ -19724,12 +19741,13 @@
       "low": 4071.654,
       "high": 4084.207,
       "formed_at": "2026-11-05 01:00:00+00:00",
-      "status": "pending",
+      "status": "filtered_weak",
       "quality_score": 2,
       "quality_label": "MODERATE \ud83d\udfe1",
       "htf_1h": "BULLISH",
       "htf_4h": "NEUTRAL",
-      "htf_label": "PARTIAL HTF ALIGNMENT \ud83d\udfe1"
+      "htf_label": "PARTIAL HTF ALIGNMENT \ud83d\udfe1",
+      "filtered_at": "2026-11-05 16:00:00+00:00"
     },
     "XAUUSD|1h|Bullish Order Block|BUY|2026-11-05 01:00:00+00:00": {
       "pair": "XAUUSD",
