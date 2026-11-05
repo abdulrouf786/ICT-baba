@@ -17659,12 +17659,13 @@
       "low": 2244.02,
       "high": 2271.28,
       "formed_at": "2026-11-04 08:00:00+00:00",
-      "status": "pending",
+      "status": "invalidated",
       "quality_score": 3,
       "quality_label": "MODERATE \ud83d\udfe1",
       "htf_1h": "BULLISH",
       "htf_4h": "NEUTRAL",
-      "htf_label": "PARTIAL HTF ALIGNMENT \ud83d\udfe1"
+      "htf_label": "PARTIAL HTF ALIGNMENT \ud83d\udfe1",
+      "invalidated_at": "2026-11-05 21:00:00+00:00"
     },
     "ETHUSDT|1h|Bullish FVG|BUY|2026-11-04 09:00:00+00:00": {
       "pair": "ETHUSDT",
@@ -22453,9 +22454,10 @@
       "entry": 2379.06,
       "sl": 2226.44,
       "tp": 2684.2999999999997,
-      "status": "active",
+      "status": "sl_hit",
       "created_at": "2026-11-04 15:27:43.402618+00:00",
-      "entry_candle": "2026-11-04 14:00:00+00:00"
+      "entry_candle": "2026-11-04 14:00:00+00:00",
+      "closed_at": "2026-11-05 21:00:00+00:00"
     },
     "retest|ETHUSDT|1h|Bullish FVG|BUY|2026-11-04 09:00:00+00:00": {
       "pair": "ETHUSDT",
