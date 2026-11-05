@@ -40,7 +40,10 @@
     "sent_at": 1793806039.7167757,
     "candle": "2026-11-04 15:00:00+00:00"
   },
-  "ETHUSDT|1m|Bullish IFVG|BUY": "2026-11-01 14:24:00+00:00",
+  "ETHUSDT|1m|Bullish IFVG|BUY": {
+    "sent_at": 1793912434.7063649,
+    "candle": "2026-11-01 14:24:00+00:00"
+  },
   "ETHUSDT|15m|Bearish OTE (62%-79%)|SELL": {
     "sent_at": 1793660983.1538992,
     "candle": "2026-11-01 14:00:00+00:00"
@@ -13831,7 +13834,8 @@
       "low": 2242.62,
       "high": 2245.73,
       "formed_at": "2026-11-02 19:55:00+00:00",
-      "status": "pending"
+      "status": "filtered_weak",
+      "filtered_at": "2026-11-05 20:55:00+00:00"
     },
     "ETHUSDT|5m|Bullish FVG|BUY|2026-11-02 20:00:00+00:00": {
       "pair": "ETHUSDT",
@@ -21205,12 +21209,13 @@
       "low": 4094.06,
       "high": 4094.52,
       "formed_at": "2026-11-05 18:25:00+00:00",
-      "status": "pending",
+      "status": "filtered_trend",
       "quality_score": 4,
       "quality_label": "STRONG \ud83d\udfe2",
       "htf_1h": "BULLISH",
       "htf_4h": "BULLISH",
-      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
+      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2",
+      "filtered_at": "2026-11-05 20:59:00+00:00"
     },
     "PAXGUSDT|1m|Bullish Order Block|BUY|2026-11-05 18:25:00+00:00": {
       "pair": "PAXGUSDT",
@@ -21220,12 +21225,13 @@
       "low": 4093.65,
       "high": 4094.06,
       "formed_at": "2026-11-05 18:25:00+00:00",
-      "status": "pending",
+      "status": "filtered_trend",
       "quality_score": 4,
       "quality_label": "STRONG \ud83d\udfe2",
       "htf_1h": "BULLISH",
       "htf_4h": "BULLISH",
-      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
+      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2",
+      "filtered_at": "2026-11-05 20:59:00+00:00"
     },
     "PAXGUSDT|1m|Bullish FVG|BUY|2026-11-05 18:26:00+00:00": {
       "pair": "PAXGUSDT",
@@ -21250,12 +21256,13 @@
       "low": 4093.65,
       "high": 4094.06,
       "formed_at": "2026-11-05 18:26:00+00:00",
-      "status": "pending",
+      "status": "filtered_trend",
       "quality_score": 4,
       "quality_label": "STRONG \ud83d\udfe2",
       "htf_1h": "BULLISH",
       "htf_4h": "BULLISH",
-      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
+      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2",
+      "filtered_at": "2026-11-05 20:59:00+00:00"
     },
     "PAXGUSDT|1m|Bullish FVG|BUY|2026-11-05 18:27:00+00:00": {
       "pair": "PAXGUSDT",
@@ -21281,12 +21288,13 @@
       "low": 4093.65,
       "high": 4094.06,
       "formed_at": "2026-11-05 18:27:00+00:00",
-      "status": "pending",
+      "status": "filtered_trend",
       "quality_score": 4,
       "quality_label": "STRONG \ud83d\udfe2",
       "htf_1h": "BULLISH",
       "htf_4h": "BULLISH",
-      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
+      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2",
+      "filtered_at": "2026-11-05 20:59:00+00:00"
     },
     "BTCUSDT|4h|Bearish Order Block|SELL|2026-11-05 12:00:00+00:00": {
       "pair": "BTCUSDT",
@@ -21326,12 +21334,13 @@
       "low": 4107.607,
       "high": 4111.8,
       "formed_at": "2026-11-05 19:45:00+00:00",
-      "status": "pending",
+      "status": "invalidated",
       "quality_score": 4,
       "quality_label": "STRONG \ud83d\udfe2",
       "htf_1h": "BULLISH",
       "htf_4h": "BULLISH",
-      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
+      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2",
+      "invalidated_at": "2026-11-05 20:45:00+00:00"
     },
     "XAUUSD|15m|Bullish Order Block|BUY|2026-11-05 19:45:00+00:00": {
       "pair": "XAUUSD",
@@ -21461,12 +21470,13 @@
       "low": 4095.43,
       "high": 4103.9,
       "formed_at": "2026-11-05 19:30:00+00:00",
-      "status": "pending",
+      "status": "invalidated",
       "quality_score": 4,
       "quality_label": "STRONG \ud83d\udfe2",
       "htf_1h": "BULLISH",
       "htf_4h": "BULLISH",
-      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
+      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2",
+      "invalidated_at": "2026-11-05 20:45:00+00:00"
     },
     "PAXGUSDT|15m|Bullish FVG|BUY|2026-11-05 19:45:00+00:00": {
       "pair": "PAXGUSDT",
@@ -21476,12 +21486,13 @@
       "low": 4103.9,
       "high": 4108.18,
       "formed_at": "2026-11-05 19:45:00+00:00",
-      "status": "pending",
+      "status": "invalidated",
       "quality_score": 4,
       "quality_label": "STRONG \ud83d\udfe2",
       "htf_1h": "BULLISH",
       "htf_4h": "BULLISH",
-      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
+      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2",
+      "invalidated_at": "2026-11-05 20:45:00+00:00"
     },
     "PAXGUSDT|15m|Bullish Order Block|BUY|2026-11-05 19:45:00+00:00": {
       "pair": "PAXGUSDT",
@@ -21491,12 +21502,13 @@
       "low": 4095.43,
       "high": 4103.9,
       "formed_at": "2026-11-05 19:45:00+00:00",
-      "status": "pending",
+      "status": "invalidated",
       "quality_score": 4,
       "quality_label": "STRONG \ud83d\udfe2",
       "htf_1h": "BULLISH",
       "htf_4h": "BULLISH",
-      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
+      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2",
+      "invalidated_at": "2026-11-05 20:45:00+00:00"
     }
   },
   "BTCUSDT|1m|Bearish MSS / CHoCH|SELL": {
@@ -23967,9 +23979,10 @@
       "entry": 4114.613,
       "sl": 4111.8,
       "tp": 4128.678000000001,
-      "status": "active",
+      "status": "sl_hit",
       "created_at": "2026-11-05 20:14:01.069307+00:00",
-      "entry_candle": ""
+      "entry_candle": "",
+      "closed_at": "2026-11-05 20:45:00+00:00"
     },
     "signal|ETHUSDT|5m|Bearish MSS / CHoCH|SELL|2026-11-05 20:05:00+00:00": {
       "pair": "ETHUSDT",
@@ -23993,9 +24006,10 @@
       "entry": 4111.28,
       "sl": 4108.18,
       "tp": 4126.779999999997,
-      "status": "active",
+      "status": "sl_hit",
       "created_at": "2026-11-05 20:14:37.702294+00:00",
-      "entry_candle": ""
+      "entry_candle": "",
+      "closed_at": "2026-11-05 20:45:00+00:00"
     }
   },
   "indicator|XAUUSD|1m|SELL|2026-11-04 13:07:00+00:00": {
