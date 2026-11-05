@@ -19870,12 +19870,13 @@
       "low": 2424.41,
       "high": 2430.4,
       "formed_at": "2026-11-05 04:00:00+00:00",
-      "status": "pending",
+      "status": "filtered_weak",
       "quality_score": 2,
       "quality_label": "MODERATE \ud83d\udfe1",
       "htf_1h": "BULLISH",
       "htf_4h": "BULLISH",
-      "htf_label": "COUNTER-TREND / WEAK HTF \ud83d\udd34"
+      "htf_label": "COUNTER-TREND / WEAK HTF \ud83d\udd34",
+      "filtered_at": "2026-11-05 08:30:00+00:00"
     },
     "ETHUSDT|15m|Bearish Order Block|SELL|2026-11-05 04:00:00+00:00": {
       "pair": "ETHUSDT",
