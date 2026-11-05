@@ -20792,6 +20792,21 @@
       "htf_4h": "BULLISH",
       "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2",
       "confirmed_at": "2026-11-05 08:25:00+00:00"
+    },
+    "PAXGUSDT|5m|Bullish Order Block|BUY|2026-11-05 10:35:00+00:00": {
+      "pair": "PAXGUSDT",
+      "tf": "5m",
+      "model": "Bullish Order Block",
+      "direction": "BUY",
+      "low": 4116.79,
+      "high": 4118.81,
+      "formed_at": "2026-11-05 10:35:00+00:00",
+      "status": "pending",
+      "quality_score": 3,
+      "quality_label": "MODERATE \ud83d\udfe1",
+      "htf_1h": "BULLISH",
+      "htf_4h": "BULLISH",
+      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
     }
   },
   "BTCUSDT|1m|Bearish MSS / CHoCH|SELL": {
@@ -22974,6 +22989,32 @@
       "status": "active",
       "created_at": "2026-11-05 09:42:31.624184+00:00",
       "entry_candle": "2026-11-05 08:00:00+00:00"
+    },
+    "signal|PAXGUSDT|5m|Bullish MSS / CHoCH|BUY|2026-11-05 10:35:00+00:00": {
+      "pair": "PAXGUSDT",
+      "tf": "5m",
+      "symbol": "PAXGUSDT",
+      "model": "Bullish MSS / CHoCH",
+      "direction": "BUY",
+      "entry": 4120.0,
+      "sl": 4117.35,
+      "tp": 4133.249999999998,
+      "status": "active",
+      "created_at": "2026-11-05 10:44:23.614386+00:00",
+      "entry_candle": ""
+    },
+    "signal|PAXGUSDT|5m|Bullish Mitigation Block|BUY|2026-11-05 10:35:00+00:00": {
+      "pair": "PAXGUSDT",
+      "tf": "5m",
+      "symbol": "PAXGUSDT",
+      "model": "Bullish Mitigation Block",
+      "direction": "BUY",
+      "entry": 4120.0,
+      "sl": 4117.35,
+      "tp": 4133.249999999998,
+      "status": "active",
+      "created_at": "2026-11-05 10:44:24.207685+00:00",
+      "entry_candle": ""
     }
   },
   "indicator|XAUUSD|1m|SELL|2026-11-04 13:07:00+00:00": {
@@ -23127,5 +23168,13 @@
   "indicator|BTCUSDT|1h|BUY|2026-11-04 23:00:00+00:00": {
     "sent_at": 1793871751.6242304,
     "candle": "2026-11-05 08:00:00+00:00"
+  },
+  "PAXGUSDT|5m|Bullish MSS / CHoCH|BUY": {
+    "sent_at": 1793875463.6144323,
+    "candle": "2026-11-05 10:35:00+00:00"
+  },
+  "PAXGUSDT|5m|Bullish Mitigation Block|BUY": {
+    "sent_at": 1793875464.2077308,
+    "candle": "2026-11-05 10:35:00+00:00"
   }
 }
