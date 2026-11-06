@@ -665,14 +665,14 @@ def main():
                                  else "📉 VSA NO DEMAND — SELL WATCH" if vsa["kind"] == "NO_DEMAND"
                                  else "📈 VSA NO SUPPLY — BUY WATCH")
                     send_telegram(
-                        f"{vsa_title}\\n\\n"
-                        f"📊 Pair: {symbol}\\n"
-                        f"⏱ Timeframe: {tf}\\n"
-                        f"🕒 Candle time (PKT): {pd.to_datetime(candle_time, utc=True).tz_convert('Asia/Karachi').strftime('%d %b %Y, %I:%M:%S %p PKT')}\\n"
-                        f"📈 Direction: {'🟢 BUY' if vsa['side'] == 'BUY' else '🔴 SELL'}\\n"
-                        f"💰 Candle close / reference: {vsa_fmt(vsa_entry)}\\n"
-                        f"🧠 VSA Type: {vsa['kind']}\\n"
-                        f"📝 {vsa['reason']}\\n\\n"
+                        f"{vsa_title}\n\n"
+                        f"📊 Pair: {symbol}\n"
+                        f"⏱ Timeframe: {tf}\n"
+                        f"🕒 Candle time (PKT): {pd.to_datetime(candle_time, utc=True).tz_convert('Asia/Karachi').strftime('%d %b %Y, %I:%M:%S %p PKT')}\n"
+                        f"📈 Direction: {'🟢 BUY' if vsa['side'] == 'BUY' else '🔴 SELL'}\n"
+                        f"💰 Candle close / reference: {vsa_fmt(vsa_entry)}\n"
+                        f"🧠 VSA Type: {vsa['kind']}\n"
+                        f"📝 {vsa['reason']}\n\n"
                         "⚠️ VSA volume alert only—not a guaranteed entry. Confirm price action and risk."
                     )
                     state[vsa_key] = {"sent_at": time.time(), "candle": candle_time}
