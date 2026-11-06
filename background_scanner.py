@@ -133,71 +133,6 @@ def scan_ict_setups(df):
 
 
 
-def scan_vsa_setups(df, climax_window=5):
-    """Detect volume climax and subsequent VSA No Demand / No Supply.
-    Requires real OHLCV volume; skips feeds with missing/zero volume.
-    """
-    d = df.reset_index(drop=True).copy()
-    if len(d) < 25 or "volume" not in d.columns:
-        return []
-    d["volume"] = pd.to_numeric(d["volume"], errors="coerce")
-    if d["volume"].isna().all() or float(d["volume"].fillna(0).max()) <= 0:
-        return []
-    d["spread"] = d["high"].astype(float) - d["low"].astype(float)
-    d["vol_avg20"] = d["volume"].rolling(20, min_periods=15).mean()
-    d["spread_avg10"] = d["spread"].rolling(10, min_periods=8).mean()
-    i = len(d) - 1
-    b = d.iloc[i]
-    vol = float(b.volume)
-    avg_vol = float(b.vol_avg20) if pd.notna(b.vol_avg20) else 0.0
-    spread = float(b.spread)
-    avg_spread = float(b.spread_avg10) if pd.notna(b.spread_avg10) else 0.0
-    if avg_vol <= 0 or avg_spread <= 0 or spread <= 0:
-        return []
-    prior_vols = d.iloc[max(0, i-2):i]["volume"].astype(float)
-    prior_spreads = d.iloc[max(0, i-2):i]["spread"].astype(float)
-    signals = []
-
-    # Volume climax: volume >= 2x 20-bar average and candle range >= 1.3x average.
-    is_climax = vol >= 2.0 * avg_vol and spread >= 1.3 * avg_spread
-    if is_climax:
-        side = "BUY" if float(b.close) > float(b.open) else "SELL" if float(b.close) < float(b.open) else None
-        if side:
-            signals.append({
-                "kind": "CLIMAX", "side": side,
-                "reason": f"Volume {vol/avg_vol:.1f}x 20-bar average; wide-range candle"
-            })
-
-    # No Demand / No Supply: narrow spread, lower volume than previous two bars,
-    # and low volume relative to 20-bar average. Require a recent climax context.
-    recent = d.iloc[max(0, i-climax_window-1):i]
-    recent_climax = False
-    for _, r in recent.iterrows():
-        rv = float(r.volume) if pd.notna(r.volume) else 0.0
-        rav = float(r.vol_avg20) if pd.notna(r.vol_avg20) else 0.0
-        rs = float(r.spread) if pd.notna(r.spread) else 0.0
-        ras = float(r.spread_avg10) if pd.notna(r.spread_avg10) else 0.0
-        if rav > 0 and ras > 0 and rv >= 2.0 * rav and rs >= 1.3 * ras:
-            recent_climax = True
-            break
-
-    lower_than_prev2 = len(prior_vols) == 2 and vol < float(prior_vols.iloc[-1]) and vol < float(prior_vols.iloc[-2])
-    narrow = spread <= 0.75 * avg_spread
-    low_volume = vol <= 0.70 * avg_vol
-    if recent_climax and lower_than_prev2 and narrow and low_volume:
-        if float(b.close) > float(b.open):
-            signals.append({
-                "kind": "NO_DEMAND", "side": "SELL",
-                "reason": "After recent volume climax: up-close narrow candle on low volume (No Demand)"
-            })
-        elif float(b.close) < float(b.open):
-            signals.append({
-                "kind": "NO_SUPPLY", "side": "BUY",
-                "reason": "After recent volume climax: down-close narrow candle on low volume (No Supply)"
-            })
-    return signals
-
-
 def scan_indicator_retest_signal(df, pivot_len=3, setup_window=30):
     """
     Python implementation of the GitHub Pine indicator's core setup:
@@ -652,31 +587,6 @@ def main():
                 df = df.iloc[:-1].copy().reset_index(drop=True)
                 candle_time = str(df.iloc[-1].openTime)
                 setups = scan_ict_setups(df)
-                # VSA alerts are independent Telegram messages; existing ICT logic remains unchanged.
-                for vsa in scan_vsa_setups(df):
-                    vsa_key = f"vsa|{pair}|{tf}|{vsa['kind']}|{candle_time}"
-                    if vsa_key in state:
-                        continue
-                    candle = df.iloc[-1]
-                    vsa_entry = float(candle.close)
-                    decimals = price_decimals(pair)
-                    vsa_fmt = lambda value: f"{value:.{decimals}f}"
-                    vsa_title = ("🔥 CLIMACTIC ACTION BAR" if vsa["kind"] == "CLIMAX"
-                                 else "📉 VSA NO DEMAND — SELL WATCH" if vsa["kind"] == "NO_DEMAND"
-                                 else "📈 VSA NO SUPPLY — BUY WATCH")
-                    send_telegram(
-                        f"{vsa_title}\n\n"
-                        f"📊 Pair: {symbol}\n"
-                        f"⏱ Timeframe: {tf}\n"
-                        f"🕒 Candle time (PKT): {pd.to_datetime(candle_time, utc=True).tz_convert('Asia/Karachi').strftime('%d %b %Y, %I:%M:%S %p PKT')}\n"
-                        f"📈 Direction: {'🟢 BUY' if vsa['side'] == 'BUY' else '🔴 SELL'}\n"
-                        f"💰 Candle close / reference: {vsa_fmt(vsa_entry)}\n"
-                        f"🧠 VSA Type: {vsa['kind']}\n"
-                        f"📝 {vsa['reason']}\n\n"
-                        "⚠️ VSA volume alert only—not a guaranteed entry. Confirm price action and risk."
-                    )
-                    state[vsa_key] = {"sent_at": time.time(), "candle": candle_time}
-                    sent += 1
                 # Run the GitHub-hosted ICT indicator rules on the same closed candles.
                 indicator_signal = scan_indicator_retest_signal(df)
                 indicator_quality_score = 0
