@@ -206,17 +206,6 @@
       "status": "invalidated",
       "invalidated_at": "2026-11-01 23:00:00+00:00"
     },
-    "XAUUSD|1h|Bearish FVG|SELL|2026-10-30 14:00:00+00:00": {
-      "pair": "XAUUSD",
-      "tf": "1h",
-      "model": "Bearish FVG",
-      "direction": "SELL",
-      "low": 3921.465,
-      "high": 3953.705,
-      "formed_at": "2026-10-30 14:00:00+00:00",
-      "status": "invalidated",
-      "invalidated_at": "2026-11-02 14:00:00+00:00"
-    },
     "XAUUSD|1h|Bearish FVG|SELL|2026-10-30 18:00:00+00:00": {
       "pair": "XAUUSD",
       "tf": "1h",
@@ -656,17 +645,6 @@
       "formed_at": "2026-10-30 21:00:00+00:00",
       "status": "invalidated",
       "invalidated_at": "2026-11-02 01:45:00+00:00"
-    },
-    "EUR/USD|1h|Bearish FVG|SELL|2026-10-30 14:00:00+00:00": {
-      "pair": "EUR/USD",
-      "tf": "1h",
-      "model": "Bearish FVG",
-      "direction": "SELL",
-      "low": 1.116071343421936,
-      "high": 1.1174432039260864,
-      "formed_at": "2026-10-30 14:00:00+00:00",
-      "status": "invalidated",
-      "invalidated_at": "2026-11-02 04:00:00+00:00"
     },
     "EUR/USD|1h|Bullish FVG|BUY|2026-10-30 19:00:00+00:00": {
       "pair": "EUR/USD",
@@ -17749,12 +17727,13 @@
       "low": 4016.95,
       "high": 4029.96,
       "formed_at": "2026-11-04 13:00:00+00:00",
-      "status": "pending",
+      "status": "filtered_weak",
       "quality_score": 2,
       "quality_label": "MODERATE \ud83d\udfe1",
       "htf_1h": "BULLISH",
       "htf_4h": "NEUTRAL",
-      "htf_label": "PARTIAL HTF ALIGNMENT \ud83d\udfe1"
+      "htf_label": "PARTIAL HTF ALIGNMENT \ud83d\udfe1",
+      "filtered_at": "2026-11-06 14:00:00+00:00"
     },
     "PAXGUSDT|1h|Bullish Order Block|BUY|2026-11-04 16:00:00+00:00": {
       "pair": "PAXGUSDT",
@@ -22166,12 +22145,13 @@
       "low": 76102.01,
       "high": 76130.0,
       "formed_at": "2026-11-06 13:00:00+00:00",
-      "status": "pending",
+      "status": "confirmed",
       "quality_score": 4,
       "quality_label": "STRONG \ud83d\udfe2",
       "htf_1h": "BEARISH",
       "htf_4h": "BEARISH",
-      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
+      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2",
+      "confirmed_at": "2026-11-06 14:45:00+00:00"
     },
     "BTCUSDT|15m|Bearish Order Block|SELL|2026-11-06 13:00:00+00:00": {
       "pair": "BTCUSDT",
@@ -22181,12 +22161,13 @@
       "low": 76124.0,
       "high": 76378.0,
       "formed_at": "2026-11-06 13:00:00+00:00",
-      "status": "pending",
+      "status": "confirmed",
       "quality_score": 4,
       "quality_label": "STRONG \ud83d\udfe2",
       "htf_1h": "BEARISH",
       "htf_4h": "BEARISH",
-      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
+      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2",
+      "confirmed_at": "2026-11-06 14:45:00+00:00"
     }
   },
   "BTCUSDT|1m|Bearish MSS / CHoCH|SELL": {
@@ -25022,9 +25003,10 @@
       "entry": 75938.01,
       "sl": 75956.0,
       "tp": 75848.05999999997,
-      "status": "active",
+      "status": "tp_hit",
       "created_at": "2026-11-06 13:26:37.387833+00:00",
-      "entry_candle": ""
+      "entry_candle": "",
+      "closed_at": "2026-11-06 15:12:00+00:00"
     },
     "indicator|BTCUSDT|5m|SELL|2026-11-06 13:05:00+00:00": {
       "pair": "BTCUSDT",
@@ -25035,9 +25017,10 @@
       "entry": 75956.0,
       "sl": 76337.86,
       "tp": 75192.28,
-      "status": "active",
+      "status": "tp_hit",
       "created_at": "2026-11-06 13:26:38.786784+00:00",
-      "entry_candle": "2026-11-06 13:20:00+00:00"
+      "entry_candle": "2026-11-06 13:20:00+00:00",
+      "closed_at": "2026-11-06 15:05:00+00:00"
     },
     "signal|BTCUSDT|15m|Bearish MSS / CHoCH|SELL|2026-11-06 13:00:00+00:00": {
       "pair": "BTCUSDT",
@@ -25048,9 +25031,50 @@
       "entry": 75906.01,
       "sl": 76102.01,
       "tp": 74926.01,
-      "status": "active",
+      "status": "sl_hit",
       "created_at": "2026-11-06 13:26:43.017102+00:00",
-      "entry_candle": ""
+      "entry_candle": "",
+      "closed_at": "2026-11-06 14:45:00+00:00"
+    },
+    "indicator|BTCUSDT|15m|SELL|2026-11-06 14:15:00+00:00": {
+      "pair": "BTCUSDT",
+      "tf": "15m",
+      "symbol": "BTCUSDT",
+      "model": "ICT Indicator: Bearish Sweep + MSS + FVG Retest",
+      "direction": "SELL",
+      "entry": 75543.49,
+      "sl": 76337.86,
+      "tp": 73954.75000000001,
+      "status": "active",
+      "created_at": "2026-11-06 15:13:36.264625+00:00",
+      "entry_candle": "2026-11-06 14:45:00+00:00"
+    },
+    "retest|BTCUSDT|15m|Bearish FVG|SELL|2026-11-06 13:00:00+00:00": {
+      "pair": "BTCUSDT",
+      "tf": "15m",
+      "symbol": "BTCUSDT",
+      "model": "Bearish FVG",
+      "direction": "SELL",
+      "entry": 75543.49,
+      "sl": 76130.0,
+      "tp": 72610.94000000003,
+      "status": "sl_hit",
+      "created_at": "2026-11-06 15:13:36.766192+00:00",
+      "entry_candle": "2026-11-06 14:45:00+00:00",
+      "closed_at": "2026-11-06 14:45:00+00:00"
+    },
+    "retest|BTCUSDT|15m|Bearish Order Block|SELL|2026-11-06 13:00:00+00:00": {
+      "pair": "BTCUSDT",
+      "tf": "15m",
+      "symbol": "BTCUSDT",
+      "model": "Bearish Order Block",
+      "direction": "SELL",
+      "entry": 75543.49,
+      "sl": 76378.0,
+      "tp": 71370.94000000003,
+      "status": "active",
+      "created_at": "2026-11-06 15:13:37.370037+00:00",
+      "entry_candle": "2026-11-06 14:45:00+00:00"
     }
   },
   "indicator|XAUUSD|1m|SELL|2026-11-04 13:07:00+00:00": {
@@ -25240,5 +25264,9 @@
   "indicator|BTCUSDT|5m|SELL|2026-11-06 13:05:00+00:00": {
     "sent_at": 1793971598.7868207,
     "candle": "2026-11-06 13:20:00+00:00"
+  },
+  "indicator|BTCUSDT|15m|SELL|2026-11-06 14:15:00+00:00": {
+    "sent_at": 1793978016.2646646,
+    "candle": "2026-11-06 14:45:00+00:00"
   }
 }
