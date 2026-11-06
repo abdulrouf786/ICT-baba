@@ -206,17 +206,6 @@
       "status": "invalidated",
       "invalidated_at": "2026-11-01 23:00:00+00:00"
     },
-    "XAUUSD|1h|Bearish FVG|SELL|2026-10-30 18:00:00+00:00": {
-      "pair": "XAUUSD",
-      "tf": "1h",
-      "model": "Bearish FVG",
-      "direction": "SELL",
-      "low": 3884.294,
-      "high": 3891.997,
-      "formed_at": "2026-10-30 18:00:00+00:00",
-      "status": "confirmed",
-      "confirmed_at": "2026-10-30 19:00:00+00:00"
-    },
     "BTCUSDT|1m|Bearish FVG|SELL|2026-11-01 15:50:00+00:00": {
       "pair": "BTCUSDT",
       "tf": "1m",
@@ -25209,6 +25198,32 @@
       "status": "active",
       "created_at": "2026-11-06 17:34:05.220906+00:00",
       "entry_candle": ""
+    },
+    "indicator|BTCUSDT|1m|SELL|2026-11-06 18:17:00+00:00": {
+      "pair": "BTCUSDT",
+      "tf": "1m",
+      "symbol": "BTCUSDT",
+      "model": "ICT Indicator: Bearish Sweep + MSS + FVG Retest",
+      "direction": "SELL",
+      "entry": 75753.1,
+      "sl": 75828.01,
+      "tp": 75603.28000000003,
+      "status": "active",
+      "created_at": "2026-11-06 18:22:27.395271+00:00",
+      "entry_candle": "2026-11-06 18:21:00+00:00"
+    },
+    "indicator|ETHUSDT|1m|SELL|2026-11-06 18:17:00+00:00": {
+      "pair": "ETHUSDT",
+      "tf": "1m",
+      "symbol": "ETHUSDT",
+      "model": "ICT Indicator: Bearish Sweep + MSS + FVG Retest",
+      "direction": "SELL",
+      "entry": 2224.84,
+      "sl": 2227.89,
+      "tp": 2218.7400000000007,
+      "status": "active",
+      "created_at": "2026-11-06 18:22:35.696375+00:00",
+      "entry_candle": "2026-11-06 18:21:00+00:00"
     }
   },
   "indicator|XAUUSD|1m|SELL|2026-11-04 13:07:00+00:00": {
@@ -25402,5 +25417,13 @@
   "indicator|BTCUSDT|15m|SELL|2026-11-06 14:15:00+00:00": {
     "sent_at": 1793978016.2646646,
     "candle": "2026-11-06 14:45:00+00:00"
+  },
+  "indicator|BTCUSDT|1m|SELL|2026-11-06 18:17:00+00:00": {
+    "sent_at": 1793989347.3953183,
+    "candle": "2026-11-06 18:21:00+00:00"
+  },
+  "indicator|ETHUSDT|1m|SELL|2026-11-06 18:17:00+00:00": {
+    "sent_at": 1793989355.6964211,
+    "candle": "2026-11-06 18:21:00+00:00"
   }
 }
