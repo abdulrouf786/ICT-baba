@@ -217,28 +217,6 @@
       "status": "confirmed",
       "confirmed_at": "2026-10-30 19:00:00+00:00"
     },
-    "XAUUSD|4h|Bearish FVG|SELL|2026-10-30 16:00:00+00:00": {
-      "pair": "XAUUSD",
-      "tf": "4h",
-      "model": "Bearish FVG",
-      "direction": "SELL",
-      "low": 3903.251,
-      "high": 3964.057,
-      "formed_at": "2026-10-30 16:00:00+00:00",
-      "status": "confirmed",
-      "confirmed_at": "2026-11-02 00:00:00+00:00"
-    },
-    "XAUUSD|4h|Bearish Order Block|SELL|2026-10-30 16:00:00+00:00": {
-      "pair": "XAUUSD",
-      "tf": "4h",
-      "model": "Bearish Order Block",
-      "direction": "SELL",
-      "low": 4016.648,
-      "high": 4037.78,
-      "formed_at": "2026-10-30 16:00:00+00:00",
-      "status": "invalidated",
-      "invalidated_at": "2026-11-04 08:00:00+00:00"
-    },
     "BTCUSDT|1m|Bearish FVG|SELL|2026-11-01 15:50:00+00:00": {
       "pair": "BTCUSDT",
       "tf": "1m",
@@ -656,17 +634,6 @@
       "formed_at": "2026-10-30 19:00:00+00:00",
       "status": "invalidated",
       "invalidated_at": "2026-10-30 20:00:00+00:00"
-    },
-    "EUR/USD|4h|Bearish FVG|SELL|2026-10-30 16:00:00+00:00": {
-      "pair": "EUR/USD",
-      "tf": "4h",
-      "model": "Bearish FVG",
-      "direction": "SELL",
-      "low": 1.1175681352615356,
-      "high": 1.11906898021698,
-      "formed_at": "2026-10-30 16:00:00+00:00",
-      "status": "invalidated",
-      "invalidated_at": "2026-11-02 04:00:00+00:00"
     },
     "BTCUSDT|1m|Bearish FVG|SELL|2026-11-01 16:20:00+00:00": {
       "pair": "BTCUSDT",
@@ -8548,16 +8515,6 @@
       "low": 1.1230907440185547,
       "high": 1.1238480806350708,
       "formed_at": "2026-11-02 10:45:00+00:00",
-      "status": "pending"
-    },
-    "EUR/USD|4h|Bullish Mitigation Block|BUY|2026-10-30 16:00:00+00:00": {
-      "pair": "EUR/USD",
-      "tf": "4h",
-      "model": "Bullish Mitigation Block",
-      "direction": "BUY",
-      "low": 1.1129660606384277,
-      "high": 1.1154489517211914,
-      "formed_at": "2026-10-30 16:00:00+00:00",
       "status": "pending"
     },
     "XAUUSD|5m|Bullish Mitigation Block|BUY|2026-11-02 10:50:00+00:00": {
@@ -17315,12 +17272,13 @@
       "low": 3969.2,
       "high": 4020.87,
       "formed_at": "2026-11-04 08:00:00+00:00",
-      "status": "pending",
+      "status": "filtered_trend",
       "quality_score": 3,
       "quality_label": "MODERATE \ud83d\udfe1",
       "htf_1h": "BULLISH",
       "htf_4h": "NEUTRAL",
-      "htf_label": "PARTIAL HTF ALIGNMENT \ud83d\udfe1"
+      "htf_label": "PARTIAL HTF ALIGNMENT \ud83d\udfe1",
+      "filtered_at": "2026-11-06 12:00:00+00:00"
     },
     "PAXGUSDT|4h|Bullish Order Block|BUY|2026-11-04 08:00:00+00:00": {
       "pair": "PAXGUSDT",
