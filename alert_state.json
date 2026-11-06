@@ -22645,8 +22645,8 @@
     "candle": "2026-11-02 20:25:00+00:00"
   },
   "ETHUSDT|1h|Liquidity Sweep / Turtle Soup|SELL": {
-    "sent_at": 1793584306.6345053,
-    "candle": "2026-11-02 00:00:00+00:00"
+    "sent_at": 1794007579.0198517,
+    "candle": "2026-11-06 22:00:00+00:00"
   },
   "XAUUSD|1m|Liquidity Sweep / Turtle Soup|SELL": {
     "sent_at": 1793663813.5302532,
@@ -25605,9 +25605,10 @@
       "entry": 4060.4,
       "sl": 4058.95,
       "tp": 4067.6500000000015,
-      "status": "active",
+      "status": "sl_hit",
       "created_at": "2026-11-06 22:12:33.622873+00:00",
-      "entry_candle": "2026-11-06 22:05:00+00:00"
+      "entry_candle": "2026-11-06 22:05:00+00:00",
+      "closed_at": "2026-11-06 23:20:00+00:00"
     },
     "signal|PAXGUSDT|5m|Bullish MSS / CHoCH|BUY|2026-11-06 22:05:00+00:00": {
       "pair": "PAXGUSDT",
@@ -25618,9 +25619,10 @@
       "entry": 4060.4,
       "sl": 4059.3,
       "tp": 4065.8999999999996,
-      "status": "active",
+      "status": "sl_hit",
       "created_at": "2026-11-06 22:12:34.516073+00:00",
-      "entry_candle": ""
+      "entry_candle": "",
+      "closed_at": "2026-11-06 23:20:00+00:00"
     },
     "retest|PAXGUSDT|1h|Bullish Order Block|BUY|2026-11-06 18:00:00+00:00": {
       "pair": "PAXGUSDT",
@@ -25634,6 +25636,32 @@
       "status": "active",
       "created_at": "2026-11-06 22:12:37.107156+00:00",
       "entry_candle": "2026-11-06 21:00:00+00:00"
+    },
+    "signal|ETHUSDT|1h|Liquidity Sweep / Turtle Soup|SELL|2026-11-06 22:00:00+00:00": {
+      "pair": "ETHUSDT",
+      "tf": "1h",
+      "symbol": "ETHUSDT",
+      "model": "Liquidity Sweep / Turtle Soup",
+      "direction": "SELL",
+      "entry": 2237.65,
+      "sl": 2254.26,
+      "tp": 2154.5999999999995,
+      "status": "active",
+      "created_at": "2026-11-06 23:26:19.019810+00:00",
+      "entry_candle": ""
+    },
+    "signal|ETHUSDT|1h|Bearish OTE (62%-79%)|SELL|2026-11-06 22:00:00+00:00": {
+      "pair": "ETHUSDT",
+      "tf": "1h",
+      "symbol": "ETHUSDT",
+      "model": "Bearish OTE (62%-79%)",
+      "direction": "SELL",
+      "entry": 2237.65,
+      "sl": 2254.26,
+      "tp": 2154.5999999999995,
+      "status": "active",
+      "created_at": "2026-11-06 23:26:19.539975+00:00",
+      "entry_candle": ""
     }
   },
   "indicator|XAUUSD|1m|SELL|2026-11-04 13:07:00+00:00": {
@@ -25839,5 +25867,9 @@
   "indicator|BTCUSDT|15m|SELL|2026-11-06 17:45:00+00:00": {
     "sent_at": 1793993035.2574582,
     "candle": "2026-11-06 19:00:00+00:00"
+  },
+  "ETHUSDT|1h|Bearish OTE (62%-79%)|SELL": {
+    "sent_at": 1794007579.5400147,
+    "candle": "2026-11-06 22:00:00+00:00"
   }
 }
