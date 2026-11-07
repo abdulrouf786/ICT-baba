@@ -26277,9 +26277,49 @@
       "entry": 75996.0,
       "sl": 76070.01,
       "tp": 75847.98000000001,
-      "status": "active",
+      "status": "tp_hit",
       "created_at": "2026-11-07 11:14:30.998201+00:00",
-      "entry_candle": "2026-11-07 10:45:00+00:00"
+      "entry_candle": "2026-11-07 10:45:00+00:00",
+      "closed_at": "2026-11-07 13:00:00+00:00"
+    },
+    "indicator|BTCUSDT|15m|SELL|2026-11-07 12:45:00+00:00": {
+      "pair": "BTCUSDT",
+      "tf": "15m",
+      "symbol": "BTCUSDT",
+      "model": "ICT Indicator: Bearish Sweep + MSS + FVG Retest",
+      "direction": "SELL",
+      "entry": 75843.99,
+      "sl": 76070.01,
+      "tp": 75391.95000000003,
+      "status": "active",
+      "created_at": "2026-11-07 13:29:24.379702+00:00",
+      "entry_candle": "2026-11-07 13:00:00+00:00"
+    },
+    "indicator|ETHUSDT|15m|SELL|2026-11-07 12:45:00+00:00": {
+      "pair": "ETHUSDT",
+      "tf": "15m",
+      "symbol": "ETHUSDT",
+      "model": "ICT Indicator: Bearish Sweep + MSS + FVG Retest",
+      "direction": "SELL",
+      "entry": 2239.7,
+      "sl": 2248.91,
+      "tp": 2221.2799999999997,
+      "status": "active",
+      "created_at": "2026-11-07 13:29:32.541005+00:00",
+      "entry_candle": "2026-11-07 13:00:00+00:00"
+    },
+    "indicator|PAXGUSDT|15m|BUY|2026-11-07 12:45:00+00:00": {
+      "pair": "PAXGUSDT",
+      "tf": "15m",
+      "symbol": "PAXGUSDT",
+      "model": "ICT Indicator: Bullish Sweep + MSS + FVG Retest",
+      "direction": "BUY",
+      "entry": 4065.05,
+      "sl": 4062.17,
+      "tp": 4070.8100000000004,
+      "status": "active",
+      "created_at": "2026-11-07 13:29:40.239795+00:00",
+      "entry_candle": "2026-11-07 13:00:00+00:00"
     }
   },
   "indicator|XAUUSD|1m|SELL|2026-11-04 13:07:00+00:00": {
@@ -26509,5 +26549,17 @@
   "indicator|BTCUSDT|15m|SELL|2026-11-07 10:30:00+00:00": {
     "sent_at": 1794050070.9982443,
     "candle": "2026-11-07 10:45:00+00:00"
+  },
+  "indicator|BTCUSDT|15m|SELL|2026-11-07 12:45:00+00:00": {
+    "sent_at": 1794058164.3797565,
+    "candle": "2026-11-07 13:00:00+00:00"
+  },
+  "indicator|ETHUSDT|15m|SELL|2026-11-07 12:45:00+00:00": {
+    "sent_at": 1794058172.541054,
+    "candle": "2026-11-07 13:00:00+00:00"
+  },
+  "indicator|PAXGUSDT|15m|BUY|2026-11-07 12:45:00+00:00": {
+    "sent_at": 1794058180.2398777,
+    "candle": "2026-11-07 13:00:00+00:00"
   }
 }
