@@ -22734,12 +22734,13 @@
       "low": 4062.7,
       "high": 4065.0,
       "formed_at": "2026-11-07 01:15:00+00:00",
-      "status": "pending",
+      "status": "filtered_trend",
       "quality_score": 4,
       "quality_label": "STRONG \ud83d\udfe2",
       "htf_1h": "BULLISH",
       "htf_4h": "BULLISH",
-      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
+      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2",
+      "filtered_at": "2026-11-07 10:15:00+00:00"
     },
     "PAXGUSDT|15m|Bullish Order Block|BUY|2026-11-07 01:15:00+00:00": {
       "pair": "PAXGUSDT",
@@ -22843,12 +22844,13 @@
       "low": 4058.31,
       "high": 4062.31,
       "formed_at": "2026-11-07 02:00:00+00:00",
-      "status": "pending",
+      "status": "filtered_trend",
       "quality_score": 3,
       "quality_label": "MODERATE \ud83d\udfe1",
       "htf_1h": "BULLISH",
       "htf_4h": "BULLISH",
-      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
+      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2",
+      "filtered_at": "2026-11-07 09:00:00+00:00"
     },
     "PAXGUSDT|5m|Bullish FVG|BUY|2026-11-07 09:45:00+00:00": {
       "pair": "PAXGUSDT",
