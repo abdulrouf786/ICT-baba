@@ -26173,6 +26173,19 @@
       "status": "active",
       "created_at": "2026-11-07 03:17:54.977044+00:00",
       "entry_candle": ""
+    },
+    "indicator|PAXGUSDT|1h|BUY|2026-11-07 03:00:00+00:00": {
+      "pair": "PAXGUSDT",
+      "tf": "1h",
+      "symbol": "PAXGUSDT",
+      "model": "ICT Indicator: Bullish Sweep + MSS + FVG Retest",
+      "direction": "BUY",
+      "entry": 4069.73,
+      "sl": 4021.65,
+      "tp": 4165.889999999999,
+      "status": "active",
+      "created_at": "2026-11-07 05:36:33.089590+00:00",
+      "entry_candle": "2026-11-07 04:00:00+00:00"
     }
   },
   "indicator|XAUUSD|1m|SELL|2026-11-04 13:07:00+00:00": {
@@ -26394,5 +26407,9 @@
   "indicator|PAXGUSDT|15m|BUY|2026-11-07 01:30:00+00:00": {
     "sent_at": 1794018544.9828877,
     "candle": "2026-11-07 02:00:00+00:00"
+  },
+  "indicator|PAXGUSDT|1h|BUY|2026-11-07 03:00:00+00:00": {
+    "sent_at": 1794029793.0896301,
+    "candle": "2026-11-07 04:00:00+00:00"
   }
 }
