@@ -26176,9 +26176,10 @@
       "entry": 4071.18,
       "sl": 4064.13,
       "tp": 4106.4299999999985,
-      "status": "active",
+      "status": "sl_hit",
       "created_at": "2026-11-07 03:17:54.977044+00:00",
-      "entry_candle": ""
+      "entry_candle": "",
+      "closed_at": "2026-11-07 08:00:00+00:00"
     },
     "indicator|PAXGUSDT|1h|BUY|2026-11-07 03:00:00+00:00": {
       "pair": "PAXGUSDT",
