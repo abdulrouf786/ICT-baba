@@ -26267,6 +26267,19 @@
       "status": "active",
       "created_at": "2026-11-07 09:58:22.481604+00:00",
       "entry_candle": "2026-11-07 09:30:00+00:00"
+    },
+    "indicator|BTCUSDT|15m|SELL|2026-11-07 10:30:00+00:00": {
+      "pair": "BTCUSDT",
+      "tf": "15m",
+      "symbol": "BTCUSDT",
+      "model": "ICT Indicator: Bearish Sweep + MSS + FVG Retest",
+      "direction": "SELL",
+      "entry": 75996.0,
+      "sl": 76070.01,
+      "tp": 75847.98000000001,
+      "status": "active",
+      "created_at": "2026-11-07 11:14:30.998201+00:00",
+      "entry_candle": "2026-11-07 10:45:00+00:00"
     }
   },
   "indicator|XAUUSD|1m|SELL|2026-11-04 13:07:00+00:00": {
@@ -26492,5 +26505,9 @@
   "indicator|PAXGUSDT|1h|BUY|2026-11-07 03:00:00+00:00": {
     "sent_at": 1794029793.0896301,
     "candle": "2026-11-07 04:00:00+00:00"
+  },
+  "indicator|BTCUSDT|15m|SELL|2026-11-07 10:30:00+00:00": {
+    "sent_at": 1794050070.9982443,
+    "candle": "2026-11-07 10:45:00+00:00"
   }
 }
