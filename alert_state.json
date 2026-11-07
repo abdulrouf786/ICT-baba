@@ -22749,12 +22749,13 @@
       "low": 4061.84,
       "high": 4062.7,
       "formed_at": "2026-11-07 01:15:00+00:00",
-      "status": "pending",
+      "status": "confirmed",
       "quality_score": 4,
       "quality_label": "STRONG \ud83d\udfe2",
       "htf_1h": "BULLISH",
       "htf_4h": "BULLISH",
-      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
+      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2",
+      "confirmed_at": "2026-11-07 09:30:00+00:00"
     },
     "PAXGUSDT|1m|Bullish FVG|BUY|2026-11-07 02:21:00+00:00": {
       "pair": "PAXGUSDT",
@@ -22845,6 +22846,51 @@
       "status": "pending",
       "quality_score": 3,
       "quality_label": "MODERATE \ud83d\udfe1",
+      "htf_1h": "BULLISH",
+      "htf_4h": "BULLISH",
+      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
+    },
+    "PAXGUSDT|5m|Bullish FVG|BUY|2026-11-07 09:45:00+00:00": {
+      "pair": "PAXGUSDT",
+      "tf": "5m",
+      "model": "Bullish FVG",
+      "direction": "BUY",
+      "low": 4063.35,
+      "high": 4063.5,
+      "formed_at": "2026-11-07 09:45:00+00:00",
+      "status": "pending",
+      "quality_score": 4,
+      "quality_label": "STRONG \ud83d\udfe2",
+      "htf_1h": "BULLISH",
+      "htf_4h": "BULLISH",
+      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
+    },
+    "PAXGUSDT|5m|Bullish FVG|BUY|2026-11-07 09:50:00+00:00": {
+      "pair": "PAXGUSDT",
+      "tf": "5m",
+      "model": "Bullish FVG",
+      "direction": "BUY",
+      "low": 4063.5,
+      "high": 4064.01,
+      "formed_at": "2026-11-07 09:50:00+00:00",
+      "status": "pending",
+      "quality_score": 4,
+      "quality_label": "STRONG \ud83d\udfe2",
+      "htf_1h": "BULLISH",
+      "htf_4h": "BULLISH",
+      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
+    },
+    "PAXGUSDT|5m|Bullish Order Block|BUY|2026-11-07 09:50:00+00:00": {
+      "pair": "PAXGUSDT",
+      "tf": "5m",
+      "model": "Bullish Order Block",
+      "direction": "BUY",
+      "low": 4062.47,
+      "high": 4063.35,
+      "formed_at": "2026-11-07 09:50:00+00:00",
+      "status": "pending",
+      "quality_score": 4,
+      "quality_label": "STRONG \ud83d\udfe2",
       "htf_1h": "BULLISH",
       "htf_4h": "BULLISH",
       "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
@@ -26193,6 +26239,32 @@
       "status": "active",
       "created_at": "2026-11-07 05:36:33.089590+00:00",
       "entry_candle": "2026-11-07 04:00:00+00:00"
+    },
+    "signal|PAXGUSDT|5m|Bullish MSS / CHoCH|BUY|2026-11-07 09:50:00+00:00": {
+      "pair": "PAXGUSDT",
+      "tf": "5m",
+      "symbol": "PAXGUSDT",
+      "model": "Bullish MSS / CHoCH",
+      "direction": "BUY",
+      "entry": 4064.3,
+      "sl": 4064.01,
+      "tp": 4065.75,
+      "status": "active",
+      "created_at": "2026-11-07 09:58:21.042008+00:00",
+      "entry_candle": ""
+    },
+    "retest|PAXGUSDT|15m|Bullish Order Block|BUY|2026-11-07 01:15:00+00:00": {
+      "pair": "PAXGUSDT",
+      "tf": "15m",
+      "symbol": "PAXGUSDT",
+      "model": "Bullish Order Block",
+      "direction": "BUY",
+      "entry": 4063.5,
+      "sl": 4061.84,
+      "tp": 4071.7999999999993,
+      "status": "active",
+      "created_at": "2026-11-07 09:58:22.481604+00:00",
+      "entry_candle": "2026-11-07 09:30:00+00:00"
     }
   },
   "indicator|XAUUSD|1m|SELL|2026-11-04 13:07:00+00:00": {
@@ -26348,8 +26420,8 @@
     "candle": "2026-11-05 08:00:00+00:00"
   },
   "PAXGUSDT|5m|Bullish MSS / CHoCH|BUY": {
-    "sent_at": 1794003154.5161164,
-    "candle": "2026-11-06 22:05:00+00:00"
+    "sent_at": 1794045501.04205,
+    "candle": "2026-11-07 09:50:00+00:00"
   },
   "PAXGUSDT|5m|Bullish Mitigation Block|BUY": {
     "sent_at": 1793875464.2077308,
