@@ -23045,12 +23045,13 @@
       "low": 2236.8,
       "high": 2238.03,
       "formed_at": "2026-11-07 16:25:00+00:00",
-      "status": "pending",
+      "status": "invalidated",
       "quality_score": 3,
       "quality_label": "MODERATE \ud83d\udfe1",
       "htf_1h": "BEARISH",
       "htf_4h": "BEARISH",
-      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
+      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2",
+      "invalidated_at": "2026-11-07 18:10:00+00:00"
     },
     "ETHUSDT|15m|Bearish FVG|SELL|2026-11-07 15:15:00+00:00": {
       "pair": "ETHUSDT",
@@ -26751,9 +26752,10 @@
       "entry": 2231.08,
       "sl": 2238.12,
       "tp": 2195.88,
-      "status": "active",
+      "status": "sl_hit",
       "created_at": "2026-11-07 16:32:21.552791+00:00",
-      "entry_candle": ""
+      "entry_candle": "",
+      "closed_at": "2026-11-07 18:10:00+00:00"
     },
     "signal|ETHUSDT|5m|Bearish Mitigation Block|SELL|2026-11-07 16:25:00+00:00": {
       "pair": "ETHUSDT",
@@ -26764,9 +26766,10 @@
       "entry": 2231.08,
       "sl": 2238.12,
       "tp": 2195.88,
-      "status": "active",
+      "status": "sl_hit",
       "created_at": "2026-11-07 16:32:22.011562+00:00",
-      "entry_candle": ""
+      "entry_candle": "",
+      "closed_at": "2026-11-07 18:10:00+00:00"
     },
     "indicator|ETHUSDT|15m|SELL|2026-11-07 16:00:00+00:00": {
       "pair": "ETHUSDT",
@@ -26803,9 +26806,10 @@
       "entry": 2231.08,
       "sl": 2238.12,
       "tp": 2195.88,
-      "status": "active",
+      "status": "sl_hit",
       "created_at": "2026-11-07 16:32:27.496197+00:00",
-      "entry_candle": ""
+      "entry_candle": "",
+      "closed_at": "2026-11-07 18:00:00+00:00"
     },
     "retest|PAXGUSDT|5m|Bullish FVG|BUY|2026-11-07 16:55:00+00:00": {
       "pair": "PAXGUSDT",
