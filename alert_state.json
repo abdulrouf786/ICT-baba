@@ -198,28 +198,6 @@
       "status": "confirmed",
       "confirmed_at": "2026-11-01 15:30:00+00:00"
     },
-    "BTCUSDT|1h|Bullish Order Block|BUY|2026-11-01 08:00:00+00:00": {
-      "pair": "BTCUSDT",
-      "tf": "1h",
-      "model": "Bullish Order Block",
-      "direction": "BUY",
-      "low": 77850.0,
-      "high": 78035.61,
-      "formed_at": "2026-11-01 08:00:00+00:00",
-      "status": "confirmed",
-      "confirmed_at": "2026-11-01 14:00:00+00:00"
-    },
-    "BTCUSDT|4h|Bullish FVG|BUY|2026-11-01 08:00:00+00:00": {
-      "pair": "BTCUSDT",
-      "tf": "4h",
-      "model": "Bullish FVG",
-      "direction": "BUY",
-      "low": 77897.03,
-      "high": 77913.66,
-      "formed_at": "2026-11-01 08:00:00+00:00",
-      "status": "confirmed",
-      "confirmed_at": "2026-11-01 12:00:00+00:00"
-    },
     "ETHUSDT|1m|Bearish FVG|SELL|2026-11-01 15:50:00+00:00": {
       "pair": "ETHUSDT",
       "tf": "1m",
@@ -384,17 +362,6 @@
       "formed_at": "2026-11-01 15:50:00+00:00",
       "status": "invalidated",
       "invalidated_at": "2026-11-01 16:20:00+00:00"
-    },
-    "ETHUSDT|1h|Bullish Order Block|BUY|2026-11-01 08:00:00+00:00": {
-      "pair": "ETHUSDT",
-      "tf": "1h",
-      "model": "Bullish Order Block",
-      "direction": "BUY",
-      "low": 2267.26,
-      "high": 2274.35,
-      "formed_at": "2026-11-01 08:00:00+00:00",
-      "status": "invalidated",
-      "invalidated_at": "2026-11-01 15:00:00+00:00"
     },
     "ETHUSDT|1h|Bearish Order Block|SELL|2026-11-01 12:00:00+00:00": {
       "pair": "ETHUSDT",
@@ -23002,12 +22969,13 @@
       "low": 2242.16,
       "high": 2248.67,
       "formed_at": "2026-11-07 15:00:00+00:00",
-      "status": "pending",
+      "status": "filtered_trend",
       "quality_score": 3,
       "quality_label": "MODERATE \ud83d\udfe1",
       "htf_1h": "BEARISH",
       "htf_4h": "BEARISH",
-      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
+      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2",
+      "filtered_at": "2026-11-08 07:00:00+00:00"
     },
     "ETHUSDT|5m|Bearish Order Block|SELL|2026-11-07 16:25:00+00:00": {
       "pair": "ETHUSDT",
