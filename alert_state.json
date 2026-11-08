@@ -24453,12 +24453,13 @@
       "low": 2237.13,
       "high": 2237.99,
       "formed_at": "2026-11-08 09:55:00+00:00",
-      "status": "pending",
+      "status": "confirmed",
       "quality_score": 3,
       "quality_label": "MODERATE \ud83d\udfe1",
       "htf_1h": "BEARISH",
       "htf_4h": "BEARISH",
-      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
+      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2",
+      "confirmed_at": "2026-11-08 11:00:00+00:00"
     },
     "ETHUSDT|5m|Bearish FVG|SELL|2026-11-08 10:05:00+00:00": {
       "pair": "ETHUSDT",
@@ -28847,9 +28848,10 @@
       "entry": 2234.82,
       "sl": 2236.9,
       "tp": 2224.4200000000005,
-      "status": "active",
+      "status": "sl_hit",
       "created_at": "2026-11-08 10:25:34.403216+00:00",
-      "entry_candle": "2026-11-08 10:20:00+00:00"
+      "entry_candle": "2026-11-08 10:20:00+00:00",
+      "closed_at": "2026-11-08 11:00:00+00:00"
     },
     "signal|ETHUSDT|5m|Bearish MSS / CHoCH|SELL|2026-11-08 10:20:00+00:00": {
       "pair": "ETHUSDT",
@@ -28860,9 +28862,10 @@
       "entry": 2234.82,
       "sl": 2236.21,
       "tp": 2227.870000000001,
-      "status": "active",
+      "status": "sl_hit",
       "created_at": "2026-11-08 10:25:35.481210+00:00",
-      "entry_candle": ""
+      "entry_candle": "",
+      "closed_at": "2026-11-08 11:00:00+00:00"
     },
     "signal|ETHUSDT|5m|Bearish Mitigation Block|SELL|2026-11-08 10:20:00+00:00": {
       "pair": "ETHUSDT",
@@ -28873,9 +28876,23 @@
       "entry": 2234.82,
       "sl": 2236.21,
       "tp": 2227.870000000001,
-      "status": "active",
+      "status": "sl_hit",
       "created_at": "2026-11-08 10:25:35.838115+00:00",
-      "entry_candle": ""
+      "entry_candle": "",
+      "closed_at": "2026-11-08 11:00:00+00:00"
+    },
+    "retest|ETHUSDT|5m|Bearish FVG|SELL|2026-11-08 09:55:00+00:00": {
+      "pair": "ETHUSDT",
+      "tf": "5m",
+      "symbol": "ETHUSDT",
+      "model": "Bearish FVG",
+      "direction": "SELL",
+      "entry": 2236.32,
+      "sl": 2237.99,
+      "tp": 2227.970000000002,
+      "status": "active",
+      "created_at": "2026-11-08 11:07:43.912666+00:00",
+      "entry_candle": "2026-11-08 11:00:00+00:00"
     }
   },
   "indicator|XAUUSD|1m|SELL|2026-11-04 13:07:00+00:00": {
