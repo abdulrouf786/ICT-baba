@@ -27712,9 +27712,10 @@
       "entry": 4068.0,
       "sl": 4054.95,
       "tp": 4094.1000000000004,
-      "status": "active",
+      "status": "sl_hit",
       "created_at": "2026-11-07 01:43:29.534602+00:00",
-      "entry_candle": "2026-11-07 01:35:00+00:00"
+      "entry_candle": "2026-11-07 01:35:00+00:00",
+      "closed_at": "2026-11-08 14:35:00+00:00"
     },
     "signal|PAXGUSDT|15m|Bullish MSS / CHoCH|BUY|2026-11-07 01:15:00+00:00": {
       "pair": "PAXGUSDT",
@@ -27795,9 +27796,10 @@
       "entry": 4068.02,
       "sl": 4054.95,
       "tp": 4094.1600000000003,
-      "status": "active",
+      "status": "sl_hit",
       "created_at": "2026-11-07 02:29:04.982846+00:00",
-      "entry_candle": "2026-11-07 02:00:00+00:00"
+      "entry_candle": "2026-11-07 02:00:00+00:00",
+      "closed_at": "2026-11-08 14:15:00+00:00"
     },
     "signal|PAXGUSDT|1h|Bullish MSS / CHoCH|BUY|2026-11-07 02:00:00+00:00": {
       "pair": "PAXGUSDT",
@@ -28923,9 +28925,10 @@
       "entry": 2236.35,
       "sl": 2246.0,
       "tp": 2188.0999999999995,
-      "status": "active",
+      "status": "sl_hit",
       "created_at": "2026-11-08 14:09:07.700984+00:00",
-      "entry_candle": ""
+      "entry_candle": "",
+      "closed_at": "2026-11-08 13:00:00+00:00"
     },
     "signal|ETHUSDT|1h|Bearish IFVG|SELL|2026-11-08 13:00:00+00:00": {
       "pair": "ETHUSDT",
@@ -28936,9 +28939,10 @@
       "entry": 2236.35,
       "sl": 2246.0,
       "tp": 2188.0999999999995,
-      "status": "active",
+      "status": "sl_hit",
       "created_at": "2026-11-08 14:09:08.232041+00:00",
-      "entry_candle": ""
+      "entry_candle": "",
+      "closed_at": "2026-11-08 13:00:00+00:00"
     }
   },
   "indicator|XAUUSD|1m|SELL|2026-11-04 13:07:00+00:00": {
