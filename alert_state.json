@@ -13182,12 +13182,13 @@
       "low": 4028.28,
       "high": 4028.29,
       "formed_at": "2026-11-10 22:28:00+00:00",
-      "status": "pending",
+      "status": "invalidated",
       "quality_score": 3,
       "quality_label": "MODERATE \ud83d\udfe1",
       "htf_1h": "BEARISH",
       "htf_4h": "NEUTRAL",
-      "htf_label": "PARTIAL HTF ALIGNMENT \ud83d\udfe1"
+      "htf_label": "PARTIAL HTF ALIGNMENT \ud83d\udfe1",
+      "invalidated_at": "2026-11-10 23:40:00+00:00"
     },
     "BTCUSDT|5m|Bearish FVG|SELL|2026-11-10 23:00:00+00:00": {
       "pair": "BTCUSDT",
@@ -13227,12 +13228,13 @@
       "low": 73622.01,
       "high": 73672.85,
       "formed_at": "2026-11-10 23:05:00+00:00",
-      "status": "pending",
+      "status": "invalidated",
       "quality_score": 4,
       "quality_label": "STRONG \ud83d\udfe2",
       "htf_1h": "BEARISH",
       "htf_4h": "BEARISH",
-      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
+      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2",
+      "invalidated_at": "2026-11-10 23:35:00+00:00"
     },
     "BTCUSDT|5m|Bearish Order Block|SELL|2026-11-10 23:05:00+00:00": {
       "pair": "BTCUSDT",
@@ -20510,9 +20512,10 @@
       "entry": 4028.0,
       "sl": 4028.46,
       "tp": 4025.7,
-      "status": "active",
+      "status": "sl_hit",
       "created_at": "2026-11-10 22:29:58.385926+00:00",
-      "entry_candle": ""
+      "entry_candle": "",
+      "closed_at": "2026-11-10 23:40:00+00:00"
     },
     "signal|PAXGUSDT|1m|Bearish Mitigation Block|SELL|2026-11-10 22:28:00+00:00": {
       "pair": "PAXGUSDT",
@@ -20523,9 +20526,10 @@
       "entry": 4028.0,
       "sl": 4028.46,
       "tp": 4025.7,
-      "status": "active",
+      "status": "sl_hit",
       "created_at": "2026-11-10 22:29:58.775340+00:00",
-      "entry_candle": ""
+      "entry_candle": "",
+      "closed_at": "2026-11-10 23:40:00+00:00"
     },
     "signal|PAXGUSDT|1m|Bearish IFVG|SELL|2026-11-10 22:28:00+00:00": {
       "pair": "PAXGUSDT",
@@ -20536,9 +20540,10 @@
       "entry": 4028.0,
       "sl": 4028.46,
       "tp": 4025.7,
-      "status": "active",
+      "status": "sl_hit",
       "created_at": "2026-11-10 22:29:59.164011+00:00",
-      "entry_candle": ""
+      "entry_candle": "",
+      "closed_at": "2026-11-10 23:40:00+00:00"
     }
   },
   "indicator|XAUUSD|1m|SELL|2026-11-04 13:07:00+00:00": {
