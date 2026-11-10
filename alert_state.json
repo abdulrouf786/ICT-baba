@@ -12997,8 +12997,8 @@
     "candle": "2026-11-10 15:28:00+00:00"
   },
   "BTCUSDT|15m|Liquidity Sweep / Turtle Soup|SELL": {
-    "sent_at": 1794319140.1433725,
-    "candle": "2026-11-10 13:30:00+00:00"
+    "sent_at": 1794347651.156926,
+    "candle": "2026-11-10 21:30:00+00:00"
   },
   "ETHUSDT|1m|Bearish MSS / CHoCH|SELL": {
     "sent_at": 1794319151.9166644,
@@ -20150,6 +20150,32 @@
       "created_at": "2026-11-10 20:24:19.435776+00:00",
       "entry_candle": "",
       "closed_at": "2026-11-10 16:00:00+00:00"
+    },
+    "signal|BTCUSDT|15m|Liquidity Sweep / Turtle Soup|SELL|2026-11-10 21:30:00+00:00": {
+      "pair": "BTCUSDT",
+      "tf": "15m",
+      "symbol": "BTCUSDT",
+      "model": "Liquidity Sweep / Turtle Soup",
+      "direction": "SELL",
+      "entry": 73870.0,
+      "sl": 74055.71,
+      "tp": 72941.44999999997,
+      "status": "active",
+      "created_at": "2026-11-10 21:54:11.156879+00:00",
+      "entry_candle": ""
+    },
+    "signal|BTCUSDT|15m|Bearish IFVG|SELL|2026-11-10 21:30:00+00:00": {
+      "pair": "BTCUSDT",
+      "tf": "15m",
+      "symbol": "BTCUSDT",
+      "model": "Bearish IFVG",
+      "direction": "SELL",
+      "entry": 73870.0,
+      "sl": 74055.71,
+      "tp": 72941.44999999997,
+      "status": "active",
+      "created_at": "2026-11-10 21:54:11.464611+00:00",
+      "entry_candle": ""
     }
   },
   "indicator|XAUUSD|1m|SELL|2026-11-04 13:07:00+00:00": {
@@ -20551,5 +20577,9 @@
   "indicator|ETHUSDT|15m|SELL|2026-11-10 15:45:00+00:00": {
     "sent_at": 1794333507.6261902,
     "candle": "2026-11-10 17:30:00+00:00"
+  },
+  "BTCUSDT|15m|Bearish IFVG|SELL": {
+    "sent_at": 1794347651.4646564,
+    "candle": "2026-11-10 21:30:00+00:00"
   }
 }
