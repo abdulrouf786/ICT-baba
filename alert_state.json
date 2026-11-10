@@ -9013,12 +9013,13 @@
       "low": 4065.179,
       "high": 4076.93,
       "formed_at": "2026-11-09 00:30:00+00:00",
-      "status": "pending",
+      "status": "filtered_trend",
       "quality_score": 4,
       "quality_label": "STRONG \ud83d\udfe2",
       "htf_1h": "BULLISH",
       "htf_4h": "BULLISH",
-      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
+      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2",
+      "filtered_at": "2026-11-10 12:30:00+00:00"
     },
     "XAUUSD|15m|Bullish FVG|BUY|2026-11-09 00:45:00+00:00": {
       "pair": "XAUUSD",
@@ -9044,12 +9045,13 @@
       "low": 4065.179,
       "high": 4076.93,
       "formed_at": "2026-11-09 00:45:00+00:00",
-      "status": "pending",
+      "status": "filtered_trend",
       "quality_score": 4,
       "quality_label": "STRONG \ud83d\udfe2",
       "htf_1h": "BULLISH",
       "htf_4h": "BULLISH",
-      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
+      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2",
+      "filtered_at": "2026-11-10 12:30:00+00:00"
     },
     "XAUUSD|1h|Bullish Mitigation Block|BUY|2026-11-06 21:00:00+00:00": {
       "pair": "XAUUSD",
