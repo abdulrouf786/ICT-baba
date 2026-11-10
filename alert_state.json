@@ -19852,9 +19852,10 @@
       "entry": 4017.94,
       "sl": 4022.57,
       "tp": 3994.7899999999995,
-      "status": "active",
+      "status": "sl_hit",
       "created_at": "2026-11-10 16:22:34.684478+00:00",
-      "entry_candle": ""
+      "entry_candle": "",
+      "closed_at": "2026-11-10 18:39:00+00:00"
     },
     "signal|PAXGUSDT|4h|Bearish MSS / CHoCH|SELL|2026-11-10 12:00:00+00:00": {
       "pair": "PAXGUSDT",
