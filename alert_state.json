@@ -12171,12 +12171,13 @@
       "low": 4061.466,
       "high": 4073.151,
       "formed_at": "2026-11-10 14:00:00+00:00",
-      "status": "pending",
+      "status": "filtered_trend",
       "quality_score": 3,
       "quality_label": "MODERATE \ud83d\udfe1",
       "htf_1h": "BEARISH",
       "htf_4h": "NEUTRAL",
-      "htf_label": "PARTIAL HTF ALIGNMENT \ud83d\udfe1"
+      "htf_label": "PARTIAL HTF ALIGNMENT \ud83d\udfe1",
+      "filtered_at": "2026-11-11 05:00:00+00:00"
     },
     "XAUUSD|1h|Bearish Order Block|SELL|2026-11-10 14:00:00+00:00": {
       "pair": "XAUUSD",
@@ -20416,9 +20417,10 @@
       "entry": 4039.077,
       "sl": 4061.466,
       "tp": 3927.132000000002,
-      "status": "active",
+      "status": "sl_hit",
       "created_at": "2026-11-10 15:29:44.238442+00:00",
-      "entry_candle": ""
+      "entry_candle": "",
+      "closed_at": "2026-11-11 05:00:00+00:00"
     },
     "signal|BTCUSDT|1m|Bearish MSS / CHoCH|SELL|2026-11-10 15:28:00+00:00": {
       "pair": "BTCUSDT",
@@ -20482,9 +20484,10 @@
       "entry": 4031.14,
       "sl": 4052.9,
       "tp": 3922.339999999999,
-      "status": "active",
+      "status": "sl_hit",
       "created_at": "2026-11-10 15:30:18.691996+00:00",
-      "entry_candle": ""
+      "entry_candle": "",
+      "closed_at": "2026-11-11 05:00:00+00:00"
     },
     "retest|BTCUSDT|1h|Bearish Order Block|SELL|2026-11-10 13:00:00+00:00": {
       "pair": "BTCUSDT",
