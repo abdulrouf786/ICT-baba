@@ -12382,12 +12382,13 @@
       "low": 4052.9,
       "high": 4063.45,
       "formed_at": "2026-11-10 14:00:00+00:00",
-      "status": "pending",
+      "status": "filtered_trend",
       "quality_score": 3,
       "quality_label": "MODERATE \ud83d\udfe1",
       "htf_1h": "BEARISH",
       "htf_4h": "NEUTRAL",
-      "htf_label": "PARTIAL HTF ALIGNMENT \ud83d\udfe1"
+      "htf_label": "PARTIAL HTF ALIGNMENT \ud83d\udfe1",
+      "filtered_at": "2026-11-11 06:00:00+00:00"
     },
     "PAXGUSDT|1h|Bearish Order Block|SELL|2026-11-10 14:00:00+00:00": {
       "pair": "PAXGUSDT",
@@ -13438,12 +13439,13 @@
       "low": 2068.97,
       "high": 2069.08,
       "formed_at": "2026-11-11 04:44:00+00:00",
-      "status": "pending",
+      "status": "invalidated",
       "quality_score": 3,
       "quality_label": "MODERATE \ud83d\udfe1",
       "htf_1h": "BEARISH",
       "htf_4h": "BEARISH",
-      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
+      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2",
+      "invalidated_at": "2026-11-11 07:57:00+00:00"
     },
     "ETHUSDT|1m|Bearish FVG|SELL|2026-11-11 04:45:00+00:00": {
       "pair": "ETHUSDT",
@@ -20967,9 +20969,10 @@
       "entry": 2067.09,
       "sl": 2068.97,
       "tp": 2057.690000000002,
-      "status": "active",
+      "status": "sl_hit",
       "created_at": "2026-11-11 04:50:55.484376+00:00",
-      "entry_candle": "2026-11-11 04:49:00+00:00"
+      "entry_candle": "2026-11-11 04:49:00+00:00",
+      "closed_at": "2026-11-11 07:57:00+00:00"
     },
     "signal|ETHUSDT|1m|Bearish MSS / CHoCH|SELL|2026-11-11 04:49:00+00:00": {
       "pair": "ETHUSDT",
@@ -21008,9 +21011,10 @@
       "entry": 73854.42,
       "sl": 73906.65,
       "tp": 73593.27000000002,
-      "status": "active",
+      "status": "sl_hit",
       "created_at": "2026-11-11 05:46:25.489791+00:00",
-      "entry_candle": "2026-11-11 05:40:00+00:00"
+      "entry_candle": "2026-11-11 05:40:00+00:00",
+      "closed_at": "2026-11-11 07:50:00+00:00"
     },
     "retest|BTCUSDT|5m|Bearish FVG|SELL|2026-11-10 21:55:00+00:00": {
       "pair": "BTCUSDT",
@@ -21035,9 +21039,10 @@
       "entry": 73854.42,
       "sl": 73906.65,
       "tp": 73593.27000000002,
-      "status": "active",
+      "status": "sl_hit",
       "created_at": "2026-11-11 05:46:26.358833+00:00",
-      "entry_candle": "2026-11-11 05:40:00+00:00"
+      "entry_candle": "2026-11-11 05:40:00+00:00",
+      "closed_at": "2026-11-11 07:50:00+00:00"
     },
     "retest|BTCUSDT|5m|Bearish FVG|SELL|2026-11-10 22:20:00+00:00": {
       "pair": "BTCUSDT",
@@ -21048,9 +21053,10 @@
       "entry": 73854.42,
       "sl": 73893.88,
       "tp": 73657.11999999997,
-      "status": "active",
+      "status": "sl_hit",
       "created_at": "2026-11-11 05:46:26.808962+00:00",
-      "entry_candle": "2026-11-11 05:40:00+00:00"
+      "entry_candle": "2026-11-11 05:40:00+00:00",
+      "closed_at": "2026-11-11 07:50:00+00:00"
     },
     "retest|BTCUSDT|5m|Bearish Order Block|SELL|2026-11-10 22:20:00+00:00": {
       "pair": "BTCUSDT",
