@@ -69,38 +69,6 @@
     "candle": "2026-11-11 14:30:00+00:00"
   },
   "pending_retests": {
-    "PAXGUSDT|5m|Bullish Order Block|BUY|2026-11-06 22:05:00+00:00": {
-      "pair": "PAXGUSDT",
-      "tf": "5m",
-      "model": "Bullish Order Block",
-      "direction": "BUY",
-      "low": 4054.78,
-      "high": 4055.54,
-      "formed_at": "2026-11-06 22:05:00+00:00",
-      "status": "invalidated",
-      "quality_score": 3,
-      "quality_label": "MODERATE \ud83d\udfe1",
-      "htf_1h": "BULLISH",
-      "htf_4h": "BULLISH",
-      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2",
-      "invalidated_at": "2026-11-08 15:10:00+00:00"
-    },
-    "BTCUSDT|5m|Bearish Order Block|SELL|2026-11-06 22:45:00+00:00": {
-      "pair": "BTCUSDT",
-      "tf": "5m",
-      "model": "Bearish Order Block",
-      "direction": "SELL",
-      "low": 75998.0,
-      "high": 76060.89,
-      "formed_at": "2026-11-06 22:45:00+00:00",
-      "status": "invalidated",
-      "quality_score": 3,
-      "quality_label": "MODERATE \ud83d\udfe1",
-      "htf_1h": "BEARISH",
-      "htf_4h": "BEARISH",
-      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2",
-      "invalidated_at": "2026-11-07 03:10:00+00:00"
-    },
     "BTCUSDT|1m|Bearish Order Block|SELL|2026-11-06 23:54:00+00:00": {
       "pair": "BTCUSDT",
       "tf": "1m",
