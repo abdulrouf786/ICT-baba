@@ -69,38 +69,6 @@
     "candle": "2026-11-13 23:15:00+00:00"
   },
   "pending_retests": {
-    "PAXGUSDT|15m|Bullish FVG|BUY|2026-11-07 01:15:00+00:00": {
-      "pair": "PAXGUSDT",
-      "tf": "15m",
-      "model": "Bullish FVG",
-      "direction": "BUY",
-      "low": 4062.7,
-      "high": 4065.0,
-      "formed_at": "2026-11-07 01:15:00+00:00",
-      "status": "filtered_trend",
-      "quality_score": 4,
-      "quality_label": "STRONG \ud83d\udfe2",
-      "htf_1h": "BULLISH",
-      "htf_4h": "BULLISH",
-      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2",
-      "filtered_at": "2026-11-07 10:15:00+00:00"
-    },
-    "PAXGUSDT|15m|Bullish Order Block|BUY|2026-11-07 01:15:00+00:00": {
-      "pair": "PAXGUSDT",
-      "tf": "15m",
-      "model": "Bullish Order Block",
-      "direction": "BUY",
-      "low": 4061.84,
-      "high": 4062.7,
-      "formed_at": "2026-11-07 01:15:00+00:00",
-      "status": "confirmed",
-      "quality_score": 4,
-      "quality_label": "STRONG \ud83d\udfe2",
-      "htf_1h": "BULLISH",
-      "htf_4h": "BULLISH",
-      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2",
-      "confirmed_at": "2026-11-07 09:30:00+00:00"
-    },
     "PAXGUSDT|1m|Bullish FVG|BUY|2026-11-07 02:21:00+00:00": {
       "pair": "PAXGUSDT",
       "tf": "1m",
@@ -15161,12 +15129,13 @@
       "low": 68288.01,
       "high": 68376.97,
       "formed_at": "2026-11-13 23:00:00+00:00",
-      "status": "pending",
+      "status": "invalidated",
       "quality_score": 3,
       "quality_label": "MODERATE \ud83d\udfe1",
       "htf_1h": "BEARISH",
       "htf_4h": "BEARISH",
-      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
+      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2",
+      "invalidated_at": "2026-11-14 01:40:00+00:00"
     },
     "BTCUSDT|5m|Bearish Order Block|SELL|2026-11-13 23:00:00+00:00": {
       "pair": "BTCUSDT",
@@ -15223,12 +15192,13 @@
       "low": 1926.92,
       "high": 1928.9,
       "formed_at": "2026-11-13 23:00:00+00:00",
-      "status": "pending",
+      "status": "invalidated",
       "quality_score": 3,
       "quality_label": "MODERATE \ud83d\udfe1",
       "htf_1h": "BEARISH",
       "htf_4h": "BEARISH",
-      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
+      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2",
+      "invalidated_at": "2026-11-14 01:40:00+00:00"
     },
     "ETHUSDT|5m|Bearish Order Block|SELL|2026-11-13 23:00:00+00:00": {
       "pair": "ETHUSDT",
@@ -25842,9 +25812,10 @@
       "entry": 1928.83,
       "sl": 1931.84,
       "tp": 1913.78,
-      "status": "active",
+      "status": "sl_hit",
       "created_at": "2026-11-13 23:58:14.912859+00:00",
-      "entry_candle": "2026-11-13 23:50:00+00:00"
+      "entry_candle": "2026-11-13 23:50:00+00:00",
+      "closed_at": "2026-11-14 01:40:00+00:00"
     }
   },
   "indicator|XAUUSD|1m|SELL|2026-11-04 13:07:00+00:00": {
