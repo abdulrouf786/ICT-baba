@@ -15871,12 +15871,13 @@
       "low": 67061.48,
       "high": 67288.0,
       "formed_at": "2026-11-14 03:45:00+00:00",
-      "status": "pending",
+      "status": "invalidated",
       "quality_score": 3,
       "quality_label": "MODERATE \ud83d\udfe1",
       "htf_1h": "BEARISH",
       "htf_4h": "BEARISH",
-      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
+      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2",
+      "invalidated_at": "2026-11-14 06:30:00+00:00"
     },
     "BTCUSDT|15m|Bearish Order Block|SELL|2026-11-14 04:00:00+00:00": {
       "pair": "BTCUSDT",
