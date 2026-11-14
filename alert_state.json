@@ -69,22 +69,6 @@
     "candle": "2026-11-14 12:40:00+00:00"
   },
   "pending_retests": {
-    "PAXGUSDT|5m|Bullish Order Block|BUY|2026-11-07 17:05:00+00:00": {
-      "pair": "PAXGUSDT",
-      "tf": "5m",
-      "model": "Bullish Order Block",
-      "direction": "BUY",
-      "low": 4064.2,
-      "high": 4064.21,
-      "formed_at": "2026-11-07 17:05:00+00:00",
-      "status": "invalidated",
-      "quality_score": 3,
-      "quality_label": "MODERATE \ud83d\udfe1",
-      "htf_1h": "BULLISH",
-      "htf_4h": "BULLISH",
-      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2",
-      "invalidated_at": "2026-11-07 22:20:00+00:00"
-    },
     "ETHUSDT|1m|Bearish FVG|SELL|2026-11-07 19:00:00+00:00": {
       "pair": "ETHUSDT",
       "tf": "1m",
