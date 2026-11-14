@@ -16152,12 +16152,13 @@
       "low": 3869.72,
       "high": 3877.36,
       "formed_at": "2026-11-14 03:00:00+00:00",
-      "status": "pending",
+      "status": "confirmed",
       "quality_score": 4,
       "quality_label": "STRONG \ud83d\udfe2",
       "htf_1h": "BEARISH",
       "htf_4h": "BEARISH",
-      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
+      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2",
+      "confirmed_at": "2026-11-14 10:00:00+00:00"
     },
     "PAXGUSDT|1h|Bearish Order Block|SELL|2026-11-14 03:00:00+00:00": {
       "pair": "PAXGUSDT",
@@ -27095,9 +27096,10 @@
       "entry": 3863.67,
       "sl": 3869.72,
       "tp": 3833.4200000000014,
-      "status": "active",
+      "status": "sl_hit",
       "created_at": "2026-11-14 04:19:07.850783+00:00",
-      "entry_candle": ""
+      "entry_candle": "",
+      "closed_at": "2026-11-14 10:00:00+00:00"
     },
     "retest|PAXGUSDT|15m|Bearish FVG|SELL|2026-11-14 03:45:00+00:00": {
       "pair": "PAXGUSDT",
@@ -27244,9 +27246,10 @@
       "entry": 3868.51,
       "sl": 3868.52,
       "tp": 3868.4600000000014,
-      "status": "active",
+      "status": "tp_hit",
       "created_at": "2026-11-14 10:55:20.340771+00:00",
-      "entry_candle": ""
+      "entry_candle": "",
+      "closed_at": "2026-11-14 11:24:00+00:00"
     },
     "signal|PAXGUSDT|5m|Bearish MSS / CHoCH|SELL|2026-11-14 10:50:00+00:00": {
       "pair": "PAXGUSDT",
@@ -27273,6 +27276,19 @@
       "status": "active",
       "created_at": "2026-11-14 10:55:23.235050+00:00",
       "entry_candle": ""
+    },
+    "retest|PAXGUSDT|1h|Bearish FVG|SELL|2026-11-14 03:00:00+00:00": {
+      "pair": "PAXGUSDT",
+      "tf": "1h",
+      "symbol": "PAXGUSDT",
+      "model": "Bearish FVG",
+      "direction": "SELL",
+      "entry": 3868.52,
+      "sl": 3877.36,
+      "tp": 3824.3199999999993,
+      "status": "active",
+      "created_at": "2026-11-14 11:25:29.375210+00:00",
+      "entry_candle": "2026-11-14 10:00:00+00:00"
     }
   },
   "indicator|XAUUSD|1m|SELL|2026-11-04 13:07:00+00:00": {
