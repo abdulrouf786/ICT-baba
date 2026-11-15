@@ -69,22 +69,6 @@
     "candle": "2026-11-14 12:40:00+00:00"
   },
   "pending_retests": {
-    "PAXGUSDT|1h|Bearish FVG|SELL|2026-11-08 12:00:00+00:00": {
-      "pair": "PAXGUSDT",
-      "tf": "1h",
-      "model": "Bearish FVG",
-      "direction": "SELL",
-      "low": 4058.27,
-      "high": 4059.82,
-      "formed_at": "2026-11-08 12:00:00+00:00",
-      "status": "filtered_trend",
-      "quality_score": 3,
-      "quality_label": "MODERATE \ud83d\udfe1",
-      "htf_1h": "BEARISH",
-      "htf_4h": "NEUTRAL",
-      "htf_label": "PARTIAL HTF ALIGNMENT \ud83d\udfe1",
-      "filtered_at": "2026-11-08 20:00:00+00:00"
-    },
     "PAXGUSDT|1h|Bearish Order Block|SELL|2026-11-08 14:00:00+00:00": {
       "pair": "PAXGUSDT",
       "tf": "1h",
