@@ -17022,6 +17022,111 @@
       "htf_1h": "BEARISH",
       "htf_4h": "BEARISH",
       "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
+    },
+    "PAXGUSDT|5m|Bearish FVG|SELL|2026-11-15 07:45:00+00:00": {
+      "pair": "PAXGUSDT",
+      "tf": "5m",
+      "model": "Bearish FVG",
+      "direction": "SELL",
+      "low": 3822.5,
+      "high": 3822.67,
+      "formed_at": "2026-11-15 07:45:00+00:00",
+      "status": "pending",
+      "quality_score": 4,
+      "quality_label": "STRONG \ud83d\udfe2",
+      "htf_1h": "BEARISH",
+      "htf_4h": "BEARISH",
+      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
+    },
+    "PAXGUSDT|5m|Bearish FVG|SELL|2026-11-15 07:50:00+00:00": {
+      "pair": "PAXGUSDT",
+      "tf": "5m",
+      "model": "Bearish FVG",
+      "direction": "SELL",
+      "low": 3821.21,
+      "high": 3822.51,
+      "formed_at": "2026-11-15 07:50:00+00:00",
+      "status": "pending",
+      "quality_score": 4,
+      "quality_label": "STRONG \ud83d\udfe2",
+      "htf_1h": "BEARISH",
+      "htf_4h": "BEARISH",
+      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
+    },
+    "PAXGUSDT|5m|Bearish Order Block|SELL|2026-11-15 07:50:00+00:00": {
+      "pair": "PAXGUSDT",
+      "tf": "5m",
+      "model": "Bearish Order Block",
+      "direction": "SELL",
+      "low": 3824.08,
+      "high": 3825.96,
+      "formed_at": "2026-11-15 07:50:00+00:00",
+      "status": "pending",
+      "quality_score": 4,
+      "quality_label": "STRONG \ud83d\udfe2",
+      "htf_1h": "BEARISH",
+      "htf_4h": "BEARISH",
+      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
+    },
+    "PAXGUSDT|5m|Bearish FVG|SELL|2026-11-15 07:55:00+00:00": {
+      "pair": "PAXGUSDT",
+      "tf": "5m",
+      "model": "Bearish FVG",
+      "direction": "SELL",
+      "low": 3819.8,
+      "high": 3820.2,
+      "formed_at": "2026-11-15 07:55:00+00:00",
+      "status": "pending",
+      "quality_score": 4,
+      "quality_label": "STRONG \ud83d\udfe2",
+      "htf_1h": "BEARISH",
+      "htf_4h": "BEARISH",
+      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
+    },
+    "PAXGUSDT|5m|Bearish Order Block|SELL|2026-11-15 08:10:00+00:00": {
+      "pair": "PAXGUSDT",
+      "tf": "5m",
+      "model": "Bearish Order Block",
+      "direction": "SELL",
+      "low": 3819.11,
+      "high": 3820.17,
+      "formed_at": "2026-11-15 08:10:00+00:00",
+      "status": "pending",
+      "quality_score": 4,
+      "quality_label": "STRONG \ud83d\udfe2",
+      "htf_1h": "BEARISH",
+      "htf_4h": "BEARISH",
+      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
+    },
+    "PAXGUSDT|5m|Bearish FVG|SELL|2026-11-15 08:15:00+00:00": {
+      "pair": "PAXGUSDT",
+      "tf": "5m",
+      "model": "Bearish FVG",
+      "direction": "SELL",
+      "low": 3817.33,
+      "high": 3819.11,
+      "formed_at": "2026-11-15 08:15:00+00:00",
+      "status": "pending",
+      "quality_score": 4,
+      "quality_label": "STRONG \ud83d\udfe2",
+      "htf_1h": "BEARISH",
+      "htf_4h": "BEARISH",
+      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
+    },
+    "PAXGUSDT|5m|Bearish Order Block|SELL|2026-11-15 08:15:00+00:00": {
+      "pair": "PAXGUSDT",
+      "tf": "5m",
+      "model": "Bearish Order Block",
+      "direction": "SELL",
+      "low": 3819.11,
+      "high": 3820.17,
+      "formed_at": "2026-11-15 08:15:00+00:00",
+      "status": "pending",
+      "quality_score": 4,
+      "quality_label": "STRONG \ud83d\udfe2",
+      "htf_1h": "BEARISH",
+      "htf_4h": "BEARISH",
+      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
     }
   },
   "BTCUSDT|1m|Bearish MSS / CHoCH|SELL": {
@@ -29121,6 +29226,46 @@
       "created_at": "2026-11-15 07:24:44.439249+00:00",
       "entry_candle": "2026-11-15 07:00:00+00:00",
       "closed_at": "2026-11-15 07:00:00+00:00"
+    },
+    "indicator|BTCUSDT|15m|SELL|2026-11-15 07:45:00+00:00": {
+      "pair": "BTCUSDT",
+      "tf": "15m",
+      "symbol": "BTCUSDT",
+      "model": "ICT Indicator: Bearish Sweep + MSS + FVG Retest",
+      "direction": "SELL",
+      "entry": 63891.75,
+      "sl": 64655.12,
+      "tp": 62365.009999999995,
+      "status": "active",
+      "created_at": "2026-11-15 08:22:50.174181+00:00",
+      "entry_candle": "2026-11-15 08:00:00+00:00"
+    },
+    "indicator|ETHUSDT|15m|SELL|2026-11-15 07:45:00+00:00": {
+      "pair": "ETHUSDT",
+      "tf": "15m",
+      "symbol": "ETHUSDT",
+      "model": "ICT Indicator: Bearish Sweep + MSS + FVG Retest",
+      "direction": "SELL",
+      "entry": 1779.32,
+      "sl": 1787.85,
+      "tp": 1762.26,
+      "status": "sl_hit",
+      "created_at": "2026-11-15 08:22:56.676438+00:00",
+      "entry_candle": "2026-11-15 08:00:00+00:00",
+      "closed_at": "2026-11-15 08:00:00+00:00"
+    },
+    "signal|PAXGUSDT|5m|Bearish MSS / CHoCH|SELL|2026-11-15 08:15:00+00:00": {
+      "pair": "PAXGUSDT",
+      "tf": "5m",
+      "symbol": "PAXGUSDT",
+      "model": "Bearish MSS / CHoCH",
+      "direction": "SELL",
+      "entry": 3815.84,
+      "sl": 3817.33,
+      "tp": 3808.3900000000012,
+      "status": "active",
+      "created_at": "2026-11-15 08:23:06.027803+00:00",
+      "entry_candle": ""
     }
   },
   "indicator|XAUUSD|1m|SELL|2026-11-04 13:07:00+00:00": {
@@ -29188,8 +29333,8 @@
     "candle": "2026-11-09 16:00:00+00:00"
   },
   "PAXGUSDT|5m|Bearish MSS / CHoCH|SELL": {
-    "sent_at": 1794688071.2340598,
-    "candle": "2026-11-14 20:20:00+00:00"
+    "sent_at": 1794730986.0278208,
+    "candle": "2026-11-15 08:15:00+00:00"
   },
   "PAXGUSDT|4h|Bullish MSS / CHoCH|BUY": {
     "sent_at": 1794269079.7561328,
@@ -29666,5 +29811,13 @@
   "indicator|BTCUSDT|5m|SELL|2026-11-14 12:15:00+00:00": {
     "sent_at": 1794660580.7984617,
     "candle": "2026-11-14 12:40:00+00:00"
+  },
+  "indicator|BTCUSDT|15m|SELL|2026-11-15 07:45:00+00:00": {
+    "sent_at": 1794730970.1742043,
+    "candle": "2026-11-15 08:00:00+00:00"
+  },
+  "indicator|ETHUSDT|15m|SELL|2026-11-15 07:45:00+00:00": {
+    "sent_at": 1794730976.676461,
+    "candle": "2026-11-15 08:00:00+00:00"
   }
 }
