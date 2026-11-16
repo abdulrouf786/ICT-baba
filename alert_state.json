@@ -27749,9 +27749,10 @@
       "entry": 64474.7,
       "sl": 65508.86,
       "tp": 59303.89999999998,
-      "status": "active",
+      "status": "sl_hit",
       "created_at": "2026-11-16 06:11:51.188023+00:00",
-      "entry_candle": "2026-11-16 05:00:00+00:00"
+      "entry_candle": "2026-11-16 05:00:00+00:00",
+      "closed_at": "2026-11-16 22:00:00+00:00"
     },
     "signal|BTCUSDT|1h|Bearish MSS / CHoCH|SELL|2026-11-16 05:00:00+00:00": {
       "pair": "BTCUSDT",
@@ -28051,9 +28052,10 @@
       "entry": 64467.0,
       "sl": 65508.86,
       "tp": 59257.7,
-      "status": "active",
+      "status": "sl_hit",
       "created_at": "2026-11-16 16:15:28.085606+00:00",
-      "entry_candle": "2026-11-16 15:00:00+00:00"
+      "entry_candle": "2026-11-16 15:00:00+00:00",
+      "closed_at": "2026-11-16 22:00:00+00:00"
     },
     "signal|XAUUSD|15m|Bearish MSS / CHoCH|SELL|2026-11-16 18:00:00+00:00": {
       "pair": "XAUUSD",
@@ -28094,6 +28096,19 @@
       "status": "active",
       "created_at": "2026-11-16 21:01:01.229178+00:00",
       "entry_candle": "2026-11-16 20:55:00+00:00"
+    },
+    "indicator|XAUUSD|15m|SELL|2026-11-16 20:45:00+00:00": {
+      "pair": "XAUUSD",
+      "tf": "15m",
+      "symbol": "XAUUSD",
+      "model": "ICT Indicator: Bearish Sweep + MSS + FVG Retest",
+      "direction": "SELL",
+      "entry": 3853.025,
+      "sl": 3885.988,
+      "tp": 3787.0990000000006,
+      "status": "active",
+      "created_at": "2026-11-16 23:20:33.945233+00:00",
+      "entry_candle": "2026-11-16 23:00:00+00:00"
     }
   },
   "indicator|XAUUSD|1m|SELL|2026-11-04 13:07:00+00:00": {
@@ -28667,5 +28682,9 @@
   "indicator|PAXGUSDT|5m|SELL|2026-11-16 20:45:00+00:00": {
     "sent_at": 1794862861.2292252,
     "candle": "2026-11-16 20:55:00+00:00"
+  },
+  "indicator|XAUUSD|15m|SELL|2026-11-16 20:45:00+00:00": {
+    "sent_at": 1794871233.9453013,
+    "candle": "2026-11-16 23:00:00+00:00"
   }
 }
