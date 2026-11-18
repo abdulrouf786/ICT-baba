@@ -14409,12 +14409,13 @@
       "low": 3729.99,
       "high": 3738.25,
       "formed_at": "2026-11-18 19:00:00+00:00",
-      "status": "pending",
+      "status": "confirmed",
       "quality_score": 3,
       "quality_label": "MODERATE \ud83d\udfe1",
       "htf_1h": "BEARISH",
       "htf_4h": "BEARISH",
-      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
+      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2",
+      "confirmed_at": "2026-11-18 20:00:00+00:00"
     },
     "PAXGUSDT|4h|Bearish FVG|SELL|2026-11-18 16:00:00+00:00": {
       "pair": "PAXGUSDT",
@@ -14780,8 +14781,8 @@
     "candle": "2026-11-17 10:00:00+00:00"
   },
   "BTCUSDT|4h|Bearish MSS / CHoCH|SELL": {
-    "sent_at": 1795020148.0164132,
-    "candle": "2026-11-18 12:00:00+00:00"
+    "sent_at": 1795036730.7840486,
+    "candle": "2026-11-18 16:00:00+00:00"
   },
   "BTCUSDT|4h|Bearish Mitigation Block|SELL": {
     "sent_at": 1795020148.539165,
@@ -28948,9 +28949,10 @@
       "entry": 3722.689,
       "sl": 3755.34,
       "tp": 3559.4339999999984,
-      "status": "active",
+      "status": "sl_hit",
       "created_at": "2026-11-18 20:24:29.509870+00:00",
-      "entry_candle": ""
+      "entry_candle": "",
+      "closed_at": "2026-11-18 16:00:00+00:00"
     },
     "signal|BTCUSDT|1m|Bearish MSS / CHoCH|SELL|2026-11-18 20:23:00+00:00": {
       "pair": "BTCUSDT",
@@ -28987,9 +28989,36 @@
       "entry": 3719.33,
       "sl": 3751.06,
       "tp": 3560.68,
-      "status": "active",
+      "status": "sl_hit",
       "created_at": "2026-11-18 20:24:58.931662+00:00",
+      "entry_candle": "",
+      "closed_at": "2026-11-18 16:00:00+00:00"
+    },
+    "signal|BTCUSDT|4h|Bearish MSS / CHoCH|SELL|2026-11-18 16:00:00+00:00": {
+      "pair": "BTCUSDT",
+      "tf": "4h",
+      "symbol": "BTCUSDT",
+      "model": "Bearish MSS / CHoCH",
+      "direction": "SELL",
+      "entry": 62747.22,
+      "sl": 63537.89,
+      "tp": 58793.87000000001,
+      "status": "active",
+      "created_at": "2026-11-18 21:18:50.784003+00:00",
       "entry_candle": ""
+    },
+    "retest|PAXGUSDT|1h|Bearish Order Block|SELL|2026-11-18 19:00:00+00:00": {
+      "pair": "PAXGUSDT",
+      "tf": "1h",
+      "symbol": "PAXGUSDT",
+      "model": "Bearish Order Block",
+      "direction": "SELL",
+      "entry": 3722.74,
+      "sl": 3738.25,
+      "tp": 3645.1899999999987,
+      "status": "active",
+      "created_at": "2026-11-18 21:19:07.958112+00:00",
+      "entry_candle": "2026-11-18 20:00:00+00:00"
     }
   },
   "indicator|XAUUSD|1m|SELL|2026-11-04 13:07:00+00:00": {
