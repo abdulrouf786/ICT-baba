@@ -11269,12 +11269,13 @@
       "low": 3685.32,
       "high": 3690.19,
       "formed_at": "2026-11-19 15:35:00+00:00",
-      "status": "pending",
+      "status": "confirmed",
       "quality_score": 3,
       "quality_label": "MODERATE \ud83d\udfe1",
       "htf_1h": "BEARISH",
       "htf_4h": "BEARISH",
-      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
+      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2",
+      "confirmed_at": "2026-11-19 18:25:00+00:00"
     },
     "XAUUSD|15m|Bearish Mitigation Block|SELL|2026-11-19 14:00:00+00:00": {
       "pair": "XAUUSD",
@@ -12116,12 +12117,13 @@
       "low": 63366.01,
       "high": 63462.0,
       "formed_at": "2026-11-19 16:00:00+00:00",
-      "status": "pending",
+      "status": "confirmed",
       "quality_score": 4,
       "quality_label": "STRONG \ud83d\udfe2",
       "htf_1h": "BEARISH",
       "htf_4h": "BEARISH",
-      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
+      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2",
+      "confirmed_at": "2026-11-19 17:00:00+00:00"
     },
     "BTCUSDT|1h|Bearish Order Block|SELL|2026-11-19 16:00:00+00:00": {
       "pair": "BTCUSDT",
@@ -27618,9 +27620,10 @@
       "entry": 63117.22,
       "sl": 63192.8,
       "tp": 62739.31999999999,
-      "status": "active",
+      "status": "sl_hit",
       "created_at": "2026-11-19 16:47:03.309702+00:00",
-      "entry_candle": ""
+      "entry_candle": "",
+      "closed_at": "2026-11-19 18:33:00+00:00"
     },
     "signal|BTCUSDT|1m|Bearish Mitigation Block|SELL|2026-11-19 16:45:00+00:00": {
       "pair": "BTCUSDT",
@@ -27631,9 +27634,10 @@
       "entry": 63117.22,
       "sl": 63192.8,
       "tp": 62739.31999999999,
-      "status": "active",
+      "status": "sl_hit",
       "created_at": "2026-11-19 16:47:03.796606+00:00",
-      "entry_candle": ""
+      "entry_candle": "",
+      "closed_at": "2026-11-19 18:33:00+00:00"
     },
     "retest|BTCUSDT|5m|Bearish FVG|SELL|2026-11-19 15:35:00+00:00": {
       "pair": "BTCUSDT",
@@ -27871,6 +27875,32 @@
       "status": "active",
       "created_at": "2026-11-19 17:40:34.297870+00:00",
       "entry_candle": ""
+    },
+    "retest|XAUUSD|5m|Bearish Order Block|SELL|2026-11-19 15:35:00+00:00": {
+      "pair": "XAUUSD",
+      "tf": "5m",
+      "symbol": "XAUUSD",
+      "model": "Bearish Order Block",
+      "direction": "SELL",
+      "entry": 3684.523,
+      "sl": 3690.19,
+      "tp": 3656.1880000000006,
+      "status": "active",
+      "created_at": "2026-11-19 18:33:57.400805+00:00",
+      "entry_candle": "2026-11-19 18:25:00+00:00"
+    },
+    "retest|BTCUSDT|1h|Bearish FVG|SELL|2026-11-19 16:00:00+00:00": {
+      "pair": "BTCUSDT",
+      "tf": "1h",
+      "symbol": "BTCUSDT",
+      "model": "Bearish FVG",
+      "direction": "SELL",
+      "entry": 62748.96,
+      "sl": 63462.0,
+      "tp": 59183.759999999995,
+      "status": "active",
+      "created_at": "2026-11-19 18:34:09.020386+00:00",
+      "entry_candle": "2026-11-19 17:00:00+00:00"
     }
   },
   "indicator|XAUUSD|1m|SELL|2026-11-04 13:07:00+00:00": {
