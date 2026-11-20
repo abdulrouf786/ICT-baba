@@ -133,22 +133,6 @@
       "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2",
       "confirmed_at": "2026-11-13 15:00:00+00:00"
     },
-    "PAXGUSDT|15m|Bearish Mitigation Block|SELL|2026-11-13 11:45:00+00:00": {
-      "pair": "PAXGUSDT",
-      "tf": "15m",
-      "model": "Bearish Mitigation Block",
-      "direction": "SELL",
-      "low": 3885.51,
-      "high": 3891.13,
-      "formed_at": "2026-11-13 11:45:00+00:00",
-      "status": "confirmed",
-      "quality_score": 3,
-      "quality_label": "MODERATE \ud83d\udfe1",
-      "htf_1h": "BEARISH",
-      "htf_4h": "BEARISH",
-      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2",
-      "confirmed_at": "2026-11-13 15:00:00+00:00"
-    },
     "PAXGUSDT|15m|Bearish FVG|SELL|2026-11-13 12:45:00+00:00": {
       "pair": "PAXGUSDT",
       "tf": "15m",
@@ -31599,6 +31583,45 @@
       "status": "active",
       "created_at": "2026-11-20 09:40:55.417894+00:00",
       "entry_candle": "2026-11-20 09:15:00+00:00"
+    },
+    "indicator|XAUUSD|1m|SELL|2026-11-20 12:34:00+00:00": {
+      "pair": "XAUUSD",
+      "tf": "1m",
+      "symbol": "XAUUSD",
+      "model": "ICT Indicator: Bearish Sweep + MSS + FVG Retest",
+      "direction": "SELL",
+      "entry": 3570.434,
+      "sl": 3578.989,
+      "tp": 3553.3240000000005,
+      "status": "active",
+      "created_at": "2026-11-20 12:37:07.322115+00:00",
+      "entry_candle": "2026-11-20 12:36:00+00:00"
+    },
+    "indicator|XAUUSD|5m|SELL|2026-11-20 12:05:00+00:00": {
+      "pair": "XAUUSD",
+      "tf": "5m",
+      "symbol": "XAUUSD",
+      "model": "ICT Indicator: Bearish Sweep + MSS + FVG Retest",
+      "direction": "SELL",
+      "entry": 3571.615,
+      "sl": 3591.345,
+      "tp": 3532.1549999999997,
+      "status": "active",
+      "created_at": "2026-11-20 12:37:09.144263+00:00",
+      "entry_candle": "2026-11-20 12:30:00+00:00"
+    },
+    "indicator|PAXGUSDT|1m|SELL|2026-11-20 12:34:00+00:00": {
+      "pair": "PAXGUSDT",
+      "tf": "1m",
+      "symbol": "PAXGUSDT",
+      "model": "ICT Indicator: Bearish Sweep + MSS + FVG Retest",
+      "direction": "SELL",
+      "entry": 3567.01,
+      "sl": 3571.12,
+      "tp": 3558.790000000001,
+      "status": "active",
+      "created_at": "2026-11-20 12:37:28.309305+00:00",
+      "entry_candle": "2026-11-20 12:36:00+00:00"
     }
   },
   "indicator|XAUUSD|1m|SELL|2026-11-04 13:07:00+00:00": {
@@ -32292,5 +32315,17 @@
   "indicator|XAUUSD|5m|SELL|2026-11-20 09:30:00+00:00": {
     "sent_at": 1795167620.6926386,
     "candle": "2026-11-20 09:35:00+00:00"
+  },
+  "indicator|XAUUSD|1m|SELL|2026-11-20 12:34:00+00:00": {
+    "sent_at": 1795178227.3221557,
+    "candle": "2026-11-20 12:36:00+00:00"
+  },
+  "indicator|XAUUSD|5m|SELL|2026-11-20 12:05:00+00:00": {
+    "sent_at": 1795178229.144307,
+    "candle": "2026-11-20 12:30:00+00:00"
+  },
+  "indicator|PAXGUSDT|1m|SELL|2026-11-20 12:34:00+00:00": {
+    "sent_at": 1795178248.309349,
+    "candle": "2026-11-20 12:36:00+00:00"
   }
 }
