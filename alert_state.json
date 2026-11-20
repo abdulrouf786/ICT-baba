@@ -14665,6 +14665,36 @@
       "htf_1h": "BEARISH",
       "htf_4h": "BEARISH",
       "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
+    },
+    "ETHUSDT|1h|Bearish FVG|SELL|2026-11-20 16:00:00+00:00": {
+      "pair": "ETHUSDT",
+      "tf": "1h",
+      "model": "Bearish FVG",
+      "direction": "SELL",
+      "low": 1661.85,
+      "high": 1724.67,
+      "formed_at": "2026-11-20 16:00:00+00:00",
+      "status": "pending",
+      "quality_score": 4,
+      "quality_label": "STRONG \ud83d\udfe2",
+      "htf_1h": "BEARISH",
+      "htf_4h": "BEARISH",
+      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
+    },
+    "ETHUSDT|1h|Bearish Order Block|SELL|2026-11-20 16:00:00+00:00": {
+      "pair": "ETHUSDT",
+      "tf": "1h",
+      "model": "Bearish Order Block",
+      "direction": "SELL",
+      "low": 1728.12,
+      "high": 1757.92,
+      "formed_at": "2026-11-20 16:00:00+00:00",
+      "status": "pending",
+      "quality_score": 4,
+      "quality_label": "STRONG \ud83d\udfe2",
+      "htf_1h": "BEARISH",
+      "htf_4h": "BEARISH",
+      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
     }
   },
   "BTCUSDT|1m|Bearish MSS / CHoCH|SELL": {
@@ -24404,9 +24434,10 @@
       "entry": 1934.57,
       "sl": 1993.79,
       "tp": 1638.4699999999998,
-      "status": "active",
+      "status": "tp_hit",
       "created_at": "2026-11-13 04:15:04.215428+00:00",
-      "entry_candle": ""
+      "entry_candle": "",
+      "closed_at": "2026-11-20 16:00:00+00:00"
     },
     "signal|ETHUSDT|4h|Bearish MSS / CHoCH|SELL|2026-11-13 00:00:00+00:00": {
       "pair": "ETHUSDT",
@@ -29090,9 +29121,10 @@
       "entry": 1768.48,
       "sl": 1836.0,
       "tp": 1633.44,
-      "status": "active",
+      "status": "tp_hit",
       "created_at": "2026-11-18 18:29:09.687640+00:00",
-      "entry_candle": "2026-11-18 17:00:00+00:00"
+      "entry_candle": "2026-11-18 17:00:00+00:00",
+      "closed_at": "2026-11-20 16:00:00+00:00"
     },
     "retest|ETHUSDT|1h|Bearish FVG|SELL|2026-11-18 15:00:00+00:00": {
       "pair": "ETHUSDT",
@@ -30244,9 +30276,10 @@
       "entry": 63103.3,
       "sl": 63916.01,
       "tp": 59039.75000000001,
-      "status": "active",
+      "status": "tp_hit",
       "created_at": "2026-11-19 16:47:12.176255+00:00",
-      "entry_candle": ""
+      "entry_candle": "",
+      "closed_at": "2026-11-20 16:00:00+00:00"
     },
     "signal|BTCUSDT|1h|Bearish Mitigation Block|SELL|2026-11-19 15:00:00+00:00": {
       "pair": "BTCUSDT",
@@ -30257,9 +30290,10 @@
       "entry": 63103.3,
       "sl": 63916.01,
       "tp": 59039.75000000001,
-      "status": "active",
+      "status": "tp_hit",
       "created_at": "2026-11-19 16:47:12.681742+00:00",
-      "entry_candle": ""
+      "entry_candle": "",
+      "closed_at": "2026-11-20 16:00:00+00:00"
     },
     "retest|BTCUSDT|4h|Bearish FVG|SELL|2026-11-18 16:00:00+00:00": {
       "pair": "BTCUSDT",
@@ -30446,9 +30480,10 @@
       "entry": 62748.96,
       "sl": 63462.0,
       "tp": 59183.759999999995,
-      "status": "active",
+      "status": "tp_hit",
       "created_at": "2026-11-19 18:34:09.020386+00:00",
-      "entry_candle": "2026-11-19 17:00:00+00:00"
+      "entry_candle": "2026-11-19 17:00:00+00:00",
+      "closed_at": "2026-11-20 16:00:00+00:00"
     },
     "retest|BTCUSDT|5m|Bearish FVG|SELL|2026-11-19 19:05:00+00:00": {
       "pair": "BTCUSDT",
@@ -31754,9 +31789,10 @@
       "entry": 3571.615,
       "sl": 3591.345,
       "tp": 3532.1549999999997,
-      "status": "active",
+      "status": "tp_hit",
       "created_at": "2026-11-20 12:37:09.144263+00:00",
-      "entry_candle": "2026-11-20 12:30:00+00:00"
+      "entry_candle": "2026-11-20 12:30:00+00:00",
+      "closed_at": "2026-11-20 17:25:00+00:00"
     },
     "indicator|PAXGUSDT|1m|SELL|2026-11-20 12:34:00+00:00": {
       "pair": "PAXGUSDT",
@@ -31942,9 +31978,10 @@
       "entry": 59475.47,
       "sl": 62179.45,
       "tp": 45955.57000000002,
-      "status": "active",
+      "status": "sl_hit",
       "created_at": "2026-11-20 16:36:50.236596+00:00",
-      "entry_candle": ""
+      "entry_candle": "",
+      "closed_at": "2026-11-20 12:00:00+00:00"
     },
     "signal|BTCUSDT|4h|Bearish Mitigation Block|SELL|2026-11-20 12:00:00+00:00": {
       "pair": "BTCUSDT",
@@ -31955,9 +31992,10 @@
       "entry": 59475.47,
       "sl": 62179.45,
       "tp": 45955.57000000002,
-      "status": "active",
+      "status": "sl_hit",
       "created_at": "2026-11-20 16:36:50.671198+00:00",
-      "entry_candle": ""
+      "entry_candle": "",
+      "closed_at": "2026-11-20 12:00:00+00:00"
     },
     "signal|ETHUSDT|1h|Bearish MSS / CHoCH|SELL|2026-11-20 15:00:00+00:00": {
       "pair": "ETHUSDT",
@@ -31994,9 +32032,10 @@
       "entry": 1655.57,
       "sl": 1759.63,
       "tp": 1135.269999999999,
-      "status": "active",
+      "status": "sl_hit",
       "created_at": "2026-11-20 16:37:04.050186+00:00",
-      "entry_candle": ""
+      "entry_candle": "",
+      "closed_at": "2026-11-20 12:00:00+00:00"
     },
     "signal|ETHUSDT|4h|Bearish Mitigation Block|SELL|2026-11-20 12:00:00+00:00": {
       "pair": "ETHUSDT",
@@ -32007,9 +32046,23 @@
       "entry": 1655.57,
       "sl": 1759.63,
       "tp": 1135.269999999999,
-      "status": "active",
+      "status": "sl_hit",
       "created_at": "2026-11-20 16:37:04.443746+00:00",
-      "entry_candle": ""
+      "entry_candle": "",
+      "closed_at": "2026-11-20 12:00:00+00:00"
+    },
+    "indicator|PAXGUSDT|5m|SELL|2026-11-20 17:20:00+00:00": {
+      "pair": "PAXGUSDT",
+      "tf": "5m",
+      "symbol": "PAXGUSDT",
+      "model": "ICT Indicator: Bearish Sweep + MSS + FVG Retest",
+      "direction": "SELL",
+      "entry": 3525.32,
+      "sl": 3582.96,
+      "tp": 3410.0400000000004,
+      "status": "active",
+      "created_at": "2026-11-20 17:33:56.309053+00:00",
+      "entry_candle": "2026-11-20 17:25:00+00:00"
     }
   },
   "indicator|XAUUSD|1m|SELL|2026-11-04 13:07:00+00:00": {
@@ -32719,5 +32772,9 @@
   "indicator|XAUUSD|5m|SELL|2026-11-20 13:25:00+00:00": {
     "sent_at": 1795182693.9641078,
     "candle": "2026-11-20 13:45:00+00:00"
+  },
+  "indicator|PAXGUSDT|5m|SELL|2026-11-20 17:20:00+00:00": {
+    "sent_at": 1795196036.3090968,
+    "candle": "2026-11-20 17:25:00+00:00"
   }
 }
