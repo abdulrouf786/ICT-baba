@@ -14175,12 +14175,13 @@
       "low": 58254.81,
       "high": 58265.76,
       "formed_at": "2026-11-21 03:30:00+00:00",
-      "status": "pending",
+      "status": "confirmed",
       "quality_score": 3,
       "quality_label": "MODERATE \ud83d\udfe1",
       "htf_1h": "BEARISH",
       "htf_4h": "BEARISH",
-      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
+      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2",
+      "confirmed_at": "2026-11-21 11:35:00+00:00"
     },
     "BTCUSDT|5m|Bearish Order Block|SELL|2026-11-21 03:30:00+00:00": {
       "pair": "BTCUSDT",
@@ -14190,12 +14191,13 @@
       "low": 58265.76,
       "high": 58388.98,
       "formed_at": "2026-11-21 03:30:00+00:00",
-      "status": "pending",
+      "status": "confirmed",
       "quality_score": 3,
       "quality_label": "MODERATE \ud83d\udfe1",
       "htf_1h": "BEARISH",
       "htf_4h": "BEARISH",
-      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
+      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2",
+      "confirmed_at": "2026-11-21 11:35:00+00:00"
     },
     "BTCUSDT|5m|Bearish FVG|SELL|2026-11-21 03:35:00+00:00": {
       "pair": "BTCUSDT",
@@ -14487,12 +14489,13 @@
       "low": 57998.01,
       "high": 58020.76,
       "formed_at": "2026-11-21 10:56:00+00:00",
-      "status": "pending",
+      "status": "invalidated",
       "quality_score": 3,
       "quality_label": "MODERATE \ud83d\udfe1",
       "htf_1h": "BEARISH",
       "htf_4h": "BEARISH",
-      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
+      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2",
+      "invalidated_at": "2026-11-21 11:40:00+00:00"
     },
     "BTCUSDT|1m|Bearish FVG|SELL|2026-11-21 10:57:00+00:00": {
       "pair": "BTCUSDT",
@@ -14502,12 +14505,13 @@
       "low": 57986.88,
       "high": 57990.73,
       "formed_at": "2026-11-21 10:57:00+00:00",
-      "status": "pending",
+      "status": "invalidated",
       "quality_score": 3,
       "quality_label": "MODERATE \ud83d\udfe1",
       "htf_1h": "BEARISH",
       "htf_4h": "BEARISH",
-      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
+      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2",
+      "invalidated_at": "2026-11-21 11:40:00+00:00"
     },
     "BTCUSDT|1m|Bearish Order Block|SELL|2026-11-21 10:59:00+00:00": {
       "pair": "BTCUSDT",
@@ -14517,12 +14521,13 @@
       "low": 58020.76,
       "high": 58032.01,
       "formed_at": "2026-11-21 10:59:00+00:00",
-      "status": "pending",
+      "status": "invalidated",
       "quality_score": 3,
       "quality_label": "MODERATE \ud83d\udfe1",
       "htf_1h": "BEARISH",
       "htf_4h": "BEARISH",
-      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
+      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2",
+      "invalidated_at": "2026-11-21 11:40:00+00:00"
     }
   },
   "BTCUSDT|1m|Bearish MSS / CHoCH|SELL": {
@@ -32539,9 +32544,37 @@
       "entry": 57932.98,
       "sl": 57976.01,
       "tp": 57717.83000000001,
-      "status": "active",
+      "status": "sl_hit",
       "created_at": "2026-11-21 11:00:13.562011+00:00",
-      "entry_candle": ""
+      "entry_candle": "",
+      "closed_at": "2026-11-21 11:40:00+00:00"
+    },
+    "retest|BTCUSDT|5m|Bearish FVG|SELL|2026-11-21 03:30:00+00:00": {
+      "pair": "BTCUSDT",
+      "tf": "5m",
+      "symbol": "BTCUSDT",
+      "model": "Bearish FVG",
+      "direction": "SELL",
+      "entry": 58204.32,
+      "sl": 58265.76,
+      "tp": 57897.11999999999,
+      "status": "sl_hit",
+      "created_at": "2026-11-21 11:41:21.703574+00:00",
+      "entry_candle": "2026-11-21 11:35:00+00:00",
+      "closed_at": "2026-11-21 11:35:00+00:00"
+    },
+    "retest|BTCUSDT|5m|Bearish Order Block|SELL|2026-11-21 03:30:00+00:00": {
+      "pair": "BTCUSDT",
+      "tf": "5m",
+      "symbol": "BTCUSDT",
+      "model": "Bearish Order Block",
+      "direction": "SELL",
+      "entry": 58204.32,
+      "sl": 58388.98,
+      "tp": 57281.01999999998,
+      "status": "active",
+      "created_at": "2026-11-21 11:41:22.087952+00:00",
+      "entry_candle": "2026-11-21 11:35:00+00:00"
     }
   },
   "indicator|XAUUSD|1m|SELL|2026-11-04 13:07:00+00:00": {
