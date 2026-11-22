@@ -69,54 +69,6 @@
     "candle": "2026-11-19 20:25:00+00:00"
   },
   "pending_retests": {
-    "PAXGUSDT|5m|Bearish FVG|SELL|2026-11-15 07:45:00+00:00": {
-      "pair": "PAXGUSDT",
-      "tf": "5m",
-      "model": "Bearish FVG",
-      "direction": "SELL",
-      "low": 3822.5,
-      "high": 3822.67,
-      "formed_at": "2026-11-15 07:45:00+00:00",
-      "status": "invalidated",
-      "quality_score": 4,
-      "quality_label": "STRONG \ud83d\udfe2",
-      "htf_1h": "BEARISH",
-      "htf_4h": "BEARISH",
-      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2",
-      "invalidated_at": "2026-11-15 09:05:00+00:00"
-    },
-    "PAXGUSDT|5m|Bearish FVG|SELL|2026-11-15 07:50:00+00:00": {
-      "pair": "PAXGUSDT",
-      "tf": "5m",
-      "model": "Bearish FVG",
-      "direction": "SELL",
-      "low": 3821.21,
-      "high": 3822.51,
-      "formed_at": "2026-11-15 07:50:00+00:00",
-      "status": "invalidated",
-      "quality_score": 4,
-      "quality_label": "STRONG \ud83d\udfe2",
-      "htf_1h": "BEARISH",
-      "htf_4h": "BEARISH",
-      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2",
-      "invalidated_at": "2026-11-15 09:05:00+00:00"
-    },
-    "PAXGUSDT|5m|Bearish Order Block|SELL|2026-11-15 07:50:00+00:00": {
-      "pair": "PAXGUSDT",
-      "tf": "5m",
-      "model": "Bearish Order Block",
-      "direction": "SELL",
-      "low": 3824.08,
-      "high": 3825.96,
-      "formed_at": "2026-11-15 07:50:00+00:00",
-      "status": "invalidated",
-      "quality_score": 4,
-      "quality_label": "STRONG \ud83d\udfe2",
-      "htf_1h": "BEARISH",
-      "htf_4h": "BEARISH",
-      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2",
-      "invalidated_at": "2026-11-15 09:05:00+00:00"
-    },
     "PAXGUSDT|5m|Bearish FVG|SELL|2026-11-15 07:55:00+00:00": {
       "pair": "PAXGUSDT",
       "tf": "5m",
@@ -12946,12 +12898,13 @@
       "low": 1663.06,
       "high": 1665.29,
       "formed_at": "2026-11-22 05:05:00+00:00",
-      "status": "pending",
+      "status": "invalidated",
       "quality_score": 4,
       "quality_label": "STRONG \ud83d\udfe2",
       "htf_1h": "BEARISH",
       "htf_4h": "BEARISH",
-      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
+      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2",
+      "invalidated_at": "2026-11-22 07:45:00+00:00"
     },
     "ETHUSDT|5m|Bearish Order Block|SELL|2026-11-22 05:15:00+00:00": {
       "pair": "ETHUSDT",
