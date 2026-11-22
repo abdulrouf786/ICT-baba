@@ -12501,12 +12501,13 @@
       "low": 3551.75,
       "high": 3554.37,
       "formed_at": "2026-11-22 02:30:00+00:00",
-      "status": "pending",
+      "status": "invalidated",
       "quality_score": 4,
       "quality_label": "STRONG \ud83d\udfe2",
       "htf_1h": "BEARISH",
       "htf_4h": "BEARISH",
-      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
+      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2",
+      "invalidated_at": "2026-11-22 10:30:00+00:00"
     },
     "PAXGUSDT|15m|Bearish Order Block|SELL|2026-11-22 02:30:00+00:00": {
       "pair": "PAXGUSDT",
