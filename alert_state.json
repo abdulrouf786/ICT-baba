@@ -12246,12 +12246,13 @@
       "low": 3550.85,
       "high": 3556.77,
       "formed_at": "2026-11-22 02:00:00+00:00",
-      "status": "pending",
+      "status": "invalidated",
       "quality_score": 3,
       "quality_label": "MODERATE \ud83d\udfe1",
       "htf_1h": "BEARISH",
       "htf_4h": "BEARISH",
-      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
+      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2",
+      "invalidated_at": "2026-11-22 10:00:00+00:00"
     },
     "BTCUSDT|15m|Bearish Mitigation Block|SELL|2026-11-22 02:00:00+00:00": {
       "pair": "BTCUSDT",
@@ -12853,12 +12854,13 @@
       "low": 3550.85,
       "high": 3556.77,
       "formed_at": "2026-11-22 03:00:00+00:00",
-      "status": "pending",
+      "status": "invalidated",
       "quality_score": 4,
       "quality_label": "STRONG \ud83d\udfe2",
       "htf_1h": "BEARISH",
       "htf_4h": "BEARISH",
-      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
+      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2",
+      "invalidated_at": "2026-11-22 10:00:00+00:00"
     },
     "ETHUSDT|5m|Bearish Mitigation Block|SELL|2026-11-22 05:05:00+00:00": {
       "pair": "ETHUSDT",
