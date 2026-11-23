@@ -12486,12 +12486,13 @@
       "low": 3556.63,
       "high": 3562.22,
       "formed_at": "2026-11-22 18:00:00+00:00",
-      "status": "pending",
+      "status": "invalidated",
       "quality_score": 3,
       "quality_label": "MODERATE \ud83d\udfe1",
       "htf_1h": "BEARISH",
       "htf_4h": "BEARISH",
-      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
+      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2",
+      "invalidated_at": "2026-11-22 23:00:00+00:00"
     },
     "BTCUSDT|5m|Bullish Order Block|BUY|2026-11-22 20:45:00+00:00": {
       "pair": "BTCUSDT",
@@ -12655,12 +12656,13 @@
       "low": 3550.21,
       "high": 3556.89,
       "formed_at": "2026-11-22 19:00:00+00:00",
-      "status": "pending",
+      "status": "invalidated",
       "quality_score": 3,
       "quality_label": "MODERATE \ud83d\udfe1",
       "htf_1h": "BEARISH",
       "htf_4h": "BEARISH",
-      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
+      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2",
+      "invalidated_at": "2026-11-22 23:00:00+00:00"
     },
     "PAXGUSDT|1h|Bearish Order Block|SELL|2026-11-22 20:00:00+00:00": {
       "pair": "PAXGUSDT",
@@ -12670,12 +12672,13 @@
       "low": 3556.63,
       "high": 3562.22,
       "formed_at": "2026-11-22 20:00:00+00:00",
-      "status": "pending",
+      "status": "invalidated",
       "quality_score": 3,
       "quality_label": "MODERATE \ud83d\udfe1",
       "htf_1h": "BEARISH",
       "htf_4h": "BEARISH",
-      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2"
+      "htf_label": "STRONG HTF ALIGNMENT \ud83d\udfe2",
+      "invalidated_at": "2026-11-22 23:00:00+00:00"
     },
     "PAXGUSDT|1m|Bearish FVG|SELL|2026-11-22 22:15:00+00:00": {
       "pair": "PAXGUSDT",
@@ -31460,9 +31463,10 @@
       "entry": 3549.35,
       "sl": 3561.58,
       "tp": 3488.2,
-      "status": "active",
+      "status": "sl_hit",
       "created_at": "2026-11-22 19:29:22.951068+00:00",
-      "entry_candle": ""
+      "entry_candle": "",
+      "closed_at": "2026-11-22 23:00:00+00:00"
     },
     "signal|PAXGUSDT|1h|Bearish Mitigation Block|SELL|2026-11-22 18:00:00+00:00": {
       "pair": "PAXGUSDT",
@@ -31473,9 +31477,10 @@
       "entry": 3549.35,
       "sl": 3561.58,
       "tp": 3488.2,
-      "status": "active",
+      "status": "sl_hit",
       "created_at": "2026-11-22 19:29:23.290043+00:00",
-      "entry_candle": ""
+      "entry_candle": "",
+      "closed_at": "2026-11-22 23:00:00+00:00"
     },
     "signal|BTCUSDT|5m|Bullish MSS / CHoCH|BUY|2026-11-22 20:50:00+00:00": {
       "pair": "BTCUSDT",
